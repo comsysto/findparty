@@ -1,7 +1,6 @@
 package com.comsysto.findparty.web;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.comsysto.findparty.Party;
@@ -55,6 +54,8 @@ public class PartyServiceImpl implements PartyService {
     }
 
     private void cancelParty(String username, Party party) {
+        party.getParticipants().remove(username);
+        party.getCandidates().remove(username);
     }
 
     @Override
