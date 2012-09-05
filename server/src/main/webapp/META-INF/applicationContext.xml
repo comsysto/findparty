@@ -28,6 +28,8 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
     
     <bean id="mongo" class="com.mongodb.Mongo"/>
 
+    <bean id="partyService" class="com.comsysto.findparty.web.PartyServiceImpl" />
+
     <bean id="partiesMongoOperations" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg><ref bean="mongo"/></constructor-arg>
         <constructor-arg value="parties"/>
