@@ -22,7 +22,6 @@ public class PartyController {
     @Autowired
     public PartyService partyService;
 
-    public static final Double KILOMETER = 111.0d;
 
     /**
      * The Attribute that is used for the search for the start position
@@ -70,18 +69,7 @@ public class PartyController {
     }
 
 
-    /**
-     * The current implementation of near assumes an idealized model of a flat earth, meaning that an arcdegree
-     * of latitude (y) and longitude (x) represent the same distance everywhere.
-     * This is only true at the equator where they are both about equal to 69 miles or 111km. Therefore you must divide the
-     * distance you want by 111 for kilometer and 69 for miles.
-     *
-     * @param maxdistance The distance around a point.
-     * @return The calcuated distance in kilometer.
-     */
-    private Double getInKilometer(Double maxdistance) {
-        return maxdistance / KILOMETER;
-    }
+
 
 /*    @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
