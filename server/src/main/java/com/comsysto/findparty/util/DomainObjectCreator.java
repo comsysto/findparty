@@ -21,7 +21,7 @@ import java.util.Set;
  */
 public class DomainObjectCreator {
 
-    public static final String PREFIX = "C:\\work\\workspaces\\comsysto\\find-party\\meta\\generated";
+    public static final String PREFIX = System.getProperty("user.dir") + File.separator + "../meta" + File.separator + "generated"; 
 
     public void createObjects() {
         try {
@@ -40,9 +40,12 @@ public class DomainObjectCreator {
         party1.setSize(3);
         party1.setCategory(CategoryType.BIKING.name());
         party1.setLevel(LevelType.BEGINNER.name());
-        party1.setLocation(new Point(11.53144, 48.1567));
+        Point location = new Point();
+        location.setLon(13.222);
+        location.setLat(59.232);
+        party1.setLocation(location);
         party1.setStartDate(new Date());
-
+        party1.setName("Testparty");
         User dave = new User();
         dave.setUsername("dave");
 

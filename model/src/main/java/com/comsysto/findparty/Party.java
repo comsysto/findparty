@@ -1,7 +1,8 @@
 package com.comsysto.findparty;
 
+import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,9 +11,12 @@ import java.util.Set;
  * Time: 13:09
  * To change this template use File | Settings | File Templates.
  */
-public class Party {
+@SuppressWarnings("serial")
+public class Party implements Serializable{
 
     private String id;
+
+    private String name;
 
     private Integer size;
 
@@ -24,9 +28,9 @@ public class Party {
 
     private String category;
 
-    private Set<String> participants;
+    private List<String> participants;
 
-    private Set<String> candidates;
+    private List<String> candidates;
 
     private String owner;
 
@@ -36,6 +40,14 @@ public class Party {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getSize() {
@@ -78,19 +90,19 @@ public class Party {
         this.category = category;
     }
 
-    public Set<String> getParticipants() {
+    public List<String> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(Set<String> participants) {
+    public void setParticipants(List<String> participants) {
         this.participants = participants;
     }
 
-    public Set<String> getCandidates() {
+    public List<String> getCandidates() {
         return candidates;
     }
 
-    public void setCandidates(Set<String> candidates) {
+    public void setCandidates(List<String> candidates) {
         this.candidates = candidates;
     }
 
