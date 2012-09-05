@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
 import com.comsysto.dalli.android.R;
-import com.comsysto.dalli.android.application.TaskManagerApplication;
+import com.comsysto.dalli.android.application.PartyManagerApplication;
 
 /**
  * Shows and handles the Preferences of the App
@@ -28,7 +28,7 @@ public class Preferences extends PreferenceActivity {
 	 * when the settings are left, we go back to main screen
 	 */
 	public void onBackPressed() {
-		((TaskManagerApplication)getApplication()).initializeService();
+		((PartyManagerApplication)getApplication()).initializeService();
 		Intent intent = new Intent(this, SplashScreenActivity.class);
 	    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	    startActivity(intent);

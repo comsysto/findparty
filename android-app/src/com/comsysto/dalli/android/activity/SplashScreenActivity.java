@@ -35,32 +35,33 @@ public class SplashScreenActivity extends AbstractActivity {
 
 		setContentView(R.layout.main);
 
-		Button reviewButton = (Button) findViewById(R.id.REVIEW_BUTTON);
-		Button focusButton = (Button) findViewById(R.id.FOCUS_BUTTON);
+		Button findPartyButton = (Button) findViewById(R.id.FIND_PARTY_BUTTON);
+		Button createNewPartyButton = (Button) findViewById(R.id.CREATE_NEW_PARTY_BUTTON);
+        Button myPartiesButton = (Button) findViewById(R.id.MY_PARTIES_BUTTON);
 
-		reviewButton.setOnClickListener(new View.OnClickListener() {
+        myPartiesButton.setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				if (getTaskManagerApplication().isReady()) {
-					goTo(SplashScreenActivity.this, ReviewActivity.class);
-				} else {
-					SplashScreenActivity.this.showDialog(5);
-				}
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                if (getTaskManagerApplication().isReady()) {
+                    goTo(SplashScreenActivity.this, MyPartiesActivity.class);
+                } else {
+                    SplashScreenActivity.this.showDialog(5);
+                }
+            }
+        });
 
-		focusButton.setOnClickListener(new View.OnClickListener() {
+		createNewPartyButton.setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				if (getTaskManagerApplication().isReady()) {
-					goTo(SplashScreenActivity.this, FocusActivity.class);
-				} else {
-					SplashScreenActivity.this.showDialog(5);
-				}
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                if (getTaskManagerApplication().isReady()) {
+                    goTo(SplashScreenActivity.this, SelectCategoryActivity.class);
+                } else {
+                    SplashScreenActivity.this.showDialog(5);
+                }
+            }
+        });
 	}
 
 	private void showProgressDialogIfNotReady() {
@@ -75,7 +76,7 @@ public class SplashScreenActivity extends AbstractActivity {
 					while (!getTaskManagerApplication().isReady()) {
 						//wait
 					}
-					getTaskManagerApplication().loadTasks();
+					getTaskManagerApplication().loadParties();
 					return null;
 				}
 				

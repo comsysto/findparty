@@ -1,7 +1,7 @@
  <account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
     android:accountType="com.comsysto.authentication"
-    android:icon="@drawable/logo"
-    android:smallIcon="@drawable/ic_launcher_dailly"
+    android:icon="@drawable/findparty_logo"
+    android:smallIcon="@drawable/findparty_logo"
     android:label="@string/APP_NAME" />
 <!--  android:accountPreferences="@xml/account_preferences"
  /> -->

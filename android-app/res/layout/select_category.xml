@@ -2,9 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical">
 
-	<ImageView android:layout_height="wrap_content" android:layout_width="wrap_content" 
-    	android:src="@drawable/tasklist" android:id="@+id/imageView1"
-    	android:layout_gravity="center_horizontal"></ImageView>
+	<TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+    	android:id="@+id/selectCategoryTitle"
+        android:text="@string/SELECT_CATEGORY_TITLE"
+    	android:layout_gravity="left"/>
+
     	
 	<ListView android:id="@id/android:list" 
 		android:layout_width="fill_parent"
@@ -12,7 +16,7 @@
 
 	<TextView android:id="@id/android:empty" 
 		android:gravity="center_vertical|center_horizontal"
-		android:text="Keine Tasks"
+		android:text="Keine Kategorien - ups da ist was schief gelaufen"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"/>
 

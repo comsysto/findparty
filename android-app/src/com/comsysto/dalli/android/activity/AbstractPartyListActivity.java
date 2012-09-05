@@ -1,41 +1,34 @@
 package com.comsysto.dalli.android.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ContextMenu;
+import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
-
 import com.comsysto.dalli.android.R;
-import com.comsysto.dalli.android.adapter.TaskListAdapter;
-import com.comsysto.dalli.android.application.TaskManagerApplication;
+import com.comsysto.dalli.android.adapter.PartyListAdapter;
+import com.comsysto.dalli.android.application.PartyManagerApplication;
 import com.comsysto.dalli.android.authentication.AccountAuthenticator;
 import com.comsysto.dalli.android.menu.OptionMenuHandler;
-import com.comsysto.modules.taskmanagement.api.dto.Task;
-import com.comsysto.modules.taskmanagement.api.dto.TaskStatus;
+import com.comsysto.findparty.Party;
+
+import java.util.List;
 
 /**
- * Abstract class for displaying a list of task's. Subclasses decide which
+ * Abstract class for displaying a list of Parties. Subclasses decide which
  * List of Tasks shall be displayed. 
  * 
  * @author stefandjurasic
  *
  */
-public abstract class AbstractTaskListActivity extends ListActivity {
+public abstract class AbstractPartyListActivity extends ListActivity {
 
-	private ArrayAdapter<Task> arrayAdapter;
-	protected List<Task> tasks;
+	private ArrayAdapter<com.comsysto.findparty.Party> arrayAdapter;
+	protected List<Party> parties;
 	private OptionMenuHandler optionMenuHandler;
 
 	@Override
@@ -59,24 +52,10 @@ public abstract class AbstractTaskListActivity extends ListActivity {
 	}
 
 	protected void initArrayAdapter() {
-		this.tasks = getTaskManagerApplication().getTaskList();
-		filter();
-		setArrayAdapter(new TaskListAdapter(this, tasks));
+		this.parties = getPartyManagerApplication().getParties();
+		setArrayAdapter(new PartyListAdapter(this, parties));
 		setListAdapter(getArrayAdapter());
 	}
-
-	abstract protected void filter();
-	
-	protected void filterActiveTasks() {
-		List<Task> filteredList = new ArrayList<Task>();
-		for (Task currentTask : tasks) {
-			if (currentTask.getStatus() == TaskStatus.ACTIVE) {
-				filteredList.add(currentTask);
-			}
-		}
-		this.tasks = filteredList;
-	}
-	
 
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
@@ -90,22 +69,22 @@ public abstract class AbstractTaskListActivity extends ListActivity {
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
 				.getMenuInfo();
-		Task selectedTask = getArrayAdapter().getItem((int)info.id);
+		Party selectedParty = getArrayAdapter().getItem((int)info.id);
 
 		switch (item.getItemId()) {
-		case R.id.toggle_task:
-			 TaskStatus taskStatus = selectedTask.getStatus() == TaskStatus.ACTIVE ? TaskStatus.DONE : TaskStatus.ACTIVE;
-			 selectedTask.setStatus(taskStatus);
-			 this.notifyDataSetChanged();
-			 return true;
-		case R.id.delete_task:
-			getTaskManagerApplication().deleteTask(selectedTask);
-			this.notifyDataSetChanged();
-			return true;
-		case R.id.open_task:
-			getTaskManagerApplication().setSelectedTask(selectedTask);
+//		case R.id.toggle_task:
+//			 TaskStatus taskStatus = selectedTask.getStatus() == TaskStatus.ACTIVE ? TaskStatus.DONE : TaskStatus.ACTIVE;
+//			 selectedTask.setStatus(taskStatus);
+//			 this.notifyDataSetChanged();
+//			 return true;
+//		case R.id.delete_task:
+//			getPartyManagerApplication().deleteTask(selectedTask);
+//			this.notifyDataSetChanged();
+//			return true;
+		case R.id.open_party:
+			getPartyManagerApplication().setSelectedParty(selectedParty);
 			Intent intent = new Intent(this,
-					EditTaskActivity.class);
+					EditPartyActivity.class);
 			startActivity(intent);
 			return true;
 		default:
@@ -114,16 +93,16 @@ public abstract class AbstractTaskListActivity extends ListActivity {
 		}
 	}
 
-	public void setArrayAdapter(ArrayAdapter<Task> arrayAdapter) {
+	public void setArrayAdapter(ArrayAdapter<Party> arrayAdapter) {
 		this.arrayAdapter = arrayAdapter;
 	}
 
-	public ArrayAdapter<Task> getArrayAdapter() {
+	public ArrayAdapter<Party> getArrayAdapter() {
 		return arrayAdapter;
 	}
 
-	public TaskManagerApplication getTaskManagerApplication() {
-		return (TaskManagerApplication) getApplication();
+	public PartyManagerApplication getPartyManagerApplication() {
+		return (PartyManagerApplication) getApplication();
 	}
 	
 	@Override

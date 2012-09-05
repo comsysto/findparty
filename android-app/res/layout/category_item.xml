@@ -11,7 +11,7 @@
         android:gravity="center"
         android:layout_height="50dip"
 		android:textColor="#ffffff"
-		android:checkMark="?android:attr/listChoiceIndicatorMultiple" />
+		/>
 		
 	
     	

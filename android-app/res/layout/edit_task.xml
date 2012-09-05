@@ -6,60 +6,37 @@
 	xmlns:widget="http://www.comsysto.com/dalli/android/widget">
 	<LinearLayout
 		android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical">
-	    <ImageView android:src="@drawable/logo" android:id="@+id/imageView1" 
-	    	android:layout_width="wrap_content" android:layout_height="wrap_content"></ImageView>
+	    <ImageView android:src="@drawable/findparty_logo" android:id="@+id/imageView1"
+	    	android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"></ImageView>
 	        
-	    <EditText android:layout_width="fill_parent" android:layout_height="wrap_content" 
-	        android:id="@+id/taskNameEditText" android:hint="New Task"></EditText>
+	    <TextView android:layout_width="fill_parent" android:layout_height="30dip" android:gravity="center"
+	        android:id="@+id/categoryNameText" android:text="Test" style="@android:style/TextAppearance.Large"></TextView>
 	    
 	    
-	    <com.comsysto.dalli.android.widget.ModifiableTextList 
-	    	android:id="@+id/contextList"
-			android:layout_width="fill_parent" 
-			android:layout_height="wrap_content" 
-			android:orientation="vertical"   
-			widget:name="Context" 	
-	    />
-	    
-	    <Spinner 
-	        android:id="@+id/taskTypeSpinner"
+	    <Spinner
+	        android:id="@+id/levelSpinner"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
-	        android:prompt="@string/TASK_TYPE_LABEL"
+	        android:prompt="@string/EXPERIENCE_LABEL"
 	    />
-	    
-	    <Spinner 
-	        android:id="@+id/taskStatusSpinner"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:prompt="@string/TASK_STATUS_LABEL"
-	    />
-	    
-	    <com.comsysto.dalli.android.widget.ModifiableTextList 
-	    	android:id="@+id/tagList"
-			android:layout_width="fill_parent" 
-			android:layout_height="wrap_content" 
-			android:orientation="vertical" 
-			widget:name="Tag"   	
-	    />	    
-	        
-	    
+
 	    <DatePicker
-	        android:id="@+id/taskDueDatePicker"
+	        android:id="@+id/partyDatePicker"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
-	        android:prompt="@string/TASK_TIME_CONTEXT_LABEL"
+	        android:prompt="@string/DAY_AND_TIME_CONTEXT_LABEL"
 	    />
-	    
-	    <Spinner 
-	        android:id="@+id/taskTimeContextSpinner"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:prompt="@string/TASK_TIME_CONTEXT_LABEL"
-	    />    
+
+        <TimePicker
+                android:id="@+id/partyTimePicker"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                />
+
 	    
 	    <Button android:layout_width="150px" android:layout_height="wrap_content" 
-	    	android:text="@string/ADD_TASK_BUTTON" android:id="@+id/addButton" 
+	    	android:text="@string/ADD_PARTY_BUTTON" android:id="@+id/addButton"
 	    	android:layout_gravity="center_vertical|center_horizontal"></Button>    
 	    	
 	    	

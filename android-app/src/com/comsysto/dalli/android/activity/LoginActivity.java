@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.comsysto.dalli.android.R;
-import com.comsysto.dalli.android.application.TaskManagerApplication;
+import com.comsysto.dalli.android.application.PartyManagerApplication;
 import com.comsysto.dalli.android.authentication.AccountAuthenticator;
 
 /**
@@ -82,7 +82,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 
 
 	private boolean createUserInBackend() {
-		if (((TaskManagerApplication)getApplication()).createAccount(userName.getText().toString(), password.getText().toString()) != null) {
+		if (((PartyManagerApplication)getApplication()).createAccount(userName.getText().toString(), password.getText().toString()) != null) {
 			return true;
 		}
 		else {

@@ -2,7 +2,6 @@ package com.comsysto.dalli.android.menu;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,14 +9,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
-
 import com.comsysto.dalli.android.R;
-import com.comsysto.dalli.android.activity.AbstractTaskListActivity;
-import com.comsysto.dalli.android.activity.CreateTaskActivity;
+import com.comsysto.dalli.android.activity.CreatePartyActivity;
 import com.comsysto.dalli.android.activity.CreditsActivity;
 import com.comsysto.dalli.android.activity.Preferences;
-import com.comsysto.dalli.android.application.TaskManagerApplication;
-import com.comsysto.modules.taskmanagement.api.dto.Task;
+import com.comsysto.dalli.android.application.PartyManagerApplication;
 
 /**
  * OptionMenu displayed when the button menu is pushed.
@@ -67,26 +63,26 @@ public class OptionMenuHandler {
 		final EditText input = new EditText(activity);
 		alert.setView(input);
 
-		alert.setPositiveButton(R.string.ADD_TASK_BUTTON,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						Task newTask = new Task(input.getText().toString());
-						getTaskManagerApplication().createTask(newTask);
-						//ugly hack to inform when new task is here
-						if (activity instanceof ListActivity) {
-							((AbstractTaskListActivity)activity).notifyDataSetChanged();
-						}
-					}
-				});
+		alert.setPositiveButton(R.string.ADD_PARTY_BUTTON, null);
+//				new DialogInterface.OnClickListener() {
+//					public void onClick(DialogInterface dialog, int whichButton) {
+//						Task newTask = new Task(input.getText().toString());
+//						getPartyManagerApplication().createParty(newTask);
+//						//ugly hack to inform when new task is here
+//						if (activity instanceof ListActivity) {
+//							((AbstractPartyListActivity)activity).notifyDataSetChanged();
+//						}
+//					}
+//				});
 
 		alert.setNegativeButton(R.string.CANCEL_BUTTON, null);
 		alert.setNeutralButton(R.string.EDIT_BUTTON,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
 						Intent intent = new Intent(activity,
-								CreateTaskActivity.class);
+								CreatePartyActivity.class);
 
-						intent.putExtra("taskname", input.getText().toString());
+						intent.putExtra("category", input.getText().toString());
 
 						activity.startActivity(intent);
 					}
@@ -94,7 +90,7 @@ public class OptionMenuHandler {
 		alert.show();
 	}	
 	
-	TaskManagerApplication getTaskManagerApplication() {
-		return (TaskManagerApplication) activity.getApplication();
+	PartyManagerApplication getPartyManagerApplication() {
+		return (PartyManagerApplication) activity.getApplication();
 	}	
 }

@@ -4,10 +4,9 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
-
-import com.comsysto.dalli.android.application.TaskManagerApplication;
+import com.comsysto.dalli.android.application.PartyManagerApplication;
 import com.comsysto.dalli.android.authentication.AccountAuthenticator;
-import com.comsysto.modules.usermanagement.api.dto.User;
+import com.comsysto.findparty.User;
 
 
 /**
@@ -33,7 +32,7 @@ public class StartActivity extends Activity {
 	    if (accountsByType.length == 0) {
 	    	mAccountManager.addAccount(AccountAuthenticator.AUTH_TYPE, null, null, null, this, null, null);
 	    } else {
-	    	TaskManagerApplication application = (TaskManagerApplication)getApplication();
+	    	PartyManagerApplication application = (PartyManagerApplication)getApplication();
 	    	
 	    	User user = new User();
 	    	user.setUsername(accountsByType[0].name);

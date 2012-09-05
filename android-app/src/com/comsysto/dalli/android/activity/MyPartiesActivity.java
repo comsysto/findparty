@@ -1,0 +1,19 @@
+package com.comsysto.dalli.android.activity;
+
+import android.os.Bundle;
+import com.comsysto.dalli.android.R;
+
+/**
+ * Acitivty for displaying only Active Tasks!
+ * 
+ * 
+ * @author stefandjurasic
+ *
+ */
+public class MyPartiesActivity extends AbstractPartyListActivity {
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		setContentView(R.layout.my_parties);
+		super.onCreate(savedInstanceState);
+	}
+}

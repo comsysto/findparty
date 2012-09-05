@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="APP_NAME">Dailly</string>
+	<string name="APP_NAME">Find Party</string>
+
+    <string name="MY_PARTIES_BUTTON">My parties</string>
+    <string name="SETTINGS_BUTTON">Settings</string>
+    <string name="CREATE_NEW_PARTY_BUTTON">Create a new party</string>
+    <string name="FIND_PARTY_BUTTON">Find an awesome party</string>
+    <string name="EXPERIENCE_LABEL">Experience</string>
+    <string name="SELECT_CATEGORY_TITLE">What do you want to do?</string>
+    <string name="SIGNUP_LABEL">Sign Up for FindParty</string>
+    <string name="DAY_AND_TIME_CONTEXT_LABEL">Day and Time</string>
+    <string name="ADD_PARTY_BUTTON">Add Party</string>
+    <string name="OPEN_PARTY_MENU_ITEM">Open Party</string>
+
+
 
     <string name="TOGGLE_TASK_MENU_ITEM">Toggle Task</string>
     <string name="DELETE_TASK_MENU_ITEM">Delete</string>
-    <string name="OPEN_TASK_MENU_ITEM">Open</string>
 	<string name="QUICK_INSERT_MENU_ITEM">Quick Entry</string>
 
-	<string name="GROUP_VIEW_BUTTON">GroupView</string>
-	<string name="ADMIN_BUTTON">Admin</string>
-	<string name="FOCUS_BUTTON">Focus</string>
-	<string name="REVIEW_BUTTON">Review</string>
-	<string name="ADD_TASK_BUTTON">Add Task</string>
+
 	<string name="SAVE_TASK_BUTTON">Save Task</string>	
 	<string name="CANCEL_BUTTON">Cancel</string>
 	<string name="EDIT_BUTTON">Edit</string>	
@@ -20,13 +28,13 @@
     <string name="ADD_BUTTON">Add</string>
 
 	<string name="TASK_NAME_LABEL">Name</string>
-	<string name="SIGNUP_LABEL">Sign Up for Dailly</string>
+
 	<string name="SPACE_LABEL"> </string>
 	<string name="CREDITS_LABEL">Credits</string>
 	<string name="ADD_LABEL">Add Task</string>
 	<string name="PREFERENCES_LABEL">Settings</string>
-	<string name="TASK_TYPE_LABEL">Type</string>	
 	<string name="TASK_STATUS_LABEL">Status</string>
-	<string name="TASK_TIME_CONTEXT_LABEL">Time Context</string>
-	
+
+
+
 </resources>

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical">
     <ImageView android:layout_height="wrap_content" android:layout_width="wrap_content" 
-    	android:src="@drawable/logo" android:id="@+id/imageView1"
+    	android:src="@drawable/findparty_logo" android:id="@+id/imageView1"
     	android:layout_gravity="center_horizontal"></ImageView>
     	
     <TextView android:autoLink="web" android:id="@+id/textView2" 
