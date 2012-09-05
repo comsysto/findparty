@@ -1,9 +1,8 @@
 package com.comsysto.findparty.web;
 
-import com.comsysto.findparty.Party;
-
-import java.util.Date;
 import java.util.Set;
+
+import com.comsysto.findparty.Party;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,7 +17,7 @@ public interface PartyService {
 
     public Party showDetails(String partyId);
 
-    public void cancelParty(String partyId);
+    public void cancelParty(String username, String partyId);
 
     public void joinParty(String username, String partyId);
 

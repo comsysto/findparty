@@ -4,8 +4,6 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.geo.Point;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.comsysto.findparty.Party;
+
 
 @Controller
 @RequestMapping("/party")
@@ -60,11 +59,10 @@ public class PartyController {
     }
     */
 
-    @RequestMapping(value = "/{lon}/{lat}/{maxdistance}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/search/{lon}/{lat}/{maxdistance}", method = RequestMethod.GET, produces = "application/json")
     public
     @ResponseBody
     Set<Party> searchParties(@PathVariable("lon") Double lon, @PathVariable("lat") Double lat, @PathVariable("maxdistance") Double  maxdistance) throws Exception {
-        Criteria criteria = new Criteria(START).near(new Point(lon, lat)).maxDistance(getInKilometer(maxdistance));
         Set<Party> parties = partyService.searchParties(lon, lat); 
         return parties;
     }
@@ -72,28 +70,20 @@ public class PartyController {
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
     public void createParty(@RequestBody Party party) throws Exception {
-    	logger.info("received party in category: " + party.getCategory());
+    	logger.info("received party: " + party.getName());
     	partyService.createParty(party);
     }
-    
-    @RequestMapping(method = RequestMethod.GET)
+
+    @RequestMapping(value = "/cancel/{username}/{partyId}", method = RequestMethod.GET, consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
-    public void getParties() {
-    	logger.info("received request");
+    public void cancelParty(@PathVariable("username") String username, @PathVariable("partyId") String partyId) throws Exception {
+        partyService.cancelParty(username, partyId);
     }
 
-
-    /**
-     * The current implementation of near assumes an idealized model of a flat earth, meaning that an arcdegree
-     * of latitude (y) and longitude (x) represent the same distance everywhere.
-     * This is only true at the equator where they are both about equal to 69 miles or 111km. Therefore you must divide the
-     * distance you want by 111 for kilometer and 69 for miles.
-     *
-     * @param maxdistance The distance around a point.
-     * @return The calcuated distance in kilometer.
-     */
-    private Double getInKilometer(Double maxdistance) {
-        return maxdistance / KILOMETER;
+    @RequestMapping(value = "/showdetails/{partyId}", method = RequestMethod.GET, consumes = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    public void showDetails(@PathVariable("partyId") String partyId) throws Exception {
+        partyService.showDetails(partyId);
     }
 
 /*    @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = "application/json")
