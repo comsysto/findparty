@@ -1,5 +1,6 @@
 package com.comsysto.findparty.web;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -30,24 +31,33 @@ public class PartyServiceImpl implements PartyService {
     @Override
 	public Set<Party> searchParties(Double lon, Double lat) {
         Criteria criteria = new Criteria(START).near(new Point(lon, lat)).maxDistance(getInKilometer(MAXDISTANCE));
-        List<Party> tracks = mongoOperations.find(new Query(criteria),
-                Party.class);
-        return null;
+        Set<Party> parties = new HashSet<Party>();
+        parties.addAll(mongoOperations.find(new Query(criteria),
+                Party.class));
+        return parties;
 	}
 
 	@Override
 	public Party showDetails(String partyId) {
-		// TODO Auto-generated method stub
-		return null;
+		Criteria criteria = Criteria.where(PARTY_ID()).is(partyId);
+        return mongoOperations.findOne(new Query(criteria), Party.class);
 	}
 
-	@Override
-	public void cancelParty(String partyId) {
-		// TODO Auto-generated method stub
-		
-	}
+    private String PARTY_ID() {
+        return "ID";
+    }
 
-	@Override
+    @Override
+	public void cancelParty(String username, String partyId) {
+        Criteria criteria = Criteria.where(PARTY_ID()).is(partyId);
+        Party party = mongoOperations.findOne(new Query(criteria), Party.class);
+        cancelParty(username, party);
+    }
+
+    private void cancelParty(String username, Party party) {
+    }
+
+    @Override
 	public void joinParty(String username, String partyId) {
 		// TODO Auto-generated method stub
 		

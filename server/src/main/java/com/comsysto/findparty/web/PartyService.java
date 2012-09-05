@@ -18,7 +18,7 @@ public interface PartyService {
 
     public Party showDetails(String partyId);
 
-    public void cancelParty(String partyId);
+    public void cancelParty(String username, String partyId);
 
     public void joinParty(String username, String partyId);
 

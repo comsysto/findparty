@@ -55,7 +55,7 @@ public class PartyController {
     }
     */
 
-    @RequestMapping(value = "/{lon}/{lat}/{maxdistance}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/search/{lon}/{lat}/{maxdistance}", method = RequestMethod.GET, produces = "application/json")
     public
     @ResponseBody
     Set<Party> searchParties(@PathVariable("lon") Double lon, @PathVariable("lat") Double lat, @PathVariable("maxdistance") Double  maxdistance) throws Exception {
@@ -66,6 +66,12 @@ public class PartyController {
     @ResponseStatus(HttpStatus.OK)
     public void createParty(@RequestBody com.comsysto.findparty.Party party) throws Exception {
         partyService.createParty(party);
+    }
+
+    @RequestMapping(value = "/cancel/{username}/{partyId}", method = RequestMethod.GET, consumes = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    public void cancelParty(@PathVariable("username") String username, @PathVariable("partyId") String partyId) throws Exception {
+        partyService.cancelParty(username, partyId);
     }
 
 
