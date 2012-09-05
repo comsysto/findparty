@@ -2,10 +2,20 @@ package com.comsysto.findparty.web;
 
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.stereotype.Component;
+
 import com.comsysto.findparty.Party;
 
+@Component
 public class PartyServiceImpl implements PartyService {
 
+	@Autowired
+	@Qualifier(value="partiesMongoOperations")
+	private MongoTemplate partiesMongoTemplate;
+	
 	@Override
 	public Set<Party> searchParties(Double lon, Double lat) {
 		// TODO Auto-generated method stub
@@ -32,8 +42,7 @@ public class PartyServiceImpl implements PartyService {
 
 	@Override
 	public void createParty(Party party) {
-		// TODO Auto-generated method stub
-		
+		partiesMongoTemplate.save(party, "party");
 	}
 
 }

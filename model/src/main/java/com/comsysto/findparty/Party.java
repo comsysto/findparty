@@ -1,7 +1,7 @@
 package com.comsysto.findparty;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,9 +26,9 @@ public class Party {
 
     private String category;
 
-    private Set<String> participants;
+    private List<String> participants;
 
-    private Set<String> candidates;
+    private List<String> candidates;
 
     private String owner;
 
@@ -88,19 +88,19 @@ public class Party {
         this.category = category;
     }
 
-    public Set<String> getParticipants() {
+    public List<String> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(Set<String> participants) {
+    public void setParticipants(List<String> participants) {
         this.participants = participants;
     }
 
-    public Set<String> getCandidates() {
+    public List<String> getCandidates() {
         return candidates;
     }
 
-    public void setCandidates(Set<String> candidates) {
+    public void setCandidates(List<String> candidates) {
         this.candidates = candidates;
     }
 

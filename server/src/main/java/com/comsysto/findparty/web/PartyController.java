@@ -1,30 +1,31 @@
 package com.comsysto.findparty.web;
 
-import com.comsysto.findparty.Party;
+import java.util.Set;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.geo.Point;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.data.mongodb.core.geo.Point;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-
-import java.util.List;
+import com.comsysto.findparty.Party;
 
 @Controller
 @RequestMapping("/party")
 public class PartyController {
 
     @Autowired
-    @Qualifier("tracksMongoOperations")
-    public MongoOperations mongoOperations;
-
-    @Autowired
     public PartyService partyService;
 
+    public static final Logger logger = Logger.getLogger(PartyController.class);
+    
     public static final Double KILOMETER = 111.0d;
 
     /**
@@ -62,17 +63,23 @@ public class PartyController {
     @RequestMapping(value = "/{lon}/{lat}/{maxdistance}", method = RequestMethod.GET, produces = "application/json")
     public
     @ResponseBody
-    List<Party> searchParties(@PathVariable("lon") Double lon, @PathVariable("lat") Double lat, @PathVariable("maxdistance") Double  maxdistance) throws Exception {
+    Set<Party> searchParties(@PathVariable("lon") Double lon, @PathVariable("lat") Double lat, @PathVariable("maxdistance") Double  maxdistance) throws Exception {
         Criteria criteria = new Criteria(START).near(new Point(lon, lat)).maxDistance(getInKilometer(maxdistance));
-        List<Party> tracks = mongoOperations.find(new Query(criteria),
-                Party.class);
-        return tracks;
+        Set<Party> parties = partyService.searchParties(lon, lat); 
+        return parties;
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
-    public void createParty(@RequestBody com.comsysto.findparty.Party party) throws Exception {
-        mongoOperations.insert(party);
+    public void createParty(@RequestBody Party party) throws Exception {
+    	logger.info("received party in category: " + party.getCategory());
+    	partyService.createParty(party);
+    }
+    
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public void getParties() {
+    	logger.info("received request");
     }
 
 
