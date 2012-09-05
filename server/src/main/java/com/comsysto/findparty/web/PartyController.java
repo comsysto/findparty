@@ -86,6 +86,13 @@ public class PartyController {
         partyService.showDetails(partyId);
     }
 
+    @RequestMapping(value="/{partyId}", method = RequestMethod.POST, consumes="application/json")
+    @ResponseStatus(HttpStatus.OK)
+    public void joinParty(@PathVariable("partyId") String partyId, @RequestBody String username) {
+    	logger.info("received request to join user:"+username+" to party with id:"+partyId);
+    	partyService.joinParty(username, partyId);
+    }
+    
 /*    @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
     public void add(@RequestBody com.comsysto.findparty.Party track) throws Exception {

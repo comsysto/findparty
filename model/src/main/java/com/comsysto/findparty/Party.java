@@ -1,5 +1,6 @@
 package com.comsysto.findparty;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +11,8 @@ import java.util.List;
  * Time: 13:09
  * To change this template use File | Settings | File Templates.
  */
-public class Party {
+@SuppressWarnings("serial")
+public class Party implements Serializable{
 
     private String id;
 

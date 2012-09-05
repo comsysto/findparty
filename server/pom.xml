@@ -71,8 +71,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-jaxrs</artifactId>
-			<version>1.9.5</version>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>

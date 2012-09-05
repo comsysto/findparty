@@ -63,13 +63,16 @@ public class PartyServiceImpl implements PartyService {
 
     @Override
 	public void joinParty(String username, String partyId) {
-		// TODO Auto-generated method stub
+    	Criteria criteria = Criteria.where(PARTY_ID()).is(partyId);
+    	Party party = mongoOperations.findOne(new Query(criteria),Party.class);
+    	party.getCandidates().add(username);
+		mongoOperations.save(party);
 		
 	}
 
 	@Override
 	public void createParty(Party party) {
-		mongoOperations.save(party, "party");
+		mongoOperations.insert(party);
 	}
 
     /**
