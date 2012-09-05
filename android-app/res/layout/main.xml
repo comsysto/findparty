@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="wrap_content">
+	<ImageView android:src="@drawable/logo" android:id="@+id/imageView1"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"></ImageView>
+
+	<Button android:layout_weight="1" android:text="@string/FOCUS_BUTTON"
+		android:id="@+id/FOCUS_BUTTON" android:layout_width="300px"
+		android:layout_height="wrap_content" android:layout_gravity="center_horizontal"></Button>
+
+	<Button android:layout_weight="1" android:text="@string/REVIEW_BUTTON"
+		android:id="@+id/REVIEW_BUTTON" android:layout_width="300px"
+		android:layout_height="wrap_content" android:layout_gravity="center_horizontal"></Button>
+
+	<Button android:layout_weight="1" android:text="@string/GROUP_VIEW_BUTTON"
+		android:id="@+id/GROUP_VIEW_BUTTON" android:layout_width="300px"
+		android:layout_height="wrap_content" android:clickable="false" android:textColor="#999999" android:layout_gravity="center_horizontal"></Button>
+
+	<Button android:layout_weight="1" android:text="@string/ADMIN_BUTTON"
+		android:id="@+id/ADMIN_BUTTON" android:layout_width="300px"
+		android:layout_height="wrap_content" android:clickable="false" android:textColor="#999999" android:layout_gravity="center_horizontal"></Button>
+</LinearLayout>

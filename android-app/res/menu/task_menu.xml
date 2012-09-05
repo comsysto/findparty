@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:title="@string/TOGGLE_TASK_MENU_ITEM" android:id="@+id/toggle_task"></item>
+	<item android:id="@+id/open_task" android:title="@string/OPEN_TASK_MENU_ITEM"></item>
+	<item android:id="@+id/delete_task" android:title="@string/DELETE_TASK_MENU_ITEM"></item>
+</menu>

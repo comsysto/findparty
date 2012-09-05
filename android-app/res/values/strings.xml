@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="APP_NAME">Dailly</string>
+
+    <string name="TOGGLE_TASK_MENU_ITEM">Toggle Task</string>
+    <string name="DELETE_TASK_MENU_ITEM">Delete</string>
+    <string name="OPEN_TASK_MENU_ITEM">Open</string>
+	<string name="QUICK_INSERT_MENU_ITEM">Quick Entry</string>
+
+	<string name="GROUP_VIEW_BUTTON">GroupView</string>
+	<string name="ADMIN_BUTTON">Admin</string>
+	<string name="FOCUS_BUTTON">Focus</string>
+	<string name="REVIEW_BUTTON">Review</string>
+	<string name="ADD_TASK_BUTTON">Add Task</string>
+	<string name="SAVE_TASK_BUTTON">Save Task</string>	
+	<string name="CANCEL_BUTTON">Cancel</string>
+	<string name="EDIT_BUTTON">Edit</string>	
+    <string name="QUICK_ENTRY_BUTTON">Quick Entry</string>
+    <string name="LOGIN_BUTTON">Sign In</string>
+    <string name="ADD_BUTTON">Add</string>
+
+	<string name="TASK_NAME_LABEL">Name</string>
+	<string name="SIGNUP_LABEL">Sign Up for Dailly</string>
+	<string name="SPACE_LABEL"> </string>
+	<string name="CREDITS_LABEL">Credits</string>
+	<string name="ADD_LABEL">Add Task</string>
+	<string name="PREFERENCES_LABEL">Settings</string>
+	<string name="TASK_TYPE_LABEL">Type</string>	
+	<string name="TASK_STATUS_LABEL">Status</string>
+	<string name="TASK_TIME_CONTEXT_LABEL">Time Context</string>
+	
+</resources>

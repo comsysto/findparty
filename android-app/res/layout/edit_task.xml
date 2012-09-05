@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView 
+	android:layout_width="fill_parent" 
+	android:layout_height="fill_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:widget="http://www.comsysto.com/dalli/android/widget">
+	<LinearLayout
+		android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical">
+	    <ImageView android:src="@drawable/logo" android:id="@+id/imageView1" 
+	    	android:layout_width="wrap_content" android:layout_height="wrap_content"></ImageView>
+	        
+	    <EditText android:layout_width="fill_parent" android:layout_height="wrap_content" 
+	        android:id="@+id/taskNameEditText" android:hint="New Task"></EditText>
+	    
+	    
+	    <com.comsysto.dalli.android.widget.ModifiableTextList 
+	    	android:id="@+id/contextList"
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content" 
+			android:orientation="vertical"   
+			widget:name="Context" 	
+	    />
+	    
+	    <Spinner 
+	        android:id="@+id/taskTypeSpinner"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:prompt="@string/TASK_TYPE_LABEL"
+	    />
+	    
+	    <Spinner 
+	        android:id="@+id/taskStatusSpinner"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:prompt="@string/TASK_STATUS_LABEL"
+	    />
+	    
+	    <com.comsysto.dalli.android.widget.ModifiableTextList 
+	    	android:id="@+id/tagList"
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content" 
+			android:orientation="vertical" 
+			widget:name="Tag"   	
+	    />	    
+	        
+	    
+	    <DatePicker
+	        android:id="@+id/taskDueDatePicker"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:prompt="@string/TASK_TIME_CONTEXT_LABEL"
+	    />
+	    
+	    <Spinner 
+	        android:id="@+id/taskTimeContextSpinner"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:prompt="@string/TASK_TIME_CONTEXT_LABEL"
+	    />    
+	    
+	    <Button android:layout_width="150px" android:layout_height="wrap_content" 
+	    	android:text="@string/ADD_TASK_BUTTON" android:id="@+id/addButton" 
+	    	android:layout_gravity="center_vertical|center_horizontal"></Button>    
+	    	
+	    	
+	</LinearLayout>
+</ScrollView>
