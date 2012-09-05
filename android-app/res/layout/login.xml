@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical">
+    <ImageView android:layout_height="wrap_content" android:layout_width="wrap_content" 
+    	android:src="@drawable/logo" android:id="@+id/imageView1"
+    	android:layout_gravity="center_horizontal"></ImageView>
+    	
+    <TextView android:autoLink="web" android:id="@+id/textView2" 
+    	android:gravity="center" android:layout_height="wrap_content" 
+    	android:layout_width="fill_parent" android:clickable="true" 
+    	android:text="@string/SIGNUP_LABEL" android:textStyle="bold"></TextView>
+    	
+   	<TextView android:id="@+id/error" android:gravity="center" 
+    	android:layout_height="wrap_content" 
+    	android:layout_width="fill_parent" 
+    	android:visibility="invisible"
+    	android:textColor="@color/red"/>
+   		
+	<EditText android:hint="Email" android:id="@+id/editText1"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"></EditText>
+		
+	<EditText android:layout_width="fill_parent" android:id="@+id/editText2"
+		android:hint="Password" android:layout_height="wrap_content"></EditText>
+		
+	<Button android:layout_weight="1" android:text="@string/LOGIN_BUTTON"
+		android:id="@+id/LOGIN_BUTTON" android:layout_width="150px"
+		android:layout_height="wrap_content" android:layout_gravity="center_vertical|center_horizontal"></Button>
+</LinearLayout>

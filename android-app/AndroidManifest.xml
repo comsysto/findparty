@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="com.comsysto.dalli.android"
+      android:versionCode="1"
+      android:versionName="1.0">
+    <application android:debuggable="true" android:name=".application.TaskManagerApplication" android:theme="@android:style/Theme.Black" 
+    			 android:icon="@drawable/ic_launcher_dailly" android:label="@string/APP_NAME">
+        <activity android:name=".activity.StartActivity"
+                  android:label="@string/APP_NAME"
+                  android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.FocusActivity"/>
+        <activity android:name=".activity.ReviewActivity"/>
+        <activity android:name=".activity.LoginActivity"/>
+        <activity android:name=".activity.CreateTaskActivity"/>
+        <activity android:name=".activity.EditTaskActivity"/>        
+        <activity android:name=".activity.CreditsActivity"/>
+        <activity android:name=".activity.Preferences"/>
+        <activity android:name=".activity.SplashScreenActivity"/>
+        <service
+            android:name=".authentication.AuthenticationService"
+            android:exported="true">
+            <intent-filter>
+                <action
+                    android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+
+    </application>
+    <uses-sdk android:minSdkVersion="7" />
+
+
+<uses-permission android:name="android.permission.INTERNET"></uses-permission>
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+<uses-permission android:name="android.permission.GET_ACCOUNTS"></uses-permission>
+<uses-permission android:name="android.permission.MANAGE_ACCOUNTS"></uses-permission>
+<uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"></uses-permission>
+</manifest> 

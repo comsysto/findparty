@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical">
+    <ImageView android:src="@drawable/comsysto" android:id="@+id/imageView1"
+    	android:layout_width="wrap_content" android:layout_height="wrap_content"
+    	android:layout_gravity="center_horizontal"></ImageView>
+    
+    <TextView android:text="comSysto GmbH" android:textStyle="bold" 
+    	android:layout_gravity="center_horizontal" android:id="@+id/textView1" 
+    	android:layout_width="wrap_content" android:layout_height="wrap_content"
+    	android:textSize="16sp" android:textColor="#ffffff"></TextView>    
+	
+	<TextView android:text="Agnes-Pockels-Bogen 1" android:textStyle="bold" 
+		android:layout_gravity="center_horizontal" android:id="@+id/textView1" 
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:textColor="#ffffff"></TextView>
+	
+	<TextView android:text="80992 Munich" android:textStyle="bold" 
+		android:layout_gravity="center_horizontal" android:id="@+id/textView1" 
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:textColor="#ffffff"></TextView>
+	
+	<TextView android:text=" " android:textStyle="bold" 
+		android:layout_gravity="center_horizontal" android:id="@+id/textView1" 
+		android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+		
+	<TextView android:text="Phone: +49 89 550 60 588" android:textStyle="bold" 
+		android:layout_gravity="center_horizontal" android:id="@+id/textView1" 
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:textColor="#ffffff" android:autoLink="phone"></TextView>
+	
+	<TextView android:text="Fax: +49 89 550 60 590" android:textStyle="bold" 
+		android:layout_gravity="center_horizontal" android:id="@+id/textView1" 
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:textColor="#ffffff"></TextView>
+	
+	<TextView android:text=" " android:textStyle="bold" 
+		android:layout_gravity="center_horizontal" android:id="@+id/textView1" 
+		android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+		
+	<TextView android:text="Email: kontakt@comsysto.com" android:textStyle="bold" 
+		android:layout_gravity="center_horizontal" android:id="@+id/textView1" 
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:textColor="#ffffff" android:autoLink="email"></TextView>
+	
+	<TextView android:text="Web: www.comSysto.com" android:textStyle="bold" 
+		android:layout_gravity="center_horizontal" android:id="@+id/textView1" 
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:textColor="#ffffff" android:autoLink="web"></TextView>
+</LinearLayout>
