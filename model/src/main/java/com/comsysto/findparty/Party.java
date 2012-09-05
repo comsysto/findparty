@@ -14,6 +14,8 @@ public class Party {
 
     private String id;
 
+    private String name;
+
     private Integer size;
 
     private Point location;
@@ -36,6 +38,14 @@ public class Party {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getSize() {
