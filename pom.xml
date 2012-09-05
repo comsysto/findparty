@@ -167,7 +167,7 @@
         <dependencies>
             <!-- project module dependencies-->
             <dependency>
-                <groupId>com.comsysto.model</groupId>
+                <groupId>com.comsysto.findparty</groupId>
                 <artifactId>model</artifactId>
                 <version>${com.comsysto.findparty.version}</version>
             </dependency>
