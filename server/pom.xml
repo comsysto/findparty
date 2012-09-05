@@ -4,7 +4,15 @@
     <groupId>com.comsysto.findparty</groupId>
     <artifactId>findparty</artifactId>
     <packaging>war</packaging>
+<<<<<<< HEAD
     <version>0.0.1-SNAPSHOT</version>
+=======
+<<<<<<< HEAD
+    <version>0.0.1-SNAPSHOT</version>
+=======
+    <version>1.0-SNAPSHOT</version>
+>>>>>>> 088ecadd36ee579efb9aed103f8a608f2b79b48f
+>>>>>>> 429689efbdb2bdd797edce77684878459a58e4ca
     <name>findparty</name>
     <url>http://maven.apache.org</url>
 
@@ -43,11 +51,20 @@
 
     <dependencies>
         <dependency>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 429689efbdb2bdd797edce77684878459a58e4ca
             <groupId>com.comsysto.findparty</groupId>
             <artifactId>model</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 088ecadd36ee579efb9aed103f8a608f2b79b48f
+>>>>>>> 429689efbdb2bdd797edce77684878459a58e4ca
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
