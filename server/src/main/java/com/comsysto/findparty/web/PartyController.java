@@ -74,8 +74,11 @@ public class PartyController {
         partyService.cancelParty(username, partyId);
     }
 
-
-
+    @RequestMapping(value = "/showdetails/{partyId}", method = RequestMethod.GET, consumes = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    public void showDetails(@PathVariable("partyId") String partyId) throws Exception {
+        partyService.showDetails(partyId);
+    }
 
 /*    @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
