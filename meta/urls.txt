@@ -1,0 +1,2 @@
+http://localhost:8080/mongo-db-app/services/personservice/get/joe@joe.com
+http://localhost:8080/mongo-db-app/services/personservice/new/Joe/34/joe@joe.de
