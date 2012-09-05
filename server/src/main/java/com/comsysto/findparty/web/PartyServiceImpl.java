@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.query.Query;
 public class PartyServiceImpl implements PartyService {
 
     @Autowired
-    @Qualifier("tracksMongoOperations")
+    @Qualifier("partiesMongoOperations")
     public MongoOperations mongoOperations;
 
 
