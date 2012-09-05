@@ -10,7 +10,9 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.geo.Point;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PartyServiceImpl implements PartyService {
 
     @Autowired
