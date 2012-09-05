@@ -13,14 +13,11 @@ import org.springframework.data.mongodb.core.geo.Point;
 
 
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/party")
 public class PartyController {
-
-    @Autowired
-    @Qualifier("tracksMongoOperations")
-    public MongoOperations mongoOperations;
 
     @Autowired
     public PartyService partyService;
@@ -62,17 +59,14 @@ public class PartyController {
     @RequestMapping(value = "/{lon}/{lat}/{maxdistance}", method = RequestMethod.GET, produces = "application/json")
     public
     @ResponseBody
-    List<Party> searchParties(@PathVariable("lon") Double lon, @PathVariable("lat") Double lat, @PathVariable("maxdistance") Double  maxdistance) throws Exception {
-        Criteria criteria = new Criteria(START).near(new Point(lon, lat)).maxDistance(getInKilometer(maxdistance));
-        List<Party> tracks = mongoOperations.find(new Query(criteria),
-                Party.class);
-        return tracks;
+    Set<Party> searchParties(@PathVariable("lon") Double lon, @PathVariable("lat") Double lat, @PathVariable("maxdistance") Double  maxdistance) throws Exception {
+        return partyService.searchParties(lon, lat);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
     public void createParty(@RequestBody com.comsysto.findparty.Party party) throws Exception {
-        mongoOperations.insert(party);
+        partyService.createParty(party);
     }
 
 
