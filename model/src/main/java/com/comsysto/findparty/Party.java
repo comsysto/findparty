@@ -20,13 +20,13 @@ public class Party {
 
     private Date startDate;
 
-    private Integer level;
+    private String level;
 
-    private Integer category;
+    private String category;
 
-    private Set<User> participants;
+    private Set<String> participants;
 
-    private Set<User> candidates;
+    private Set<String> candidates;
 
     private String owner;
 
@@ -62,35 +62,35 @@ public class Party {
         this.startDate = startDate;
     }
 
-    public Integer getLevel() {
+    public String getLevel() {
         return level;
     }
 
-    public void setLevel(Integer level) {
+    public void setLevel(String level) {
         this.level = level;
     }
 
-    public Integer getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(Integer category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 
-    public Set<User> getParticipants() {
+    public Set<String> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(Set<User> participants) {
+    public void setParticipants(Set<String> participants) {
         this.participants = participants;
     }
 
-    public Set<User> getCandidates() {
+    public Set<String> getCandidates() {
         return candidates;
     }
 
-    public void setCandidates(Set<User> candidates) {
+    public void setCandidates(Set<String> candidates) {
         this.candidates = candidates;
     }
 

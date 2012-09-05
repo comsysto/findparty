@@ -1,4 +1,4 @@
-package org.comsysto.labs.util;
+package com.comsysto.findparty.util;
 
 import org.apache.log4j.Logger;
 

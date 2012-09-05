@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.mongodb.core.geo.Point;
@@ -63,6 +64,12 @@ public class PartyService {
         List<Party> tracks = mongoOperations.find(new Query(criteria),
                 Party.class);
         return tracks;
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    public void createParty(@RequestBody com.comsysto.findparty.Party party) throws Exception {
+        mongoOperations.insert(party);
     }
 
 
