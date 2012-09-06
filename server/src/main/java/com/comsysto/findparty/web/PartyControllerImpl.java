@@ -85,7 +85,6 @@ public class PartyControllerImpl implements PartyController {
     public void show(@PathVariable("partyId") String partyId) {
         partyService.showDetails(partyId);
     }
-
     
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody List<Party> findByUsername(@RequestParam(value = "user", required = true) String username) {

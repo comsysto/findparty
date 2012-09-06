@@ -21,7 +21,7 @@ public interface PartyService {
 
     public void joinParty(String partyId, String username);
 
-    public Party createParty(Party party);
+    public String createParty(Party party);
 
     public void update(Party party);
     

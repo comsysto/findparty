@@ -85,8 +85,9 @@ public class PartyManagerApplication extends Application {
 	}
 
 	public void createParty(Party newParty) {
-		Party createdParty = this.partyService.createParty(newParty);
-		this.parties.add(createdParty);
+		String partyId = this.partyService.createParty(newParty);
+		newParty.setId(partyId);
+		this.parties.add(newParty);
 	}
 
 	public void loadParties() {

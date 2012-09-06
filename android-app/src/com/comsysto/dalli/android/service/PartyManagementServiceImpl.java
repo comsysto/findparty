@@ -58,10 +58,10 @@ public class PartyManagementServiceImpl implements PartyService {
     }
 
     @Override
-    public Party createParty(Party party) {
+    public String createParty(Party party) {
         String url = urlBuilder.createFrom(PARTY_SERVICE_PATH);
 
-        ResponseEntity<Party> postForEntity = restTemplate.postForEntity(url, party, Party.class);
+        ResponseEntity<String> postForEntity = restTemplate.postForEntity(url, party, String.class);
         return postForEntity.getBody();
     }
 

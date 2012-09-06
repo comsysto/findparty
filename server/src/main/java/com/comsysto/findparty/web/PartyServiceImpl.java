@@ -28,8 +28,9 @@ public class PartyServiceImpl implements PartyService {
      * The Attribute that is used for the search for the start position
      */
     public static final String START = "start";
+    public static final String LOCATION = "location";
 
-    private static final Double MAXDISTANCE = 5.;
+    private static final Double MAXDISTANCE = 5.0d;
 
     @Override
 	public List<Party> searchParties(Double lon, Double lat) {
@@ -77,11 +78,6 @@ public class PartyServiceImpl implements PartyService {
     	mongoOperations.save(party);
 	}
 
-	@Override
-	public Party createParty(Party party) {
-		mongoOperations.insert(party);
-		return party;
-	}
 	
 	@Override
 	public void update(Party party) {
@@ -89,6 +85,12 @@ public class PartyServiceImpl implements PartyService {
 	    findById(party.getId());
 	    	    
 	    mongoOperations.save(party);
+	}
+	
+	@Override
+	public String createParty(Party party) {
+		mongoOperations.insert(party);
+        return party.getId();
 	}
 
 
