@@ -19,8 +19,11 @@ public class CreatePartyActivity extends PartyActivity {
 			@Override
 			public void onClick(View v) {
 				Party newParty= new Party();
-                newParty.setCategory(getCategory());
-				getTaskManagerApplication().createParty(newParty);
+                newParty.setCategory(categoryNameText.getText().toString());
+                newParty.setStartDate(calendar.getTime());
+                newParty.setLevel((String)levelSpinner.getSelectedItem());
+
+                getTaskManagerApplication().createParty(newParty);
                 goToSplashScreen(CreatePartyActivity.this);
             }
 		};

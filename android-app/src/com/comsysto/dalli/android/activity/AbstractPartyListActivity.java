@@ -9,6 +9,7 @@ import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import com.comsysto.dalli.android.R;
 import com.comsysto.dalli.android.adapter.PartyListAdapter;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
@@ -57,7 +58,12 @@ public abstract class AbstractPartyListActivity extends ListActivity {
 		setListAdapter(getArrayAdapter());
 	}
 
-	@Override
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        v.showContextMenu();
+    }
+
+    @Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);

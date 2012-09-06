@@ -40,14 +40,6 @@ public class PartyListAdapter extends ArrayAdapter<Party> {
 				.findViewById(android.R.id.text1);
 		textView.setText(party.getCategory());
 
-		textView.setOnLongClickListener(new View.OnLongClickListener() {
-
-			@Override
-			public boolean onLongClick(View v) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-		});
 		return convertView;
 	}
 
