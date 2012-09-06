@@ -43,7 +43,7 @@ public class SplashScreenActivity extends AbstractActivity {
 
             @Override
             public void onClick(View v) {
-                if (getTaskManagerApplication().isReady()) {
+                if (getPartyManagerApplication().isReady()) {
                     goTo(SplashScreenActivity.this, MyPartiesActivity.class);
                 } else {
                     SplashScreenActivity.this.showDialog(5);
@@ -55,7 +55,7 @@ public class SplashScreenActivity extends AbstractActivity {
 
             @Override
             public void onClick(View v) {
-                if (getTaskManagerApplication().isReady()) {
+                if (getPartyManagerApplication().isReady()) {
                     goTo(SplashScreenActivity.this, SelectCategoryActivity.class);
                 } else {
                     SplashScreenActivity.this.showDialog(5);
@@ -65,7 +65,7 @@ public class SplashScreenActivity extends AbstractActivity {
 	}
 
 	private void showProgressDialogIfNotReady() {
-		if (!getTaskManagerApplication().isReady()) {
+		if (!getPartyManagerApplication().isReady()) {
 			dialog = new ProgressDialog(this);
 			dialog.setMessage("Loading. Please wait...");
 			dialog.show();
@@ -73,10 +73,10 @@ public class SplashScreenActivity extends AbstractActivity {
 				
 				@Override
 				protected Void doInBackground(Void... params) {
-					while (!getTaskManagerApplication().isReady()) {
+					while (!getPartyManagerApplication().isReady()) {
 						//wait
 					}
-					getTaskManagerApplication().loadParties();
+					getPartyManagerApplication().loadParties();
 					return null;
 				}
 				

@@ -41,7 +41,7 @@ public abstract class AbstractActivity extends FragmentActivity {
 	 * returns the {@link com.comsysto.dalli.android.application.PartyManagerApplication}
 	 * @return instance of {@link com.comsysto.dalli.android.application.PartyManagerApplication}
 	 */
-	PartyManagerApplication getTaskManagerApplication() {
+	PartyManagerApplication getPartyManagerApplication() {
 		return (PartyManagerApplication) getApplication();
 	}
 
