@@ -1,19 +1,23 @@
 package com.comsysto.findparty.web;
 
-import java.util.Set;
+import java.util.List;
 
 import com.comsysto.findparty.Party;
 
 public interface PartyController {
 
-	public Set<Party> searchParties(Double lon, Double lat, Double maxdistance);
+	public List<Party> search(Double lon, Double lat);
 	
-	public void createParty(Party party);
+	public void create(Party party);
 
-	public void cancelParty(String username, String partyId);
+	public void subscribe(String partyId, String action, String username);
 
-	public abstract void showDetails(String partyId);
+	public void show(String partyId);
+	
+	public List<Party> findByUsername(String username);
+	
+	public void update(Party party);
 
-	public abstract void joinParty(String partyId, String username);
+	public void delete(String partyId);
 
 }
