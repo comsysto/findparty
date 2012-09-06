@@ -3,6 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jee="http://www.springframework.org/schema/jee"
 	xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mongo="http://www.springframework.org/schema/data/mongo"
     xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xsi:schemaLocation="
 http://www.springframework.org/schema/beans
@@ -29,22 +30,22 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
     <bean id="mongo" class="com.mongodb.Mongo"/>
 
     <bean id="partiesMongoOperations" class="org.springframework.data.mongodb.core.MongoTemplate">
-        <constructor-arg><ref bean="mongo"/></constructor-arg>
-        <constructor-arg value="parties"/>
+        <constructor-arg ref="mongo"/>
+        <constructor-arg value="party"/>
     </bean>
 
     <bean id="userMongoOperations" class="org.springframework.data.mongodb.core.MongoTemplate">
-        <constructor-arg><ref bean="mongo"/></constructor-arg>
+        <constructor-arg ref="mongo"/>
         <constructor-arg value="user"/>
     </bean>
 
     <bean id="picturesMongoOperations" class="org.springframework.data.mongodb.core.MongoTemplate">
-        <constructor-arg><ref bean="mongo"/></constructor-arg>
+        <constructor-arg ref="mongo"/>
         <constructor-arg value="pictures"/>
     </bean>
 
     <bean id="categoriesMongoOperations" class="org.springframework.data.mongodb.core.MongoTemplate">
-        <constructor-arg><ref bean="mongo"/></constructor-arg>
+        <constructor-arg ref="mongo"/>
         <constructor-arg value="categories"/>
     </bean>
 

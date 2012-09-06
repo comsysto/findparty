@@ -3,11 +3,14 @@ package com.comsysto.findparty.util;
 import com.comsysto.findparty.*;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -19,7 +22,7 @@ import java.util.Date;
  */
 public class DomainObjectCreator {
 
-    public static final String PREFIX = System.getProperty("user.dir") + File.separator + "../meta" + File.separator + "generated"; 
+    public static final String PREFIX = System.getProperty("user.dir") + File.separator + "/meta" + File.separator + "generated";
 
     public void createObjects() {
         try {
@@ -61,10 +64,15 @@ public class DomainObjectCreator {
         FileOutputStream partyOut = getOutputStream(name + ".json");
 
         ObjectMapper mapper = new ObjectMapper();
+        DateFormat myDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        mapper.configure(SerializationConfig.Feature.WRITE_DATES_AS_TIMESTAMPS, false);
+        //mapper.configure(SerializationConfig.Feature.INDENT_OUTPUT, true);
+        mapper.getSerializationConfig().setDateFormat(myDateFormat);
+
+
         mapper.writeValue(partyOut, object);
 
         partyOut.close();
-        ;
     }
 
     private FileOutputStream getOutputStream(String prefix) throws FileNotFoundException {

@@ -52,7 +52,7 @@ public class PartyController {
         > db.places.find({"loc" : {"$within" : {"$box" : box}}})
          */
     /*
-        Criteria criteria = new Criteria(START).within(new Box(new com.comsysto.findparty.Point(lon1, lat1), new com.comsysto.findparty.Point(lon2, lat2)));
+        Criteria criteria = new Criteria(LOCATION).within(new Box(new com.comsysto.findparty.Point(lon1, lat1), new com.comsysto.findparty.Point(lon2, lat2)));
         List<com.comsysto.findparty.Party> tracks = mongoOperations.find(new Query(criteria),
                 com.comsysto.findparty.Party.class);
         return tracks;
@@ -63,11 +63,11 @@ public class PartyController {
     public
     @ResponseBody
     Set<Party> searchParties(@PathVariable("lon") Double lon, @PathVariable("lat") Double lat, @PathVariable("maxdistance") Double  maxdistance) throws Exception {
-        Set<Party> parties = partyService.searchParties(lon, lat); 
+        Set<Party> parties = partyService.searchParties(lon, lat, maxdistance);
         return parties;
     }
 
-    @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(method = RequestMethod.PUT, consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
     public void createParty(@RequestBody Party party) throws Exception {
     	logger.info("received party: " + party.getName());
