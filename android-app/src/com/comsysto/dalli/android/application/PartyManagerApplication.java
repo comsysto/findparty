@@ -8,9 +8,11 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import com.comsysto.dalli.android.service.PartyManagementService;
+import com.comsysto.dalli.android.service.PartyManagementServiceImpl;
 import com.comsysto.dalli.android.service.PartyManagementServiceMock;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.User;
+import com.comsysto.findparty.web.PartyService;
 
 import java.util.List;
 
@@ -33,7 +35,7 @@ public class PartyManagerApplication extends Application {
 
 	private Party selectedParty;
 
-	private PartyManagementService partyManagementService;
+	private PartyService partyService;
 	
 	private boolean ready;
 	
@@ -48,12 +50,11 @@ public class PartyManagerApplication extends Application {
 		this.ready = false;
 		SharedPreferences defaultSharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		String host = defaultSharedPreferences.getString("host",
-				"10.0.2.2:8080");
+		String host = defaultSharedPreferences.getString("host", "10.0.2.2:8080");
 		if (isConnected()) {
 			initializeOnlineService(host);
 		} else {
-			this.partyManagementService = new PartyManagementServiceMock();
+			this.partyService = new PartyManagementServiceImpl(host);
 		}
 	}
 
@@ -62,22 +63,21 @@ public class PartyManagerApplication extends Application {
 
 			@Override
 			protected Void doInBackground(Void... params) {
-				PartyManagerApplication.this.partyManagementService = new PartyManagementServiceMock();
+				PartyManagerApplication.this.partyService = new PartyManagementServiceImpl(host);
 				try {
-					String echo = PartyManagerApplication.this.partyManagementService
-							.echo("echo");
+					String echo = PartyManagerApplication.this.partyService.echo("echo");
 					if (echo.equals("echo")) {
 						Log.i("Server Check", "Server is online");
 					} else {
 						Log.e("Server Check", "Server returned wrong echo ("+ echo + "), going offline.");
-						PartyManagerApplication.this.partyManagementService = new PartyManagementServiceMock();
+						PartyManagerApplication.this.partyService = new PartyManagementServiceImpl(host);
 					}
 				} catch (Exception e) {
 					Log.e("Server Check", "Server not reachable", e);
-					PartyManagerApplication.this.partyManagementService = new PartyManagementServiceMock();
+					PartyManagerApplication.this.partyService = new PartyManagementServiceImpl(host);
 				}
 				PartyManagerApplication.this.ready = true;
-                PartyManagerApplication.this.parties = partyManagementService.getAllPartiesFor(user.getUsername());
+                PartyManagerApplication.this.parties = partyService.getAllParties(user.getUsername());
 				return null;
 			}
 		};
@@ -85,12 +85,13 @@ public class PartyManagerApplication extends Application {
 	}
 
 	public void createParty(Party newParty) {
-		Party createdParty = this.partyManagementService.createParty(user.getUsername(), newParty);
-		this.parties.add(createdParty);
+		String partyId = this.partyService.createParty(newParty);
+		newParty.setId(partyId);
+		this.parties.add(newParty);
 	}
 
 	public void loadParties() {
-		this.parties = this.partyManagementService.getAllPartiesFor(user.getUsername());
+		this.parties = this.partyService.getAllParties(user.getUsername());
 	}
 	
 	public List<Party> getParties() {
@@ -99,8 +100,8 @@ public class PartyManagerApplication extends Application {
 	}
 
 	public void deleteParty(Party party) {
-		this.partyManagementService.deleteParty(user.getUsername(), party.getId());
-		this.parties.remove(party);
+//		this.partyService.deleteParty(party.getId());
+//		this.parties.remove(party);
 	}
 
 	boolean isConnected() {
@@ -119,7 +120,8 @@ public class PartyManagerApplication extends Application {
 	}
 
 	public void saveParty(Party updatedParty) {
-		this.partyManagementService.saveParty(user.getUsername(), updatedParty);
+	    updatedParty.setOwner(user.getUsername());
+		this.partyService.update(updatedParty);
 	}
 
 	public void setSelectedParty(Party selectedParty) {

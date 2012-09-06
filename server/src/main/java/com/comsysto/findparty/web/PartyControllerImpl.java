@@ -1,8 +1,7 @@
 package com.comsysto.findparty.web;
 
-import java.util.Set;
+import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -10,32 +9,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.comsysto.findparty.Party;
 
 @Controller
-@RequestMapping("/party")
+@RequestMapping("/parties")
 public class PartyControllerImpl implements PartyController {
 
     @Autowired
     public PartyService partyService;
-
-    public static final Logger logger = Logger.getLogger(PartyControllerImpl.class);
-
-    public static final Double KILOMETER = 111.0d;
-
-    /**
-     * The Attribute that is used for the search for the start position
-     */
-    public static final String START = "start";
-
-    /**
-     * The Attribute that is used for the search for the user
-     */
-
-    // private static final String USER = "user";
 
     /*
      * @RequestMapping(value = "/get", method = RequestMethod.GET, produces =
@@ -65,72 +50,58 @@ public class PartyControllerImpl implements PartyController {
      * Query(criteria), com.comsysto.findparty.Party.class); return tracks; }
      */
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.comsysto.findparty.web.IPartyController#searchParties(java.lang.Double
-     * , java.lang.Double, java.lang.Double)
-     */
-    @RequestMapping(value = "/search/{lon}/{lat}/{maxdistance}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/location/{lon}/{lat}", method = RequestMethod.GET, produces = "application/json")
+    @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Set<Party> searchParties(@PathVariable("lon") Double lon, @PathVariable("lat") Double lat,
-            @PathVariable("maxdistance") Double maxdistance) {
-        Set<Party> parties = partyService.searchParties(lon, lat, maxdistance);
+    List<Party> search(@PathVariable("lon") Double lon, @PathVariable("lat") Double lat) {
+        List<Party> parties = partyService.searchParties(lon, lat);
         return parties;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.comsysto.findparty.web.IPartyController#createParty(com.comsysto.
-     * findparty.Party)
-     */
-    @RequestMapping(value = "/create", method = RequestMethod.PUT, consumes = "application/json")
+    @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
-    public void createParty(@RequestBody Party party) {
-        logger.info("received party: " + party.getName());
+    public void create(@RequestBody Party party) {
         partyService.createParty(party);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.comsysto.findparty.web.IPartyController#cancelParty(java.lang.String,
-     * java.lang.String)
-     */
-    @RequestMapping(value = "/cancel/{username}/{partyId}", method = RequestMethod.GET, consumes = "application/json")
+    @RequestMapping(value = "/{partyId}", method = RequestMethod.PUT, consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
-    public void cancelParty(@PathVariable("username") String username, @PathVariable("partyId") String partyId) {
-        partyService.cancelParty(username, partyId);
+    public void update(@RequestBody Party party) {
+        partyService.update(party);            
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.comsysto.findparty.web.IPartyController#showDetails(java.lang.String)
-     */
-    @RequestMapping(value = "/showdetails/{partyId}", method = RequestMethod.GET, consumes = "application/json")
+    
+    @RequestMapping(value = "/{partyId}/subscriptions", method = RequestMethod.PUT, consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
-    public void showDetails(@PathVariable("partyId") String partyId) {
+    public void subscribe(@PathVariable String partyId, @RequestParam(value = "action", required = false) String action, @RequestBody String username) {
+        
+        if(action!=null && action.equals("cancel"))
+            partyService.cancelParty(username, partyId);
+        
+        partyService.joinParty(username, partyId);
+    }
+    
+    @RequestMapping(value = "/{partyId}", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public void show(@PathVariable("partyId") String partyId) {
         partyService.showDetails(partyId);
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.comsysto.findparty.web.IPartyController#joinParty(java.lang.String,
-     * java.lang.String)
-     */
-    @RequestMapping(value = "/join", method = RequestMethod.PUT, consumes = "application/json")
+    
+    @RequestMapping(method = RequestMethod.GET)
+    public @ResponseBody List<Party> findByUsername(@RequestParam(value = "user", required = true) String username) {
+        return partyService.getAllParties(username);        
+    }
+    
+    
+    @RequestMapping(method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
-    public void joinParty(@PathVariable("partyId") String partyId, @RequestBody String username) {
-        logger.info("received request to join user:" + username + " to party with id:" + partyId);
-        partyService.joinParty(username, partyId);
+    public void delete(@PathVariable String partyId) {
+        partyService.delete(partyId);        
+    }
+    
+    
+    @RequestMapping(value="/echo/{input}", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody String echo(@PathVariable String input) {
+        return input;
     }
 
     /*

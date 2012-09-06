@@ -1,82 +1,124 @@
 package com.comsysto.dalli.android.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import com.comsysto.dalli.android.service.util.UrlBuilder;
+import com.comsysto.findparty.Party;
+import com.comsysto.findparty.web.PartyService;
 
 /**
- * Implementation using {@link RestTemplate} from Spring to communicate with
- * our RestService to obtain Tasks.
+ * Implementation using {@link RestTemplate} from Spring to communicate with our
+ * RestService to obtain Tasks.
  * 
- * @TODO: Currently readTimeout does not work. <a href="https://jira.springsource.org/browse/ANDROID-32">JIRA Ticket</a>
+ * @TODO: Currently readTimeout does not work. <a
+ *        href="https://jira.springsource.org/browse/ANDROID-32">JIRA Ticket</a>
  * 
  * @author stefandjurasic
- *
+ * 
  */
-public class PartyManagementServiceImpl { //implements PartyManagementService {
+public class PartyManagementServiceImpl implements PartyService {
 
-	
-	private RestTemplate restTemplate;
+    private RestTemplate restTemplate;
+    private UrlBuilder urlBuilder;
 
-	private String taskManagementRestUrl;
-	private String host;
+    private final static String PARTY_SERVICE_PATH = "/services/parties";
+    private final static String SUBSCRIPTIONS = "subscriptions";
 
-	private String echoRestUrl;
+    public PartyManagementServiceImpl(String host) {
+        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+        // TODO: NOT WOKRING, check again when spring-android-rest is released
+        // requestFactory.setReadTimeout(100);
 
-	private String loginServiceRestUrl;
+        this.restTemplate = new RestTemplate(requestFactory);
+        MappingJacksonHttpMessageConverter converter = new MappingJacksonHttpMessageConverter();
+        List<MediaType> mediaTypes = new ArrayList<MediaType>();
+        mediaTypes.add(new MediaType("text", "javascript"));
+        converter.setSupportedMediaTypes(mediaTypes);
+        restTemplate.getMessageConverters().add(converter);
+        this.urlBuilder = new UrlBuilder(host);
+    }
 
+    @Override
+    public void cancelParty(String partyId, String username) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("action", "cancel");
+        String url = urlBuilder.createUri(params, PARTY_SERVICE_PATH, partyId, SUBSCRIPTIONS);
 
+        restTemplate.put(url, username);
+    }
 
-	public PartyManagementServiceImpl(String host) {
-		this.host = "http://" + host;
-		this.taskManagementRestUrl = this.host + "/rest/users/{userName}/parties";
-		this.loginServiceRestUrl = this.host + "/rest/login/";
-		this.echoRestUrl = this.host + "/rest/echo/{echo}";
-		HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
-		//TODO: NOT WOKRING, check again when spring-android-rest is released
-		//requestFactory.setReadTimeout(100);
-		this.restTemplate = new RestTemplate(requestFactory);
-	}
-//
-//	@Override
-//	public Task createParty(String userName, Task newTask) {
-//		return restTemplate.postForObject(taskManagementRestUrl, newTask, Task.class, userName);
-//	}
-//
-//	@Override
-//	public void deleteTask(String userName, String id) {
-//		restTemplate.delete(taskManagementRestUrl + "/{taskId}", userName, id);
-//	}
-//
-//
-//
-//	@Override
-//	public void saveParty(String userName, Task task) {
-//		restTemplate.put(taskManagementRestUrl, task, userName);
-//		task.setVersion(0);
-//	}
-//
-//	@Override
-//	public String echo(String echo) {
-//		Map<String, String> echoMap = new HashMap<String, String>();
-//		echoMap.put("echo", echo);
-//		return restTemplate.getForObject(echoRestUrl, String.class, echoMap);
-//	}
-//
-//	@Override
-//	public List<Task> getAllPartiesFor(String userName) {
-//		Task[] tasks = restTemplate.getForObject(taskManagementRestUrl, Task[].class, userName);
-//		return new ArrayList<Task>(Arrays.asList(tasks));
-//
-//	}
-//
-//	@Override
-//	public User createUser(User user, String password) {
-//		return restTemplate.postForObject(loginServiceRestUrl + "{password}", user, User.class, password);
-//	}
-//
-//	@Override
-//	public User login(String userName, String password) throws AuthenticationException {
-//		return restTemplate.getForObject(loginServiceRestUrl + "{userName}/{password}", User.class, userName, password);
-//	}
+    @Override
+    public String createParty(Party party) {
+        String url = urlBuilder.createFrom(PARTY_SERVICE_PATH);
+
+        ResponseEntity<String> postForEntity = restTemplate.postForEntity(url, party, String.class);
+        return postForEntity.getBody();
+    }
+
+    @Override
+    public void joinParty(String partyId, String username) {
+        String url = urlBuilder.createUri(PARTY_SERVICE_PATH, partyId, SUBSCRIPTIONS);
+
+        restTemplate.put(url, username);
+    }
+
+    @Override
+    public List<Party> searchParties(Double lon, Double lat) {
+        String url = urlBuilder.createUri(PARTY_SERVICE_PATH, String.valueOf(lon), String.valueOf(lat));
+
+        
+        Party[] response = restTemplate.getForObject(url, Party[].class);
+
+        return Arrays.asList(response);
+    }
+
+    @Override
+    public Party showDetails(String partyId) {
+        String url = urlBuilder.createUri(PARTY_SERVICE_PATH, partyId);
+
+        return restTemplate.getForObject(url, Party.class);
+    }
+
+    @Override
+    public void update(Party party) {
+        String url = urlBuilder.createUri(PARTY_SERVICE_PATH, party.getId());
+
+        restTemplate.put(url, party);
+    }
+
+    @Override
+    public void delete(String partyId) {
+        String url = urlBuilder.createUri(PARTY_SERVICE_PATH, partyId);
+        
+        restTemplate.delete(url);
+    }
+
+    
+    @Override
+    public List<Party> getAllParties(String username) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("user", username);
+        
+        String url = urlBuilder.createUri(username, PARTY_SERVICE_PATH);
+        
+        Party[] response = restTemplate.getForObject(url, Party[].class);
+        return Arrays.asList(response);
+    }
+
+    @Override
+    public String echo(String arg0) {
+        String url = urlBuilder.createUri(PARTY_SERVICE_PATH, "echo", arg0);
+        return restTemplate.getForObject(url, String.class);
+    }
+
 }
