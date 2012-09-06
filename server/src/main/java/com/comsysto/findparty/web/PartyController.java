@@ -6,6 +6,7 @@ import com.comsysto.findparty.Party;
 
 public interface PartyController {
 
+
 	public Set<Party> searchParties(Double lon, Double lat, Double maxdistance);
 	
 	public void createParty(Party party);

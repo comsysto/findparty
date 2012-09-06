@@ -26,13 +26,11 @@ public class PartyServiceImpl implements PartyService {
     /**
      * The Attribute that is used for the search for the start position
      */
-    public static final String START = "start";
-
-    private static final Double MAXDISTANCE = 5.;
+    public static final String LOCATION = "location";
 
     @Override
-	public Set<Party> searchParties(Double lon, Double lat) {
-        Criteria criteria = new Criteria(START).near(new Point(lon, lat)).maxDistance(getInKilometer(MAXDISTANCE));
+	public Set<Party> searchParties(Double lon, Double lat, Double maxdistance) {
+        Criteria criteria = new Criteria(LOCATION).near(new Point(lon, lat)).maxDistance(getInKilometer(maxdistance));
         Set<Party> parties = new HashSet<Party>();
         parties.addAll(mongoOperations.find(new Query(criteria),
                 Party.class));

@@ -1,5 +1,6 @@
 package com.comsysto.findparty;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +23,7 @@ public class Party implements Serializable{
 
     private Point location;
 
+    @DateTimeFormat(iso= DateTimeFormat.ISO.DATE)
     private Date startDate;
 
     private String level;
