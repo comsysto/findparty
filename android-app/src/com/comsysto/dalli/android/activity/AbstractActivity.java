@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
 import com.comsysto.dalli.android.authentication.AccountAuthenticator;
 
@@ -13,7 +14,7 @@ import com.comsysto.dalli.android.authentication.AccountAuthenticator;
  * @author stefandjurasic
  *
  */
-public abstract class AbstractActivity extends Activity {
+public abstract class AbstractActivity extends FragmentActivity {
 
 	/**
 	 * goes to another activity

@@ -1,14 +1,20 @@
 package com.comsysto.dalli.android.activity;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import com.comsysto.dalli.android.R;
 import com.comsysto.dalli.android.menu.OptionMenuHandler;
-import com.comsysto.dalli.android.widget.ModifiableTextList;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -18,16 +24,17 @@ import java.util.GregorianCalendar;
  * @author stefandjurasic
  *
  */
-public abstract class PartyActivity extends AbstractActivity {
+public abstract class PartyActivity extends AbstractActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener  {
 
 	private OptionMenuHandler optionMenuHandler;
 	TextView categoryNameText;
-	Spinner taskTypeSpinner;
+	Spinner levelSpinner;
 	Button saveButton;
-	DatePicker partyDatePicker;
 
 	Calendar calendar = GregorianCalendar.getInstance();
-    private TimePicker partyTimePicker;
+    SimpleDateFormat formatter = new SimpleDateFormat();
+    private TextView partyTime;
+    static final String[] LEVELS = new String[]{"Beginner", "Amateur", "Professional"};
 
 
     @Override
@@ -45,8 +52,23 @@ public abstract class PartyActivity extends AbstractActivity {
 	}
 
 	private void initTaskDueDatePicker() {
-		this.partyDatePicker = (DatePicker) findViewById(R.id.partyDatePicker);
-        this.partyTimePicker = (TimePicker) findViewById(R.id.partyTimePicker);
+        this.partyTime = (TextView) findViewById(R.id.partyTime);
+        setTimeOnView();
+
+        partyTime.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment fragment = new DialogFragment() {
+                    @Override
+                    public Dialog onCreateDialog(Bundle savedInstanceState) {
+                        return new DatePickerDialog(getActivity(), PartyActivity.this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
+                    }
+                };
+
+                fragment.show(getSupportFragmentManager(), "datePicker");
+            }
+        });
+
 	}
 
 	private void initSaveButton() {
@@ -55,11 +77,11 @@ public abstract class PartyActivity extends AbstractActivity {
 	}
 
 	private void initLevelSpinner() {
-		taskTypeSpinner = (Spinner) findViewById(R.id.levelSpinner);
+		levelSpinner = (Spinner) findViewById(R.id.levelSpinner);
 
-	    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,  android.R.layout.simple_spinner_item, new String[]{"Beginner", "Amateur","Professional"});
+	    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,  android.R.layout.simple_spinner_item, LEVELS);
 	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	    taskTypeSpinner.setAdapter(adapter);
+	    levelSpinner.setAdapter(adapter);
 	}
 
 	private void initCategory() {
@@ -84,5 +106,32 @@ public abstract class PartyActivity extends AbstractActivity {
 		this.optionMenuHandler.onOptionsItemSelected(item);
 		return super.onOptionsItemSelected(item);
 	}
-	
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        calendar.set(Calendar.MINUTE, minute);
+        setTimeOnView();
+    }
+
+    void setTimeOnView() {
+        partyTime.setText("On " + formatter.format(calendar.getTime()));
+    }
+
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        DialogFragment fragment = new DialogFragment() {
+
+            @Override
+            public Dialog onCreateDialog(Bundle savedInstanceState) {
+                return new TimePickerDialog(getActivity(), PartyActivity.this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), DateFormat.is24HourFormat(getActivity()));
+            }
+        };
+        fragment.show(getSupportFragmentManager(), "timePicker");
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, monthOfYear);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+    }
 }

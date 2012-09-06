@@ -21,23 +21,15 @@
 	        android:prompt="@string/EXPERIENCE_LABEL"
 	    />
 
-	    <DatePicker
-	        android:id="@+id/partyDatePicker"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:prompt="@string/DAY_AND_TIME_CONTEXT_LABEL"
-	    />
+        <TextView android:layout_width="fill_parent" android:layout_height="30dip" android:gravity="center"
+                  android:id="@+id/partyTime" android:text="Placehodler" style="@android:style/TextAppearance.Large"></TextView>
 
-        <TimePicker
-                android:id="@+id/partyTimePicker"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                />
 
-	    
-	    <Button android:layout_width="150px" android:layout_height="wrap_content" 
+
+        <Button android:layout_width="150px" android:layout_height="wrap_content"
 	    	android:text="@string/ADD_PARTY_BUTTON" android:id="@+id/addButton"
-	    	android:layout_gravity="center_vertical|center_horizontal"></Button>    
+	    	android:layout_gravity="center_vertical|center_horizontal"
+           />
 	    	
 	    	
 	</LinearLayout>

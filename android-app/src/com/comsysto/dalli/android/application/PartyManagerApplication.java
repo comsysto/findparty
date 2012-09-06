@@ -45,7 +45,6 @@ public class PartyManagerApplication extends Application {
 	}
 
 	public void initializeService() {
-		this.parties = null;
 		this.ready = false;
 		SharedPreferences defaultSharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
@@ -78,6 +77,7 @@ public class PartyManagerApplication extends Application {
 					PartyManagerApplication.this.partyManagementService = new PartyManagementServiceMock();
 				}
 				PartyManagerApplication.this.ready = true;
+                PartyManagerApplication.this.parties = partyManagementService.getAllPartiesFor(user.getUsername());
 				return null;
 			}
 		};

@@ -76,7 +76,7 @@ public class PartyControllerImpl implements PartyController {
     public @ResponseBody
     Set<Party> searchParties(@PathVariable("lon") Double lon, @PathVariable("lat") Double lat,
             @PathVariable("maxdistance") Double maxdistance) {
-        Set<Party> parties = partyService.searchParties(lon, lat);
+        Set<Party> parties = partyService.searchParties(lon, lat, maxdistance);
         return parties;
     }
 
@@ -126,7 +126,7 @@ public class PartyControllerImpl implements PartyController {
      * com.comsysto.findparty.web.IPartyController#joinParty(java.lang.String,
      * java.lang.String)
      */
-    @RequestMapping(value = "/{partyId}", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "/{partyId}", method = RequestMethod.PUT, consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
     public void joinParty(@PathVariable("partyId") String partyId, @RequestBody String username) {
         logger.info("received request to join user:" + username + " to party with id:" + partyId);
