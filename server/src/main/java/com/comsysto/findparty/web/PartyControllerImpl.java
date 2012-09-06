@@ -87,11 +87,12 @@ public class PartyControllerImpl implements PartyController {
      * com.comsysto.findparty.web.IPartyController#createParty(com.comsysto.
      * findparty.Party)
      */
-    @RequestMapping(value = "/create", method = RequestMethod.PUT, consumes = "application/json")
-    @ResponseStatus(HttpStatus.OK)
-    public void createParty(@RequestBody Party party) {
+    @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
+    @ResponseBody
+    public String createParty(@RequestBody Party party) {
         logger.info("received party: " + party.getName());
-        partyService.createParty(party);
+        String partyId = partyService.createParty(party);
+        return partyId;
     }
 
     /*

@@ -9,7 +9,7 @@ public interface PartyController {
 
 	public Set<Party> searchParties(Double lon, Double lat, Double maxdistance);
 	
-	public void createParty(Party party);
+	public String createParty(Party party);
 
 	public void cancelParty(String username, String partyId);
 

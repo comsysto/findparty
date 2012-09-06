@@ -69,8 +69,9 @@ public class PartyServiceImpl implements PartyService {
 	}
 
 	@Override
-	public void createParty(Party party) {
+	public String createParty(Party party) {
 		mongoOperations.insert(party);
+        return party.getId();
 	}
 
     /**
