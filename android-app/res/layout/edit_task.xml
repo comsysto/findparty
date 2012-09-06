@@ -12,8 +12,7 @@
 	        
 	    <TextView android:layout_width="fill_parent" android:layout_height="30dip" android:gravity="center"
 	        android:id="@+id/categoryNameText" android:text="Test" style="@android:style/TextAppearance.Large"></TextView>
-	    
-	    
+
 	    <Spinner
 	        android:id="@+id/levelSpinner"
 	        android:layout_width="fill_parent"
@@ -21,16 +20,19 @@
 	        android:prompt="@string/EXPERIENCE_LABEL"
 	    />
 
-        <TextView android:layout_width="fill_parent" android:layout_height="30dip" android:gravity="center"
-                  android:id="@+id/partyTime" android:text="Placehodler" style="@android:style/TextAppearance.Large"></TextView>
+        <Button android:layout_width="200dip" android:layout_gravity="center_horizontal" android:gravity="center" android:layout_height="wrap_content"
+                  android:id="@+id/partyTimeButton" android:text="Placehodler for Time"/>
 
+        <Button android:layout_width="200dip" android:gravity="center" android:layout_gravity="center_horizontal" android:layout_height="wrap_content"
+                android:id="@+id/numberOfParticipantsButton" android:text="Placehodler for Participants"/>
 
+        <Button android:layout_width="200dip" android:gravity="center" android:layout_gravity="center_horizontal" android:layout_height="wrap_content"
+                android:id="@+id/partyLocationButton" android:text="Placehodler for Location"/>
 
-        <Button android:layout_width="150px" android:layout_height="wrap_content"
+        <Button android:layout_width="150dip" android:layout_height="wrap_content"
 	    	android:text="@string/ADD_PARTY_BUTTON" android:id="@+id/addButton"
 	    	android:layout_gravity="center_vertical|center_horizontal"
            />
-	    	
-	    	
+
 	</LinearLayout>
 </ScrollView>

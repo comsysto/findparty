@@ -7,18 +7,18 @@
 		android:layout_gravity="center_horizontal"></ImageView>
 
 	<Button android:layout_weight="1" android:text="@string/CREATE_NEW_PARTY_BUTTON"
-		android:id="@+id/CREATE_NEW_PARTY_BUTTON" android:layout_width="300px"
+		android:id="@+id/CREATE_NEW_PARTY_BUTTON" android:layout_width="200dip"
 		android:layout_height="wrap_content" android:layout_gravity="center_horizontal"></Button>
 
 	<Button android:layout_weight="1" android:text="@string/FIND_PARTY_BUTTON"
-		android:id="@+id/FIND_PARTY_BUTTON" android:layout_width="300px"
+		android:id="@+id/FIND_PARTY_BUTTON" android:layout_width="200dip"
 		android:layout_height="wrap_content" android:textColor="#999999" android:clickable="false" android:layout_gravity="center_horizontal"></Button>
 
 	<Button android:layout_weight="1" android:text="@string/MY_PARTIES_BUTTON"
-		android:id="@+id/MY_PARTIES_BUTTON" android:layout_width="300px"
+		android:id="@+id/MY_PARTIES_BUTTON" android:layout_width="200dip"
 		android:layout_height="wrap_content" android:layout_gravity="center_horizontal"></Button>
 
 	<Button android:layout_weight="1" android:text="@string/SETTINGS_BUTTON"
-		android:id="@+id/SETTINGS_BUTTON" android:layout_width="300px"
+		android:id="@+id/SETTINGS_BUTTON" android:layout_width="200dip"
 		android:layout_height="wrap_content" android:clickable="false" android:textColor="#999999" android:layout_gravity="center_horizontal"></Button>
 </LinearLayout>
