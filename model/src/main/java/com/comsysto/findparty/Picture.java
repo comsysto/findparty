@@ -1,5 +1,7 @@
 package com.comsysto.findparty;
 
+import java.io.Serializable;
+
 /**
  * Created with IntelliJ IDEA.
  * com.comsysto.findparty.User: tim.hoheisel
@@ -7,7 +9,7 @@ package com.comsysto.findparty;
  * Time: 13:25
  * To change this template use File | Settings | File Templates.
  */
-public class Picture {
+public class Picture implements Serializable{
 
     private String id;
 

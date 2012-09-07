@@ -85,7 +85,7 @@ public abstract class AbstractPartyListActivity extends ListActivity {
 //			 return true;
 		case R.id.delete_party:
 			getPartyManagerApplication().deleteParty(selectedParty);
-			this.notifyDataSetChanged();
+            this.notifyDataSetChanged();
 			return true;
 		case R.id.edit_party:
 			getPartyManagerApplication().setSelectedParty(selectedParty);

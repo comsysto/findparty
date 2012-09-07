@@ -3,9 +3,13 @@ package org.comsysto.findparty;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -14,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.comsysto.findparty.*;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.junit.Test;
@@ -22,11 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
-
-import com.comsysto.findparty.CategoryType;
-import com.comsysto.findparty.LevelType;
-import com.comsysto.findparty.Party;
-import com.comsysto.findparty.Point;
 
 /**
  * Created with IntelliJ IDEA.
@@ -44,8 +44,35 @@ public class PartyControllerIT {
     private RestTemplate resttemplate;
 
     @Test
-    public void createPartytest(){
-       // resttemplate.getForObject("localhost:8080")
+    public void createPartytest() throws IOException {
+        Party party2 = new Party();
+        party2.setSize(3);
+        party2.setCategory(CategoryType.BIKING.name());
+        party2.setLevel(LevelType.BEGINNER.name());
+        Point location = new Point();
+        location.setLon(11.53144);
+        location.setLat(48.1567);
+        party2.setLocation(location);
+        party2.setStartDate(new Date());
+        party2.setName("Testparty Jubigrat");
+
+        URL resource = this.getClass().getResource("/jubi.jpg");
+        InputStream inStream = resource.openStream();
+
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+
+        byte[] buffer = new byte[4096];
+        int read = 0;
+        while((read = inStream.read(buffer)) != -1){
+            result.write(buffer);
+        }
+
+        Picture pic = new Picture();
+        pic.setContent(result.toByteArray());
+        party2.setName("Jubigrat");
+        party2.setPicture(pic);
+
+        String partyId = resttemplate.postForObject("http://localhost:8080/services/parties", party2, String.class);
     }
 
     @Test
@@ -67,24 +94,23 @@ public class PartyControllerIT {
         Map<String, String> vars = new HashMap<String, String>();
         vars.put("lat", "48.125870");
         vars.put("lon", "11.550380");
-        //vars.put("maxdistance", "15000000");
+        vars.put("maxdistance", "15");
         ObjectMapper mapper = new ObjectMapper();
-        TypeReference<HashSet<Party>> typeRef
-                = new TypeReference<
-                HashSet<Party>>() {};
-        Set<Party> parties = mapper.readValue(resttemplate.getForObject("http://localhost:8080/services/parties/location/{lon}/{lat}", String.class, vars), typeRef);
+        Set<Party> parties = resttemplate.getForObject("http://localhost:8080/services/parties/search/{lon}/{lat}/{maxdistance}", HashSet.class, vars);
         assertNotNull(parties);
         assertNotNull(partyId);
+
+        resttemplate.delete("http://localhost:8080/services/parties/{partyId}", partyId);
     }
     
     @Test
-    public void createFindUpdateParty() {
+    public void createFindUpdateParty() throws IOException {
         Calendar cal = GregorianCalendar.getInstance();
         cal.set(2012, 11, 21, 14, 30, 03);
 
         Point location = new Point();
-        location.setLon(12.2292d);
-        location.setLat(-14.222d);
+        location.setLon(11.53110);
+        location.setLat(48.1562);
         
         Party party = new Party();
 
@@ -98,6 +124,19 @@ public class PartyControllerIT {
         
         //create Party on server
         String partyId = resttemplate.postForObject(PARTY_SERVICE_URL, party, String.class);
+        Picture pic = new Picture();
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        URL resource = this.getClass().getResource("/jubi.jpg");
+        InputStream inStream = resource.openStream();
+
+        byte[] buffer = new byte[4096];
+        int read = 0;
+        while((read = inStream.read(buffer)) != -1){
+            result.write(buffer);
+        }
+        pic.setContent(result.toByteArray());
+        
+        party.setPicture(pic);
         
         assertNotNull(partyId);
         
@@ -113,8 +152,8 @@ public class PartyControllerIT {
         assertEquals("Robert", storedParty.getOwner());
         assertEquals(CategoryType.MUSIC.name(), storedParty.getCategory());
         assertEquals(LevelType.EXPERIENCED.name(), storedParty.getLevel());
-        assertEquals(new Double(12.2292d), storedParty.getLocation().getLon());
-        assertEquals(new Double(-14.222d), storedParty.getLocation().getLat());
+        assertEquals(new Double(11.53110d), storedParty.getLocation().getLon());
+        assertEquals(new Double(48.1562d), storedParty.getLocation().getLat());
         assertEquals("Awesome party for test!", storedParty.getName());
         
         assertEquals(cal.get(Calendar.YEAR), storedCal.get(Calendar.YEAR));
@@ -135,7 +174,7 @@ public class PartyControllerIT {
     }
     
     @Test
-    public void createAndJoinWithDifferentUser() {
+    public void createAndJoinWithDifferentUser() throws IOException {
         Party party = new Party();
         party.setName("join this party");
         party.setOwner("Robert");
@@ -143,12 +182,24 @@ public class PartyControllerIT {
         party.setStartDate(new Date());
         
         Point location = new Point();
-        location.setLon(12d);
-        location.setLat(44d);
+        location.setLon(11.53154);
+        location.setLat(48.1576);
         party.setLocation(location);
         party.setCategory(CategoryType.SWIMMING.name());
         party.setLevel(LevelType.BEGINNER.name());
+        Picture pic = new Picture();
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        URL resource = this.getClass().getResource("/jubi.jpg");
+        InputStream inStream = resource.openStream();
+
+        byte[] buffer = new byte[4096];
+        int read = 0;
+        while((read = inStream.read(buffer)) != -1){
+            result.write(buffer);
+        }
+        pic.setContent(result.toByteArray());
         
+        party.setPicture(pic);
         String partyId = resttemplate.postForObject(PARTY_SERVICE_URL, party, String.class);
         
         //join user
@@ -163,6 +214,7 @@ public class PartyControllerIT {
         
         //cancel user
         resttemplate.put(PARTY_SERVICE_URL+"/"+partyId+"/subscriptions?action=cancel", username);
+        updatedParty = resttemplate.getForObject(PARTY_SERVICE_URL+"/"+partyId, Party.class);
         assertNotNull(updatedParty);
         assertNotNull(updatedParty.getCandidates());
         assertEquals(0, updatedParty.getCandidates().size());
@@ -170,11 +222,5 @@ public class PartyControllerIT {
     }
 
 
-    @Test
-    public void testList() {
-        List<String> list = new ArrayList<String>();
-        list.add("test");
-        list.add("bla");
-    }
 
 }

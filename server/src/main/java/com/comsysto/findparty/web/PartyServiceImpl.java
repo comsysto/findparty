@@ -30,7 +30,7 @@ public class PartyServiceImpl implements PartyService {
     public static final Double KILOMETER = 111.0d;
 
     /**
-     * The Attribute that is used for the search for the start position
+     * The Attribute that is used for the search for the location position
      */
     public static final String LOCATION = "location";
 

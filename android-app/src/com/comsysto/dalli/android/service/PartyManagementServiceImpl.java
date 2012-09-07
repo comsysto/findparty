@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.util.Log;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -31,7 +32,7 @@ public class PartyManagementServiceImpl implements PartyService {
 
     public PartyManagementServiceImpl(String host) {
         HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
-        requestFactory.setConnectTimeout(100);
+        requestFactory.setConnectTimeout(1000);
 
         this.restTemplate = new RestTemplate(true, requestFactory);
         
@@ -54,9 +55,20 @@ public class PartyManagementServiceImpl implements PartyService {
     @Override
     public String createParty(Party party) {
         String url = urlBuilder.createFrom(PARTY_SERVICE_PATH);
+        ResponseEntity<String> postForEntity;
+        try {
+            return restTemplate.postForEntity(url, party, String.class).getBody();
+        } catch (Exception e) {
+            Log.e("createpartyPostEntity", "didn't create", e);
+        }
+        try {
+            return restTemplate.postForObject(url, party, String.class);
+        }
+         catch (Exception e) {
+            Log.e("createpartyPostLocation", "didn't create", e);
+        }
 
-        ResponseEntity<String> postForEntity = restTemplate.postForEntity(url, party, String.class);
-        return postForEntity.getBody();
+        return null;
     }
 
     @Override
