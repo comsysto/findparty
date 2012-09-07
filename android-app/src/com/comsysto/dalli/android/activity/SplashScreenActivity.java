@@ -74,9 +74,12 @@ public class SplashScreenActivity extends AbstractActivity {
 				@Override
 				protected Void doInBackground(Void... params) {
 					while (!getPartyManagerApplication().isReady()) {
-						//wait
-					}
-					getPartyManagerApplication().loadParties();
+						try{
+                            Thread.sleep(10);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        }
+                     }
 					return null;
 				}
 				

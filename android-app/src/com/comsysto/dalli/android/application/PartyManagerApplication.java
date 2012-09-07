@@ -31,8 +31,6 @@ import com.comsysto.findparty.web.PartyService;
  */
 public class PartyManagerApplication extends Application {
 
-	private List<Party> parties;
-
 	private Party selectedParty;
 
 	private PartyService partyService;
@@ -78,7 +76,6 @@ public class PartyManagerApplication extends Application {
 					PartyManagerApplication.this.partyService = new PartyManagementServiceMock();
 				}
 				PartyManagerApplication.this.ready = true;
-                PartyManagerApplication.this.parties = PartyManagerApplication.this.partyService.getAllParties(user.getUsername());
 				return null;
 			}
 		};
@@ -86,23 +83,16 @@ public class PartyManagerApplication extends Application {
 	}
 
 	public void createParty(Party newParty) {
-		String partyId = this.partyService.createParty(newParty);
-		newParty.setId(partyId);
-		this.parties.add(newParty);
+		this.partyService.createParty(newParty);
 	}
 
-	public void loadParties() {
-		this.parties = this.partyService.getAllParties(user.getUsername());
-	}
-	
+
 	public List<Party> getParties() {
-		loadParties();
-		return parties;
+		return this.partyService.getAllParties(user.getUsername());
 	}
 
 	public void deleteParty(Party party) {
 		this.partyService.delete(party.getId());
-		this.parties.remove(party);
 	}
 
 	boolean isConnected() {
