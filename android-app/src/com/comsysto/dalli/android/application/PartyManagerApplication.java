@@ -50,7 +50,7 @@ public class PartyManagerApplication extends Application {
 		this.ready = false;
 		SharedPreferences defaultSharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		String host = defaultSharedPreferences.getString("host", "192.168.1.170:8080");
+		String host = defaultSharedPreferences.getString("host", "10.0.2.2:8080");
 		if (isConnected()) {
 			initializeOnlineService(host);
 		} else {

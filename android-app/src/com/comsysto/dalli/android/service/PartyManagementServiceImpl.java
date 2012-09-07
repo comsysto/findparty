@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import com.comsysto.dalli.android.service.util.UrlBuilder;
@@ -33,6 +34,10 @@ public class PartyManagementServiceImpl implements PartyService {
         requestFactory.setConnectTimeout(100);
 
         this.restTemplate = new RestTemplate(true, requestFactory);
+        
+        List<HttpMessageConverter<?>> converters = restTemplate.getMessageConverters();
+        
+        
         
         this.urlBuilder = new UrlBuilder(host);
     }
