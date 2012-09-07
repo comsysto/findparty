@@ -2,18 +2,17 @@ package com.comsysto.findparty.web;
 
 import java.util.Set;
 
+import com.comsysto.findparty.ErrorModel;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import com.comsysto.findparty.Party;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/party")
@@ -22,7 +21,7 @@ public class PartyControllerImpl implements PartyController {
     @Autowired
     public PartyService partyService;
 
-    public static final Logger logger = Logger.getLogger(PartyControllerImpl.class);
+    public static final Logger LOGGER = Logger.getLogger(PartyControllerImpl.class);
 
     public static final Double KILOMETER = 111.0d;
 
@@ -65,6 +64,26 @@ public class PartyControllerImpl implements PartyController {
      * Query(criteria), com.comsysto.findparty.Party.class); return tracks; }
      */
 
+    @ExceptionHandler(PartyServiceException.class)
+    public ModelAndView handleIOException(PartyServiceException ex, HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        LOGGER.warn("An error occurred in the service", ex);
+        ErrorModel errorModel = new ErrorModel();
+        errorModel.setThrowable(ex);
+        return new ModelAndView("/error.jsp", "error", errorModel);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ModelAndView handleIOException(RuntimeException ex, HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        LOGGER.warn("An error occurred in the service", ex);
+        PartyServiceException partyServiceException = new PartyServiceException("An error occurred in the service", ex);
+        ErrorModel errorModel = new ErrorModel();
+        errorModel.setThrowable(partyServiceException);
+        return new ModelAndView("/error.jsp", "error", errorModel);
+    }
+
+
     /*
      * (non-Javadoc)
      * 
@@ -90,7 +109,7 @@ public class PartyControllerImpl implements PartyController {
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public String createParty(@RequestBody Party party) {
-        logger.info("received party: " + party.getName());
+        LOGGER.info("received party: " + party.getName());
         String partyId = partyService.createParty(party);
         return partyId;
     }
@@ -130,7 +149,7 @@ public class PartyControllerImpl implements PartyController {
     @RequestMapping(value = "/join", method = RequestMethod.PUT, consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
     public void joinParty(@PathVariable("partyId") String partyId, @RequestBody String username) {
-        logger.info("received request to join user:" + username + " to party with id:" + partyId);
+        LOGGER.info("received request to join user:" + username + " to party with id:" + partyId);
         partyService.joinParty(username, partyId);
     }
 
