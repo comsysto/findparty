@@ -6,8 +6,6 @@ import android.view.View.OnClickListener;
 import com.comsysto.dalli.android.R;
 import com.comsysto.findparty.Party;
 
-import java.util.GregorianCalendar;
-
 /**
  * Activity for editing exisiting Tasks
  * 
@@ -24,7 +22,7 @@ public class EditPartyActivity extends PartyActivity {
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.saveButton.setText(R.string.SAVE_TASK_BUTTON);
+        this.saveButton.setText(R.string.SAVE_PARTY_BUTTON);
     }
 
 

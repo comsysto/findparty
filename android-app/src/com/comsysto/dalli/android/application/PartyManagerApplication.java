@@ -101,8 +101,8 @@ public class PartyManagerApplication extends Application {
 	}
 
 	public void deleteParty(Party party) {
-//		this.partyService.deleteParty(party.getId());
-//		this.parties.remove(party);
+		this.partyService.delete(party.getId());
+		this.parties.remove(party);
 	}
 
 	boolean isConnected() {
