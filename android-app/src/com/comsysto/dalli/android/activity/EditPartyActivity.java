@@ -1,6 +1,5 @@
 package com.comsysto.dalli.android.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,41 +34,18 @@ public class EditPartyActivity extends PartyActivity {
 
 			@Override
 			public void onClick(View v) {
-				Party selectedParty = getTaskManagerApplication().getSelectedParty();
-				selectedParty.setCategory(categoryNameText.getText().toString());
-				selectedParty.setStartDate(calendar.getTime());
-                selectedParty.setLevel((String)levelSpinner.getSelectedItem());
-                selectedParty.setSize(numberOfParticipants);
-
-				getTaskManagerApplication().saveParty(selectedParty);
+				getPartyManagerApplication().saveParty(party);
 				goToSplashScreen(EditPartyActivity.this);
 			}
 		};
 	}		
 	
 	public String getCategory() {
-        return getTaskManagerApplication().getSelectedParty().getCategory();
+        return getPartyManagerApplication().getSelectedParty().getCategory();
 	}
 
-    public int getLevelSpinnerSelectionPosition(String selectedLevel) {
-
-        for (int i = 0; i< LEVELS.length; i++) {
-            if (LEVELS[i].equals(selectedLevel)) {
-                return i;
-            }
-
-        }
-        return 0;
-    }
-
     @Override
-    protected void fillValues() {
-        Party selectedParty = getTaskManagerApplication().getSelectedParty();
-        setTextOnNumberOfParticipantsButton(selectedParty.getSize());
-        this.numberOfParticipants = selectedParty.getSize();
-        this.calendar = new GregorianCalendar();
-        this.calendar.setTime(selectedParty.getStartDate());
-        setTimeOnView();
-        this.levelSpinner.setSelection(getLevelSpinnerSelectionPosition(selectedParty.getLevel()));
+    protected Party getParty() {
+        return getPartyManagerApplication().getSelectedParty();
     }
 }

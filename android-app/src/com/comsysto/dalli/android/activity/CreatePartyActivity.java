@@ -5,6 +5,7 @@ import android.view.View.OnClickListener;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
 import com.comsysto.findparty.Party;
 
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -21,26 +22,24 @@ public class CreatePartyActivity extends PartyActivity {
 
 			@Override
 			public void onClick(View v) {
-				Party newParty= new Party();
-                newParty.setCategory(categoryNameText.getText().toString());
-                newParty.setStartDate(calendar.getTime());
-                newParty.setLevel((String) levelSpinner.getSelectedItem());
-                newParty.setSize(numberOfParticipants);
-                newParty.setOwner(((PartyManagerApplication)getApplication()).getUser().getUsername());
-                getTaskManagerApplication().createParty(newParty);
+                getPartyManagerApplication().createParty(party);
                 goToSplashScreen(CreatePartyActivity.this);
             }
 		};
 	}
 
-    @Override
-    protected void fillValues() {
-        setTextOnNumberOfParticipantsButton(getNumberOfParticipants());
-        this.calendar = GregorianCalendar.getInstance();
-        setTimeOnView();
-    }
-
     public String getCategory() {
 		return (String) getIntent().getExtras().get("category");
 	}
+
+    @Override
+    protected Party getParty() {
+        Party party = new Party();
+        party.setOwner(getPartyManagerApplication().getUser().getUsername());
+        party.setCategory(getCategory());
+        party.setSize(2);
+        party.setStartDate(new Date());
+        party.setLevel(LEVELS[0]);
+        return party;
+    }
 }

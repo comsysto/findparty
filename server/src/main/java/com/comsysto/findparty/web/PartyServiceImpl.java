@@ -1,7 +1,7 @@
 package com.comsysto.findparty.web;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.geo.Point;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Component;
 
 import com.comsysto.findparty.Party;
@@ -26,12 +27,13 @@ public class PartyServiceImpl implements PartyService {
     /**
      * The Attribute that is used for the search for the start position
      */
+    public static final String START = "start";
     public static final String LOCATION = "location";
 
     @Override
-	public Set<Party> searchParties(Double lon, Double lat, Double maxdistance) {
-        Criteria criteria = new Criteria(LOCATION).near(new Point(lon, lat)).maxDistance(getInKilometer(maxdistance));
-        Set<Party> parties = new HashSet<Party>();
+	public List<Party> searchParties(Double lon, Double lat, Double maxdistance) {
+        Criteria criteria = new Criteria(START).near(new Point(lon, lat)).maxDistance(getInKilometer(maxdistance));
+        List<Party> parties = new ArrayList<Party>();
         parties.addAll(mongoOperations.find(new Query(criteria),
                 Party.class));
         return parties;
@@ -39,9 +41,18 @@ public class PartyServiceImpl implements PartyService {
 
 	@Override
 	public Party showDetails(String partyId) {
-		Criteria criteria = Criteria.where(PARTY_ID()).is(partyId);
-        return mongoOperations.findOne(new Query(criteria), Party.class);
+		return findById(partyId);
 	}
+
+    private Party findById(String partyId) {
+        Criteria criteria = Criteria.where(PARTY_ID()).is(partyId);
+        Party party = mongoOperations.findOne(new Query(criteria), Party.class);
+        
+        if(party==null)
+            throw new NotFoundException("an existing party with id="+partyId+" was not found on server!");
+        
+        return party;
+    }
 
     private String PARTY_ID() {
         return "ID";
@@ -49,8 +60,7 @@ public class PartyServiceImpl implements PartyService {
 
     @Override
 	public void cancelParty(String username, String partyId) {
-        Criteria criteria = Criteria.where(PARTY_ID()).is(partyId);
-        Party party = mongoOperations.findOne(new Query(criteria), Party.class);
+        Party party = findById(partyId);
         cancelParty(username, party);
     }
 
@@ -61,19 +71,40 @@ public class PartyServiceImpl implements PartyService {
 
     @Override
 	public void joinParty(String username, String partyId) {
-    	Criteria criteria = Criteria.where(PARTY_ID()).is(partyId);
-    	Party party = mongoOperations.findOne(new Query(criteria),Party.class);
+    	Party party = findById(partyId);
     	party.getCandidates().add(username);
-		mongoOperations.save(party);
-		
+    	mongoOperations.save(party);
 	}
 
+	
+	@Override
+	public void update(Party party) {
+	    //checks if party with same id exists
+	    findById(party.getId());
+	    	    
+	    mongoOperations.save(party);
+	}
+	
 	@Override
 	public String createParty(Party party) {
 		mongoOperations.insert(party);
         return party.getId();
 	}
 
+
+    @Override
+    public List<Party> getAllParties(String username) {
+        Criteria criteria = Criteria.where("owner").is(username);
+        List<Party> parties = mongoOperations.find(new Query(criteria), Party.class);
+        return parties;
+    }
+
+    @Override
+    public void delete(String partyId) {
+        Party party = findById(partyId);
+        mongoOperations.remove(party);
+    }
+	
     /**
      * The current implementation of near assumes an idealized model of a flat earth, meaning that an arcdegree
      * of latitude (y) and longitude (x) represent the same distance everywhere.
@@ -86,5 +117,11 @@ public class PartyServiceImpl implements PartyService {
     private Double getInKilometer(Double maxdistance) {
         return maxdistance / KILOMETER;
     }
+
+    @Override
+    public String echo(String input) {
+        return input;
+    }
+
 
 }
