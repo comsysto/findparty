@@ -80,7 +80,7 @@ public class PartyManagementServiceImpl implements PartyService {
 
     @Override
     public List<Party> searchParties(Double lon, Double lat, Double maxDistance) {
-        String url = urlBuilder.createUri(PARTY_SERVICE_PATH, String.valueOf(lon), String.valueOf(lat), String.valueOf(maxDistance));
+        String url = urlBuilder.createUri(PARTY_SERVICE_PATH, "search", String.valueOf(lon), String.valueOf(lat), String.valueOf(maxDistance));
 
         
         Party[] response = restTemplate.getForObject(url, Party[].class);
