@@ -1,6 +1,7 @@
 package com.comsysto.findparty;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +35,11 @@ public class Party implements Serializable{
 
     private String owner;
 
+    public Party() {
+        this.candidates = new ArrayList<String>();
+        this.participants = new ArrayList<String>();
+    }
+    
     public String getId() {
         return id;
     }

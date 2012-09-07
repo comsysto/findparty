@@ -12,11 +12,11 @@ public interface PartyController {
 
 	public void subscribe(String partyId, String action, String username);
 
-	public void show(String partyId);
+	public Party show(String partyId);
 	
 	public List<Party> findByUsername(String username);
 	
-	public void update(Party party);
+	public void update(Party party, String partyId);
 
 	public void delete(String partyId);
 

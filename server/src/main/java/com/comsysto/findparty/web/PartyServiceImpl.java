@@ -32,7 +32,6 @@ public class PartyServiceImpl implements PartyService {
     /**
      * The Attribute that is used for the search for the start position
      */
-    public static final String START = "start";
     public static final String LOCATION = "location";
 
 
@@ -42,17 +41,11 @@ public class PartyServiceImpl implements PartyService {
 	}
 
     private Party findById(String partyId) {
-        Criteria criteria = Criteria.where(PARTY_ID()).is(partyId);
-        Party party = partyMongoOperations.findOne(new Query(criteria), Party.class);
-        
+        Party party = partyMongoOperations.findById(partyId, Party.class);     
         if(party==null)
             throw new NotFoundException("an existing party with id="+partyId+" was not found on server!");
         
         return party;
-    }
-
-    private String PARTY_ID() {
-        return "ID";
     }
 
     @Override
@@ -64,6 +57,7 @@ public class PartyServiceImpl implements PartyService {
     private void cancelParty(String username, Party party) {
         party.getParticipants().remove(username);
         party.getCandidates().remove(username);
+        partyMongoOperations.save(party);        
     }
 
     @Override
@@ -71,7 +65,7 @@ public class PartyServiceImpl implements PartyService {
     	Party party = findById(partyId);
     	User user = findUserAndCreateIfNotExists(username);
 
-    	party.getCandidates().add(username);
+    	party.getCandidates().add(user.getUsername());
     	partyMongoOperations.save(party);
 	}
 
@@ -90,8 +84,6 @@ public class PartyServiceImpl implements PartyService {
 		partyMongoOperations.insert(party);
         
 		User user = findUserAndCreateIfNotExists(party.getOwner());
-
-		userMongoOperations.save(user);
 		
 		return party.getId();
 	}
@@ -112,6 +104,7 @@ public class PartyServiceImpl implements PartyService {
     private User createUser(String username) {
         User user = new User();
         user.setUsername(username);
+        userMongoOperations.insert(user);
         return user;
     }
 
@@ -148,7 +141,7 @@ public class PartyServiceImpl implements PartyService {
 
     @Override
     public List<Party> searchParties(Double lon, Double lat, Double maxdistance) {
-        Criteria criteria = new Criteria(START).near(new Point(lon, lat)).maxDistance(getInKilometer(maxdistance));
+        Criteria criteria = new Criteria(LOCATION).near(new Point(lon, lat)).maxDistance(getInKilometer(maxdistance));
         List<Party> parties = new ArrayList<Party>();
         parties.addAll(partyMongoOperations.find(new Query(criteria),
                 Party.class));
