@@ -2,13 +2,18 @@ package org.comsysto.findparty;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.comsysto.findparty.*;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.junit.Test;
@@ -17,11 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
-
-import com.comsysto.findparty.CategoryType;
-import com.comsysto.findparty.LevelType;
-import com.comsysto.findparty.Party;
-import com.comsysto.findparty.Point;
 
 /**
  * Created with IntelliJ IDEA.
@@ -38,8 +38,35 @@ public class PartyControllerIT {
     private RestTemplate resttemplate;
 
     @Test
-    public void createPartytest(){
-       // resttemplate.getForObject("localhost:8080")
+    public void createPartytest() throws IOException {
+        Party party2 = new Party();
+        party2.setSize(3);
+        party2.setCategory(CategoryType.BIKING.name());
+        party2.setLevel(LevelType.BEGINNER.name());
+        Point location = new Point();
+        location.setLon(11.53144);
+        location.setLat(48.1567);
+        party2.setLocation(location);
+        party2.setStartDate(new Date());
+        party2.setName("Testparty Jubigrat");
+
+        URL resource = this.getClass().getResource("/jubi.jpg");
+        InputStream inStream = resource.openStream();
+
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+
+        byte[] buffer = new byte[4096];
+        int read = 0;
+        while((read = inStream.read(buffer)) != -1){
+            result.write(buffer);
+        }
+
+        Picture pic = new Picture();
+        pic.setContent(result.toByteArray());
+        party2.setName("Jubigrat");
+        party2.setPicture(pic);
+
+        String partyId = resttemplate.postForObject("http://localhost:8080/services/parties", party2, String.class);
     }
 
     @Test
@@ -66,6 +93,8 @@ public class PartyControllerIT {
         Set<Party> parties = resttemplate.getForObject("http://localhost:8080/services/parties/search/{lon}/{lat}/{maxdistance}", HashSet.class, vars);
         assertNotNull(parties);
         assertNotNull(partyId);
+
+        resttemplate.delete("http://localhost:8080/services/parties/{partyId}", partyId);
     }
 
 

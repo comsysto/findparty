@@ -51,7 +51,7 @@ public class PartyServiceImpl implements PartyService {
     }
 
     private String PARTY_ID() {
-        return "ID";
+        return "id";
     }
 
     @Override
