@@ -13,30 +13,27 @@ import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Component;
 
 import com.comsysto.findparty.Party;
+import com.comsysto.findparty.User;
 
 @Component
 public class PartyServiceImpl implements PartyService {
 
     @Autowired
     @Qualifier("partiesMongoOperations")
-    public MongoOperations mongoOperations;
-
+    public MongoOperations partyMongoOperations;
+    
+    @Autowired
+    @Qualifier("userMongoOperations")
+    public MongoOperations userMongoOperations;
+    
 
     public static final Double KILOMETER = 111.0d;
 
     /**
-     * The Attribute that is used for the search for the start position
+     * The Attribute that is used for the search for the location position
      */
     public static final String LOCATION = "location";
 
-    @Override
-	public List<Party> searchParties(Double lon, Double lat, Double maxdistance) {
-        Criteria criteria = new Criteria(LOCATION).near(new Point(lon, lat)).maxDistance(getInKilometer(maxdistance));
-        List<Party> parties = new ArrayList<Party>();
-        parties.addAll(mongoOperations.find(new Query(criteria),
-                Party.class));
-        return parties;
-	}
 
 	@Override
 	public Party showDetails(String partyId) {
@@ -45,7 +42,7 @@ public class PartyServiceImpl implements PartyService {
 
     private Party findById(String partyId) {
         Criteria criteria = Criteria.where(PARTY_ID()).is(partyId);
-        Party party = mongoOperations.findOne(new Query(criteria), Party.class);
+        Party party = partyMongoOperations.findOne(new Query(criteria), Party.class);
         
         if(party==null)
             throw new NotFoundException("an existing party with id="+partyId+" was not found on server!");
@@ -71,8 +68,10 @@ public class PartyServiceImpl implements PartyService {
     @Override
 	public void joinParty(String username, String partyId) {
     	Party party = findById(partyId);
+    	User user = findUserAndCreateIfNotExists(username);
+
     	party.getCandidates().add(username);
-    	mongoOperations.save(party);
+    	partyMongoOperations.save(party);
 	}
 
 	
@@ -81,27 +80,51 @@ public class PartyServiceImpl implements PartyService {
 	    //checks if party with same id exists
 	    findById(party.getId());
 	    	    
-	    mongoOperations.save(party);
+	    partyMongoOperations.save(party);
 	}
 	
 	@Override
 	public String createParty(Party party) {
-		mongoOperations.insert(party);
-        return party.getId();
+	    
+		partyMongoOperations.insert(party);
+        
+		User user = findUserAndCreateIfNotExists(party.getOwner());
+
+		userMongoOperations.save(user);
+		
+		return party.getId();
 	}
 
+    private User findUserAndCreateIfNotExists(String username) {
+        Criteria criteria = Criteria.where("username").is(username);
+        Query query = new Query(criteria );
+        User user = userMongoOperations.findOne(query , User.class);
+        if(user!=null) {
+            return user;
+        }
+        else {
+            return createUser(username);
+        }
+    }
+
+
+    private User createUser(String username) {
+        User user = new User();
+        user.setUsername(username);
+        return user;
+    }
 
     @Override
     public List<Party> getAllParties(String username) {
         Criteria criteria = Criteria.where("owner").is(username);
-        List<Party> parties = mongoOperations.find(new Query(criteria), Party.class);
+        List<Party> parties = partyMongoOperations.find(new Query(criteria), Party.class);
         return parties;
     }
 
     @Override
     public void delete(String partyId) {
         Party party = findById(partyId);
-        mongoOperations.remove(party);
+        partyMongoOperations.remove(party);
     }
 	
     /**
@@ -120,6 +143,15 @@ public class PartyServiceImpl implements PartyService {
     @Override
     public String echo(String input) {
         return input;
+    }
+
+    @Override
+    public List<Party> searchParties(Double lon, Double lat, Double maxdistance) {
+        Criteria criteria = new Criteria(LOCATION).near(new Point(lon, lat)).maxDistance(getInKilometer(maxdistance));
+        List<Party> parties = new ArrayList<Party>();
+        parties.addAll(partyMongoOperations.find(new Query(criteria),
+                Party.class));
+        return parties;
     }
 
 

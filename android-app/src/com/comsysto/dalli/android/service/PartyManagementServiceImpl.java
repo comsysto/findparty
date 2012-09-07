@@ -1,15 +1,13 @@
 package com.comsysto.dalli.android.service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import com.comsysto.dalli.android.service.util.UrlBuilder;
@@ -36,6 +34,10 @@ public class PartyManagementServiceImpl implements PartyService {
         requestFactory.setConnectTimeout(100);
 
         this.restTemplate = new RestTemplate(true, requestFactory);
+        
+        List<HttpMessageConverter<?>> converters = restTemplate.getMessageConverters();
+        
+        
         
         this.urlBuilder = new UrlBuilder(host);
     }
@@ -65,8 +67,8 @@ public class PartyManagementServiceImpl implements PartyService {
     }
 
     @Override
-    public List<Party> searchParties(Double lon, Double lat) {
-        String url = urlBuilder.createUri(PARTY_SERVICE_PATH, String.valueOf(lon), String.valueOf(lat));
+    public List<Party> searchParties(Double lon, Double lat, Double maxDistance) {
+        String url = urlBuilder.createUri(PARTY_SERVICE_PATH, String.valueOf(lon), String.valueOf(lat), String.valueOf(maxDistance));
 
         
         Party[] response = restTemplate.getForObject(url, Party[].class);

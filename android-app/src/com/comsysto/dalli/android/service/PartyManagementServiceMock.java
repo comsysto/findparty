@@ -15,6 +15,7 @@ import java.util.*;
  */
 public class PartyManagementServiceMock implements PartyService {
 
+
 	Map<String, Party> parties = new HashMap<String, Party>();
 
 	public PartyManagementServiceMock() {
@@ -22,7 +23,7 @@ public class PartyManagementServiceMock implements PartyService {
 	}
 
     @Override
-    public List<Party> searchParties(Double lon, Double lat) {
+    public List<Party> searchParties(Double lon, Double lat, Double maxdistance) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

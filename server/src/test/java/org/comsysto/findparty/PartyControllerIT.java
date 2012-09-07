@@ -1,11 +1,14 @@
 package org.comsysto.findparty;
 
-import com.comsysto.findparty.CategoryType;
-import com.comsysto.findparty.LevelType;
-import com.comsysto.findparty.Party;
-import com.comsysto.findparty.Point;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.JsonParser;
+import static org.junit.Assert.assertNotNull;
+
+import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.junit.Test;
@@ -15,10 +18,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
-import java.util.*;
-
-import static org.junit.Assert.assertNotNull;
+import com.comsysto.findparty.CategoryType;
+import com.comsysto.findparty.LevelType;
+import com.comsysto.findparty.Party;
+import com.comsysto.findparty.Point;
 
 /**
  * Created with IntelliJ IDEA.
@@ -58,7 +61,7 @@ public class PartyControllerIT {
         Map<String, String> vars = new HashMap<String, String>();
         vars.put("lat", "48.125870");
         vars.put("lon", "11.550380");
-        vars.put("maxdistance", "15000000");
+        //vars.put("maxdistance", "15000000");
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<HashSet<Party>> typeRef
                 = new TypeReference<

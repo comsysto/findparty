@@ -1,5 +1,7 @@
 package com.comsysto.dalli.android.application;
 
+import java.util.List;
+
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -7,14 +9,12 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import com.comsysto.dalli.android.service.PartyManagementService;
+
 import com.comsysto.dalli.android.service.PartyManagementServiceImpl;
 import com.comsysto.dalli.android.service.PartyManagementServiceMock;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.User;
 import com.comsysto.findparty.web.PartyService;
-
-import java.util.List;
 
 /**
  * {@link PartyManagerApplication} holds relevant stuff for the whole app .
@@ -50,7 +50,7 @@ public class PartyManagerApplication extends Application {
 		this.ready = false;
 		SharedPreferences defaultSharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		String host = defaultSharedPreferences.getString("host", "192.168.1.170:8080");
+		String host = defaultSharedPreferences.getString("host", "10.0.2.2:8080");
 		if (isConnected()) {
 			initializeOnlineService(host);
 		} else {
@@ -78,7 +78,7 @@ public class PartyManagerApplication extends Application {
 					PartyManagerApplication.this.partyService = new PartyManagementServiceMock();
 				}
 				PartyManagerApplication.this.ready = true;
-                PartyManagerApplication.this.parties = partyService.getAllParties(user.getUsername());
+                PartyManagerApplication.this.parties = PartyManagerApplication.this.partyService.getAllParties(user.getUsername());
 				return null;
 			}
 		};
@@ -101,8 +101,8 @@ public class PartyManagerApplication extends Application {
 	}
 
 	public void deleteParty(Party party) {
-//		this.partyService.deleteParty(party.getId());
-//		this.parties.remove(party);
+		this.partyService.delete(party.getId());
+		this.parties.remove(party);
 	}
 
 	boolean isConnected() {

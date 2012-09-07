@@ -17,7 +17,7 @@ import android.widget.*;
 import com.comsysto.dalli.android.R;
 import com.comsysto.dalli.android.menu.OptionMenuHandler;
 import com.comsysto.dalli.android.service.LocationInfo;
-import com.comsysto.dalli.android.service.LocationUpdater;
+import com.comsysto.dalli.android.service.LocationService;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.Point;
 
@@ -45,7 +45,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     static final String[] LEVELS = new String[]{"Beginner", "Amateur", "Professional"};
     Button numberOfParticipantsButton;
     private Button partyLocationButton;
-    private LocationUpdater locationUpdater;
+    LocationService locationService;
     Party party;
 
 
@@ -70,11 +70,21 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     protected abstract Party getParty();
 
     private void initPartyLocationButton() {
-        locationUpdater = new LocationUpdater(getApplicationContext(), this);
+        locationService = new LocationService(getApplicationContext(), this);
         this.partyLocationButton = (Button)findViewById(R.id.partyLocationButton);
-        locationUpdater.activate();
 
+        this.partyLocationButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               locationService.activate();
+            }
+        });
 
+        if (party.getLocation() != null) {
+                partyLocationButton.setText(locationService.getLocationFromPoint(party.getLocation()));
+        } else {
+            locationService.activate();
+        }
     }
 
     private void initParticipantsButton() {
@@ -253,6 +263,6 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
         location.setLat(locationInfo.getLatitude());
         location.setLon(locationInfo.getLongitude());
         this.party.setLocation(location);
-        locationUpdater.deactivate();
+        locationService.deactivate();
     }
 }

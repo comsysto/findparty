@@ -11,26 +11,21 @@
     <string name="SIGNUP_LABEL">Sign Up for FindParty</string>
     <string name="DAY_AND_TIME_CONTEXT_LABEL">Day and Time</string>
     <string name="ADD_PARTY_BUTTON">Add Party</string>
-    <string name="OPEN_PARTY_MENU_ITEM">Open Party</string>
+    <string name="EDIT_PARTY_MENU_ITEM">Edit Party</string>
     <string name="NUMBER_OF_PARTICIPANTS_DIALOG_TITLE">How many buddies do you need?</string>
     <string name="CANCEL_BUTTON">Cancel</string>
     <string name="OK_BUTTON">Ok</string>
+    <string name="DELETE_PARTY_MENU_ITEM">Delete Party</string>
+    <string name="SAVE_PARTY_BUTTON">Save Party</string>
+    <string name="ADD_BUTTON">Create Party</string>
 
 
 
-
-
-
-    <string name="TOGGLE_TASK_MENU_ITEM">Toggle Task</string>
-    <string name="DELETE_TASK_MENU_ITEM">Delete</string>
-	<string name="QUICK_INSERT_MENU_ITEM">Quick Entry</string>
-
-
-	<string name="SAVE_TASK_BUTTON">Save Task</string>	
+    <string name="QUICK_INSERT_MENU_ITEM">Quick Entry</string>
 	<string name="EDIT_BUTTON">Edit</string>
     <string name="QUICK_ENTRY_BUTTON">Quick Entry</string>
     <string name="LOGIN_BUTTON">Sign In</string>
-    <string name="ADD_BUTTON">Add</string>
+
 
 	<string name="TASK_NAME_LABEL">Name</string>
 
