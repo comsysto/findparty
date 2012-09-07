@@ -138,4 +138,7 @@ public class PartyManagerApplication extends Application {
 		//return this.partyManagementService.createUser(user, password);
 	}
 
+    public List<Party> searchParties(Double longitude, Double latitude, Double maxDistance) {
+        return this.partyService.searchParties(longitude, latitude, maxDistance);
+    }
 }

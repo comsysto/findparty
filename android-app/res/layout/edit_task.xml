@@ -9,16 +9,23 @@
 	    <ImageView android:src="@drawable/findparty_logo" android:id="@+id/imageView1"
 	    	android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"></ImageView>
-	        
-	    <TextView android:layout_width="fill_parent" android:layout_height="30dip" android:gravity="center"
+
+
+        <TextView android:layout_height="25dip" android:layout_width="fill_parent" android:text="@string/SPACE_LABEL"/>
+
+        <TextView android:layout_width="fill_parent" android:layout_height="30dip" android:gravity="center"
 	        android:id="@+id/categoryNameText" android:text="Test" style="@android:style/TextAppearance.Large"></TextView>
+
+        <TextView android:layout_height="25dip" android:layout_width="fill_parent" android:text="@string/SPACE_LABEL"/>
 
 	    <Spinner
 	        android:id="@+id/levelSpinner"
-	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:prompt="@string/EXPERIENCE_LABEL"
-	    />
+            android:layout_width="200dip"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+        />
 
         <Button android:layout_width="200dip" android:layout_gravity="center_horizontal" android:gravity="center" android:layout_height="wrap_content"
                   android:id="@+id/partyTimeButton" android:text="Placehodler for Time"/>

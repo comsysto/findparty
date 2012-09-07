@@ -39,6 +39,17 @@ public class SplashScreenActivity extends AbstractActivity {
 		Button createNewPartyButton = (Button) findViewById(R.id.CREATE_NEW_PARTY_BUTTON);
         Button myPartiesButton = (Button) findViewById(R.id.MY_PARTIES_BUTTON);
 
+        findPartyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getPartyManagerApplication().isReady()) {
+                    goTo(SplashScreenActivity.this, FindPartiesMapActivity.class);
+                } else {
+                    SplashScreenActivity.this.showDialog(5);
+                }
+            }
+        });
+
         myPartiesButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
