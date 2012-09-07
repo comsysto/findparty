@@ -61,12 +61,9 @@ public class PartyControllerIT {
         Map<String, String> vars = new HashMap<String, String>();
         vars.put("lat", "48.125870");
         vars.put("lon", "11.550380");
-        //vars.put("maxdistance", "15000000");
+        vars.put("maxdistance", "15");
         ObjectMapper mapper = new ObjectMapper();
-        TypeReference<HashSet<Party>> typeRef
-                = new TypeReference<
-                HashSet<Party>>() {};
-        Set<Party> parties = mapper.readValue(resttemplate.getForObject("http://localhost:8080/services/parties/location/{lon}/{lat}", String.class, vars), typeRef);
+        Set<Party> parties = resttemplate.getForObject("http://localhost:8080/services/parties/search/{lon}/{lat}/{maxdistance}", HashSet.class, vars);
         assertNotNull(parties);
         assertNotNull(partyId);
     }
