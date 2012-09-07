@@ -1,9 +1,9 @@
 package com.comsysto.dalli.android.service;
 
 import com.comsysto.findparty.Party;
+import com.comsysto.findparty.web.PartyService;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -13,52 +13,59 @@ import java.util.List;
  * @author stefandjurasic
  *
  */
-public class PartyManagementServiceMock implements PartyManagementService {
+public class PartyManagementServiceMock implements PartyService {
 
-	List<Party> tasks = new ArrayList<Party>();
+	Map<String, Party> parties = new HashMap<String, Party>();
 
 	public PartyManagementServiceMock() {
-        getAllPartiesFor("asdf");
-	}
-
-	@Override
-	public Party createParty(String userName, Party newParty) {
-		return newParty;
-	}
-
-	@Override
-	public void deleteParty(String userName, String id) {
-		//mockidimock, adapter removes, is enough
-	}
-
-	@Override
-	public void saveParty(String userName, Party party) {
-		// TODO Auto-generated method stub
 
 	}
 
-	@Override
+    @Override
+    public List<Party> searchParties(Double lon, Double lat) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Party showDetails(String partyId) {
+        return parties.get(partyId);  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void cancelParty(String partyId, String username) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void joinParty(String partyId, String username) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public String createParty(Party party) {
+        String s = UUID.randomUUID().toString();
+        parties.put(s, party);
+        return s;
+    }
+
+    @Override
+    public void update(Party party) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public List<Party> getAllParties(String username) {
+        return new ArrayList<Party>(parties.values());  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void delete(String partyId) {
+        parties.remove(partyId);
+    }
+
+    @Override
 	public String echo(String echo) {
 		return echo;
 	}
-
-	@Override
-	public List<Party> getAllPartiesFor(String userId) {
-		// TODO Auto-generated method stub
-		return tasks;
-	}
-
-//	@Override
-//	public User createUser(User user, String password) {
-//		return user;
-//	}
-//
-//	@Override
-//	public User login(String username, String password) throws AuthenticationException {
-//		// TODO Auto-generated method stub
-//		User user = new User();
-//		user.setUsername(username);
-//		return user;
-//	}
 
 }

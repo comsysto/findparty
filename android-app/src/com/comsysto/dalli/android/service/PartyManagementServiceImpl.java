@@ -19,10 +19,7 @@ import com.comsysto.findparty.web.PartyService;
 /**
  * Implementation using {@link RestTemplate} from Spring to communicate with our
  * RestService to obtain Tasks.
- * 
- * @TODO: Currently readTimeout does not work. <a
- *        href="https://jira.springsource.org/browse/ANDROID-32">JIRA Ticket</a>
- * 
+ *
  * @author stefandjurasic
  * 
  */
@@ -36,8 +33,7 @@ public class PartyManagementServiceImpl implements PartyService {
 
     public PartyManagementServiceImpl(String host) {
         HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
-        // TODO: NOT WOKRING, check again when spring-android-rest is released
-        // requestFactory.setReadTimeout(100);
+        requestFactory.setConnectTimeout(100);
 
         this.restTemplate = new RestTemplate(requestFactory);
         MappingJacksonHttpMessageConverter converter = new MappingJacksonHttpMessageConverter();

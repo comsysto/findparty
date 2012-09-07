@@ -50,11 +50,12 @@ public class PartyManagerApplication extends Application {
 		this.ready = false;
 		SharedPreferences defaultSharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		String host = defaultSharedPreferences.getString("host", "10.0.2.2:8080");
+		String host = defaultSharedPreferences.getString("host", "192.168.1.170:8080");
 		if (isConnected()) {
 			initializeOnlineService(host);
 		} else {
-			this.partyService = new PartyManagementServiceImpl(host);
+            //TODO: If no network connection available close the application with a hint!
+			this.partyService = new PartyManagementServiceMock();
 		}
 	}
 
@@ -70,11 +71,11 @@ public class PartyManagerApplication extends Application {
 						Log.i("Server Check", "Server is online");
 					} else {
 						Log.e("Server Check", "Server returned wrong echo ("+ echo + "), going offline.");
-						PartyManagerApplication.this.partyService = new PartyManagementServiceImpl(host);
+						PartyManagerApplication.this.partyService = new PartyManagementServiceMock();
 					}
 				} catch (Exception e) {
 					Log.e("Server Check", "Server not reachable", e);
-					PartyManagerApplication.this.partyService = new PartyManagementServiceImpl(host);
+					PartyManagerApplication.this.partyService = new PartyManagementServiceMock();
 				}
 				PartyManagerApplication.this.ready = true;
                 PartyManagerApplication.this.parties = partyService.getAllParties(user.getUsername());
