@@ -32,6 +32,8 @@ public class Party implements Serializable{
 
     private List<String> candidates;
 
+    private Picture picture;
+
     private String owner;
 
     public String getId() {
@@ -112,5 +114,13 @@ public class Party implements Serializable{
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public Picture getPicture() {
+        return picture;
+    }
+
+    public void setPicture(Picture picture) {
+        this.picture = picture;
     }
 }
