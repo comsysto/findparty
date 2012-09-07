@@ -1,6 +1,10 @@
 package com.comsysto.dalli.android.activity;
 
+import android.graphics.BitmapFactory;
+import android.graphics.Picture;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.PictureDrawable;
 import android.os.Bundle;
 import com.comsysto.dalli.android.R;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
@@ -63,10 +67,18 @@ public class FindPartiesMapActivity extends MapActivity implements Observer {
 
 
         List<Overlay> mapOverlays = mapView.getOverlays();
-        Drawable drawable = this.getResources().getDrawable(R.drawable.findparty_logo);
+        Drawable drawable = this.getResources().getDrawable(R.drawable.androidmarker);
 
         for (Party party : parties) {
-            PartyItemizedOverlay itemizedoverlay = new PartyItemizedOverlay(drawable, this);
+            PartyItemizedOverlay itemizedoverlay = null;
+            if (party.getPicture() != null && party.getPicture().getContent() != null)  {
+                Drawable image = new BitmapDrawable(BitmapFactory.decodeByteArray(party.getPicture().getContent(), 0, party.getPicture().getContent().length));
+                itemizedoverlay = new PartyItemizedOverlay(image, this);
+            } else {
+                itemizedoverlay = new PartyItemizedOverlay(drawable, this);
+            }
+
+
             GeoPoint currentLocation = new GeoPoint(getMicroDegrees(party.getLocation().getLat()), getMicroDegrees(party.getLocation().getLon().doubleValue()));
 
             OverlayItem overlayitem = new OverlayItem(currentLocation, party.getCategory(), party.getOwner() + " " + new SimpleDateFormat().format(party.getStartDate()));

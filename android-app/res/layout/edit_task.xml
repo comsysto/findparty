@@ -20,10 +20,12 @@
 
 	    <Spinner
 	        android:id="@+id/levelSpinner"
-	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:prompt="@string/EXPERIENCE_LABEL"
-	    />
+            android:layout_width="200dip"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+        />
 
         <Button android:layout_width="200dip" android:layout_gravity="center_horizontal" android:gravity="center" android:layout_height="wrap_content"
                   android:id="@+id/partyTimeButton" android:text="Placehodler for Time"/>
