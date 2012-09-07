@@ -35,14 +35,6 @@ public class PartyServiceImpl implements PartyService {
     public static final String START = "start";
     public static final String LOCATION = "location";
 
-    @Override
-	public List<Party> searchParties(Double lon, Double lat, Double maxdistance) {
-        Criteria criteria = new Criteria(START).near(new Point(lon, lat)).maxDistance(getInKilometer(maxdistance));
-        List<Party> parties = new ArrayList<Party>();
-        parties.addAll(partyMongoOperations.find(new Query(criteria),
-                Party.class));
-        return parties;
-	}
 
 	@Override
 	public Party showDetails(String partyId) {
@@ -152,6 +144,15 @@ public class PartyServiceImpl implements PartyService {
     @Override
     public String echo(String input) {
         return input;
+    }
+
+    @Override
+    public List<Party> searchParties(Double lon, Double lat, Double maxdistance) {
+        Criteria criteria = new Criteria(START).near(new Point(lon, lat)).maxDistance(getInKilometer(maxdistance));
+        List<Party> parties = new ArrayList<Party>();
+        parties.addAll(partyMongoOperations.find(new Query(criteria),
+                Party.class));
+        return parties;
     }
 
 
