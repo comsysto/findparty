@@ -6,9 +6,9 @@ import com.comsysto.findparty.Party;
 
 public interface PartyController {
 
-	public List<Party> search(Double lon, Double lat);
+	public List<Party> search(Double lon, Double lat, Double maxdistance);
 	
-	public void create(Party party);
+	public String create(Party party);
 
 	public void subscribe(String partyId, String action, String username);
 

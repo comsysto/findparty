@@ -39,6 +39,7 @@ public class CreatePartyActivity extends PartyActivity {
         party.setCategory(getCategory());
         party.setSize(2);
         party.setStartDate(new Date());
+
         party.setLevel(LEVELS[0]);
         return party;
     }
