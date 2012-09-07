@@ -13,7 +13,7 @@ import com.comsysto.findparty.Party;
  */
 public interface PartyService {
 
-    public List<Party> searchParties(Double lon, Double lat);
+    public List<Party> searchParties(Double lon, Double lat, Double maxdistance);
 
     public Party showDetails(String partyId);
 

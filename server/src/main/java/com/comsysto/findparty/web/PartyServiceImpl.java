@@ -30,11 +30,9 @@ public class PartyServiceImpl implements PartyService {
     public static final String START = "start";
     public static final String LOCATION = "location";
 
-    private static final Double MAXDISTANCE = 5.0d;
-
     @Override
-	public List<Party> searchParties(Double lon, Double lat) {
-        Criteria criteria = new Criteria(START).near(new Point(lon, lat)).maxDistance(getInKilometer(MAXDISTANCE));
+	public List<Party> searchParties(Double lon, Double lat, Double maxdistance) {
+        Criteria criteria = new Criteria(START).near(new Point(lon, lat)).maxDistance(getInKilometer(maxdistance));
         List<Party> parties = new ArrayList<Party>();
         parties.addAll(mongoOperations.find(new Query(criteria),
                 Party.class));
