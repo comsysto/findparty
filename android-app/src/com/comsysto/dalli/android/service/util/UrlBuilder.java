@@ -37,7 +37,7 @@ public class UrlBuilder {
     public String createUri(Map<String, String> params, String... pathElements) {
         String queryParams = build(params);
         String url = createUri(pathElements);
-        return createFrom(url + queryParams);
+        return url + queryParams;
     }
 
     private String build(Map<String, String> requestParams) {

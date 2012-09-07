@@ -35,12 +35,8 @@ public class PartyManagementServiceImpl implements PartyService {
         HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
         requestFactory.setConnectTimeout(100);
 
-        this.restTemplate = new RestTemplate(requestFactory);
-        MappingJacksonHttpMessageConverter converter = new MappingJacksonHttpMessageConverter();
-        List<MediaType> mediaTypes = new ArrayList<MediaType>();
-        mediaTypes.add(new MediaType("text", "javascript"));
-        converter.setSupportedMediaTypes(mediaTypes);
-        restTemplate.getMessageConverters().add(converter);
+        this.restTemplate = new RestTemplate(true, requestFactory);
+        
         this.urlBuilder = new UrlBuilder(host);
     }
 
@@ -105,7 +101,7 @@ public class PartyManagementServiceImpl implements PartyService {
         Map<String, String> params = new HashMap<String, String>();
         params.put("user", username);
         
-        String url = urlBuilder.createUri(username, PARTY_SERVICE_PATH);
+        String url = urlBuilder.createUri(params, PARTY_SERVICE_PATH);
         
         Party[] response = restTemplate.getForObject(url, Party[].class);
         return Arrays.asList(response);
@@ -114,7 +110,9 @@ public class PartyManagementServiceImpl implements PartyService {
     @Override
     public String echo(String arg0) {
         String url = urlBuilder.createUri(PARTY_SERVICE_PATH, "echo", arg0);
-        return restTemplate.getForObject(url, String.class);
+        ResponseEntity<String> forEntity = restTemplate.getForEntity(url, String.class);
+        
+        return forEntity.getBody();
     }
 
 }
