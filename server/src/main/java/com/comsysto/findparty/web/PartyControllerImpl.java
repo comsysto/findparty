@@ -67,34 +67,37 @@ public class PartyControllerImpl implements PartyController {
 
 
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
-    @ResponseBody
-    public String create(@RequestBody Party party) {
-        LOGGER.info("received party: " + party.getName());
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody String create(@RequestBody Party party) {
+        LOGGER.info("received party for: " + party.getOwner() + " in category: " +party.getCategory());
         String partyId = partyService.createParty(party);
         return partyId;
     }
 
     @RequestMapping(value = "/{partyId}", method = RequestMethod.PUT, consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@RequestBody Party party) {
+    public void update(@RequestBody Party party, @PathVariable String partyId) {
+        
+        if(!party.getId().equals(partyId))
+            throw new IllegalArgumentException("Id mismatch of requested party(id="+partyId+") and provided party(id="+party.getId()+") does not match");
+        
         partyService.update(party);            
     }
     
-    @RequestMapping(value = "/{partyId}/subscriptions", method = RequestMethod.PUT, consumes = "application/json")
+    @RequestMapping(value = "/{partyId}/subscriptions", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void subscribe(@PathVariable String partyId, @RequestParam(value = "action", required = false) String action, @RequestBody String username) {
-        
-     if(action!=null && action.equals("cancel")) {
-        partyService.cancelParty(username, partyId);
-     }
-        
-        partyService.joinParty(username, partyId);
+
+        if(action!=null && action.equals("cancel"))
+            partyService.cancelParty(username, partyId);
+        else
+            partyService.joinParty(username, partyId);
     }
     
     @RequestMapping(value = "/{partyId}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public void show(@PathVariable("partyId") String partyId) {
-        partyService.showDetails(partyId);
+    public @ResponseBody Party show(@PathVariable("partyId") String partyId) {
+        return partyService.showDetails(partyId);
     }
     
     @RequestMapping(method = RequestMethod.GET)
@@ -102,15 +105,8 @@ public class PartyControllerImpl implements PartyController {
         return partyService.getAllParties(username);        
     }
     
-    
-    @RequestMapping(method = RequestMethod.PUT)
-    @ResponseStatus(HttpStatus.OK)
-    public void joinParty(@PathVariable("partyId") String partyId, @RequestBody String username) {
-        LOGGER.info("received request to join user:" + username + " to party with id:" + partyId);
-        partyService.joinParty(username, partyId);
-    }
 
-    @RequestMapping(value = "/{partyId}", method = RequestMethod.DELETE)
+    @RequestMapping(value="/{partyId}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable String partyId) {
         partyService.delete(partyId);        
