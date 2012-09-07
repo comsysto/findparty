@@ -1,5 +1,7 @@
 package com.comsysto.dalli.android.application;
 
+import java.util.List;
+
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -7,14 +9,12 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import com.comsysto.dalli.android.service.PartyManagementService;
+
 import com.comsysto.dalli.android.service.PartyManagementServiceImpl;
 import com.comsysto.dalli.android.service.PartyManagementServiceMock;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.User;
 import com.comsysto.findparty.web.PartyService;
-
-import java.util.List;
 
 /**
  * {@link PartyManagerApplication} holds relevant stuff for the whole app .
@@ -70,14 +70,14 @@ public class PartyManagerApplication extends Application {
 						Log.i("Server Check", "Server is online");
 					} else {
 						Log.e("Server Check", "Server returned wrong echo ("+ echo + "), going offline.");
-						PartyManagerApplication.this.partyService = new PartyManagementServiceImpl(host);
+						PartyManagerApplication.this.partyService = new PartyManagementServiceMock();
 					}
 				} catch (Exception e) {
 					Log.e("Server Check", "Server not reachable", e);
-					PartyManagerApplication.this.partyService = new PartyManagementServiceImpl(host);
+					PartyManagerApplication.this.partyService = new PartyManagementServiceMock();
 				}
 				PartyManagerApplication.this.ready = true;
-                PartyManagerApplication.this.parties = partyService.getAllParties(user.getUsername());
+                PartyManagerApplication.this.parties = PartyManagerApplication.this.partyService.getAllParties(user.getUsername());
 				return null;
 			}
 		};

@@ -1,6 +1,7 @@
 package com.comsysto.dalli.android.service;
 
 import com.comsysto.findparty.Party;
+import com.comsysto.findparty.web.PartyService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,52 +14,78 @@ import java.util.List;
  * @author stefandjurasic
  *
  */
-public class PartyManagementServiceMock implements PartyManagementService {
+public class PartyManagementServiceMock implements PartyService {
 
-	List<Party> tasks = new ArrayList<Party>();
+	List<Party> parties = new ArrayList<Party>();
 
 	public PartyManagementServiceMock() {
-        getAllPartiesFor("asdf");
+        getAllParties("asdf");
 	}
 
-	@Override
-	public Party createParty(String userName, Party newParty) {
-		return newParty;
-	}
 
-	@Override
-	public void deleteParty(String userName, String id) {
-		//mockidimock, adapter removes, is enough
-	}
+    @Override
+    public void cancelParty(String partyId, String username) {
+        // TODO Auto-generated method stub
+        
+    }
 
-	@Override
-	public void saveParty(String userName, Party party) {
-		// TODO Auto-generated method stub
+    @Override
+    public String createParty(Party party) {
+        parties.add(party);
+        return "newPartyId123";
+    }
 
-	}
+    @Override
+    public void delete(String partyId) {
+        for (Party party : parties) {
+            if(party.getId()==partyId)
+                parties.remove(party);
+        }
+    }
 
-	@Override
-	public String echo(String echo) {
-		return echo;
-	}
+    @Override
+    public List<Party> getAllParties(String username) {
+        List<Party> userParties = new ArrayList<Party>();
+        for (Party party : parties) {
+            if(party.getOwner().equals(username))
+                userParties.add(party);
+        }
+        return userParties;
+    }
 
-	@Override
-	public List<Party> getAllPartiesFor(String userId) {
-		// TODO Auto-generated method stub
-		return tasks;
-	}
+    @Override
+    public void joinParty(String partyId, String username) {
+        for (Party party : parties) {
+            if(party.getId()==partyId)
+                party.getCandidates().add(username);
+        }
+        
+    }
 
-//	@Override
-//	public User createUser(User user, String password) {
-//		return user;
-//	}
-//
-//	@Override
-//	public User login(String username, String password) throws AuthenticationException {
-//		// TODO Auto-generated method stub
-//		User user = new User();
-//		user.setUsername(username);
-//		return user;
-//	}
+    @Override
+    public List<Party> searchParties(Double lon, Double lat) {
+        return new ArrayList<Party>();
+    }
+
+    @Override
+    public Party showDetails(String partyId) {
+        for (Party party : parties) {
+            if(party.getId()==partyId)
+                return party;
+        }
+        return null;
+    }
+
+    @Override
+    public void update(Party party) {
+        delete(party.getId());
+        parties.add(party);
+    }
+
+
+    @Override
+    public String echo(String input) {
+        return input;
+    }
 
 }
