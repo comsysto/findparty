@@ -3,8 +3,7 @@ package com.comsysto.dalli.android.service;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.web.PartyService;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -16,76 +15,58 @@ import java.util.List;
  */
 public class PartyManagementServiceMock implements PartyService {
 
-	List<Party> parties = new ArrayList<Party>();
+
+	Map<String, Party> parties = new HashMap<String, Party>();
 
 	public PartyManagementServiceMock() {
-        getAllParties("asdf");
+
 	}
 
-
     @Override
-    public void cancelParty(String partyId, String username) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public String createParty(Party party) {
-        parties.add(party);
-        return "newPartyId123";
-    }
-
-    @Override
-    public void delete(String partyId) {
-        for (Party party : parties) {
-            if(party.getId()==partyId)
-                parties.remove(party);
-        }
-    }
-
-    @Override
-    public List<Party> getAllParties(String username) {
-        List<Party> userParties = new ArrayList<Party>();
-        for (Party party : parties) {
-            if(party.getOwner().equals(username))
-                userParties.add(party);
-        }
-        return userParties;
-    }
-
-    @Override
-    public void joinParty(String partyId, String username) {
-        for (Party party : parties) {
-            if(party.getId()==partyId)
-                party.getCandidates().add(username);
-        }
-        
-    }
-
-    @Override
-    public List<Party> searchParties(Double lon, Double lat) {
-        return new ArrayList<Party>();
+    public List<Party> searchParties(Double lon, Double lat, Double maxdistance) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public Party showDetails(String partyId) {
-        for (Party party : parties) {
-            if(party.getId()==partyId)
-                return party;
-        }
-        return null;
+        return parties.get(partyId);  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void cancelParty(String partyId, String username) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void joinParty(String partyId, String username) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public String createParty(Party party) {
+        String s = UUID.randomUUID().toString();
+        parties.put(s, party);
+        return s;
     }
 
     @Override
     public void update(Party party) {
-        delete(party.getId());
-        parties.add(party);
+        //To change body of implemented methods use File | Settings | File Templates.
     }
-
 
     @Override
-    public String echo(String input) {
-        return input;
+    public List<Party> getAllParties(String username) {
+        return new ArrayList<Party>(parties.values());  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    @Override
+    public void delete(String partyId) {
+        parties.remove(partyId);
+    }
+
+    @Override
+	public String echo(String echo) {
+		return echo;
+	}
 
 }

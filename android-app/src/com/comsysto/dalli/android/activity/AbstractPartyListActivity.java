@@ -68,7 +68,7 @@ public abstract class AbstractPartyListActivity extends ListActivity {
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.task_menu, menu);
+		inflater.inflate(R.menu.owner_party_menu, menu);
 	}
 
 	@Override
@@ -83,11 +83,11 @@ public abstract class AbstractPartyListActivity extends ListActivity {
 //			 selectedTask.setStatus(taskStatus);
 //			 this.notifyDataSetChanged();
 //			 return true;
-//		case R.id.delete_task:
-//			getPartyManagerApplication().deleteTask(selectedTask);
-//			this.notifyDataSetChanged();
-//			return true;
-		case R.id.open_party:
+		case R.id.delete_party:
+			getPartyManagerApplication().deleteParty(selectedParty);
+			this.notifyDataSetChanged();
+			return true;
+		case R.id.edit_party:
 			getPartyManagerApplication().setSelectedParty(selectedParty);
 			Intent intent = new Intent(this,
 					EditPartyActivity.class);

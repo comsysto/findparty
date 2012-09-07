@@ -50,11 +50,12 @@ public class PartyManagerApplication extends Application {
 		this.ready = false;
 		SharedPreferences defaultSharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		String host = defaultSharedPreferences.getString("host", "10.0.2.2:8080");
+		String host = defaultSharedPreferences.getString("host", "192.168.1.170:8080");
 		if (isConnected()) {
 			initializeOnlineService(host);
 		} else {
-			this.partyService = new PartyManagementServiceImpl(host);
+            //TODO: If no network connection available close the application with a hint!
+			this.partyService = new PartyManagementServiceMock();
 		}
 	}
 
@@ -100,8 +101,8 @@ public class PartyManagerApplication extends Application {
 	}
 
 	public void deleteParty(Party party) {
-//		this.partyService.deleteParty(party.getId());
-//		this.parties.remove(party);
+		this.partyService.delete(party.getId());
+		this.parties.remove(party);
 	}
 
 	boolean isConnected() {

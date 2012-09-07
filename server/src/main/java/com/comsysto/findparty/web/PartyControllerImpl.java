@@ -2,9 +2,12 @@ package com.comsysto.findparty.web;
 
 import java.util.List;
 
+import com.comsysto.findparty.ErrorModel;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.comsysto.findparty.Party;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/parties")
@@ -21,6 +27,21 @@ public class PartyControllerImpl implements PartyController {
 
     @Autowired
     public PartyService partyService;
+
+    public static final Logger LOGGER = Logger.getLogger(PartyControllerImpl.class);
+
+    public static final Double KILOMETER = 111.0d;
+
+    /**
+     * The Attribute that is used for the search for the start position
+     */
+    public static final String START = "start";
+
+    /**
+     * The Attribute that is used for the search for the user
+     */
+
+    // private static final String USER = "user";
 
     /*
      * @RequestMapping(value = "/get", method = RequestMethod.GET, produces =
@@ -50,18 +71,48 @@ public class PartyControllerImpl implements PartyController {
      * Query(criteria), com.comsysto.findparty.Party.class); return tracks; }
      */
 
-    @RequestMapping(value = "/location/{lon}/{lat}", method = RequestMethod.GET, produces = "application/json")
+    @ExceptionHandler(PartyServiceException.class)
+    public ModelAndView handleIOException(PartyServiceException ex, HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        LOGGER.warn("An error occurred in the service", ex);
+        ErrorModel errorModel = new ErrorModel();
+        errorModel.setThrowable(ex);
+        return new ModelAndView("/error.jsp", "error", errorModel);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ModelAndView handleIOException(RuntimeException ex, HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        LOGGER.warn("An error occurred in the service", ex);
+        PartyServiceException partyServiceException = new PartyServiceException("An error occurred in the service", ex);
+        ErrorModel errorModel = new ErrorModel();
+        errorModel.setThrowable(partyServiceException);
+        return new ModelAndView("/error.jsp", "error", errorModel);
+    }
+
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.comsysto.findparty.web.IPartyController#searchParties(java.lang.Double
+     * , java.lang.Double, java.lang.Double)
+     */
+    @RequestMapping(value = "/search/{lon}/{lat}/{maxdistance}", method = RequestMethod.GET, produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    List<Party> search(@PathVariable("lon") Double lon, @PathVariable("lat") Double lat) {
-        List<Party> parties = partyService.searchParties(lon, lat);
+    List<Party> search(@PathVariable("lon") Double lon, @PathVariable("lat") Double lat, @PathVariable("maxdistance") Double maxdistance) {
+        List<Party> parties = partyService.searchParties(lon, lat, maxdistance);
         return parties;
     }
 
+
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
-    @ResponseStatus(HttpStatus.OK)
-    public void create(@RequestBody Party party) {
-        partyService.createParty(party);
+    @ResponseBody
+    public String create(@RequestBody Party party) {
+        LOGGER.info("received party: " + party.getName());
+        String partyId = partyService.createParty(party);
+        return partyId;
     }
 
     @RequestMapping(value = "/{partyId}", method = RequestMethod.PUT, consumes = "application/json")
@@ -92,6 +143,13 @@ public class PartyControllerImpl implements PartyController {
     }
     
     
+    @RequestMapping(method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    public void joinParty(@PathVariable("partyId") String partyId, @RequestBody String username) {
+        LOGGER.info("received request to join user:" + username + " to party with id:" + partyId);
+        partyService.joinParty(username, partyId);
+    }
+
     @RequestMapping(method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable String partyId) {
@@ -100,7 +158,7 @@ public class PartyControllerImpl implements PartyController {
     
     
     @RequestMapping(value="/echo/{input}", method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody String echo(@PathVariable String input) {
+    public @ResponseBody String echo(@PathVariable("input") String input) {
         return input;
     }
 

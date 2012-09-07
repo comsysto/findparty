@@ -1,15 +1,12 @@
 package com.comsysto.dalli.android.service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import com.comsysto.dalli.android.service.util.UrlBuilder;
@@ -19,10 +16,7 @@ import com.comsysto.findparty.web.PartyService;
 /**
  * Implementation using {@link RestTemplate} from Spring to communicate with our
  * RestService to obtain Tasks.
- * 
- * @TODO: Currently readTimeout does not work. <a
- *        href="https://jira.springsource.org/browse/ANDROID-32">JIRA Ticket</a>
- * 
+ *
  * @author stefandjurasic
  * 
  */
@@ -36,8 +30,7 @@ public class PartyManagementServiceImpl implements PartyService {
 
     public PartyManagementServiceImpl(String host) {
         HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
-        // TODO: NOT WOKRING, check again when spring-android-rest is released
-        // requestFactory.setReadTimeout(100);
+        requestFactory.setConnectTimeout(100);
 
         this.restTemplate = new RestTemplate(true, requestFactory);
         
@@ -69,8 +62,8 @@ public class PartyManagementServiceImpl implements PartyService {
     }
 
     @Override
-    public List<Party> searchParties(Double lon, Double lat) {
-        String url = urlBuilder.createUri(PARTY_SERVICE_PATH, String.valueOf(lon), String.valueOf(lat));
+    public List<Party> searchParties(Double lon, Double lat, Double maxDistance) {
+        String url = urlBuilder.createUri(PARTY_SERVICE_PATH, String.valueOf(lon), String.valueOf(lat), String.valueOf(maxDistance));
 
         
         Party[] response = restTemplate.getForObject(url, Party[].class);

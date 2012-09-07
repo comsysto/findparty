@@ -90,7 +90,7 @@ public class LocationChangeListener extends Observable implements LocationListen
                 locationInfo.setLocationInSystemLanguage(result.get(0));
                 locationInfo.setLocationStringForParty(result.get(0).getAddressLine(0));
                 locationInfo.setLongitude(result.get(0).getLongitude());
-                locationInfo.setLatitude(result.get(0).getLongitude());
+                locationInfo.setLatitude(result.get(0).getLatitude());
             }
 
             if (locationInfo != null && locationInfo.getLocationInEnglish() != null
