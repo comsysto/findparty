@@ -3,7 +3,7 @@
       package="com.comsysto.dalli.android"
       android:versionCode="1"
       android:versionName="1.0">
-    <application android:debuggable="true" android:name=".application.PartyManagerApplication" android:theme="@android:style/Theme.Black"
+    <application android:debuggable="true" android:name=".application.PartyManagerApplication" android:theme="@style/CustomTheme"
     			 android:icon="@drawable/ic_launcher_dailly" android:label="@string/APP_NAME">
         <uses-library android:name="com.google.android.maps"/>
 

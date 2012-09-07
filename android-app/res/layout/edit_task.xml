@@ -34,7 +34,7 @@
                 android:id="@+id/numberOfParticipantsButton" android:text="Placehodler for Participants"/>
 
         <Button android:layout_width="200dip" android:gravity="center" android:layout_gravity="center_horizontal" android:layout_height="wrap_content"
-                android:id="@+id/partyLocationButton" android:text="Placehodler for Location"/>
+                android:id="@+id/partyLocationButton" android:text="Waiting For Location"/>
 
         <Button android:layout_width="150dip" android:layout_height="wrap_content"
 	    	android:text="@string/ADD_PARTY_BUTTON" android:id="@+id/addButton"
