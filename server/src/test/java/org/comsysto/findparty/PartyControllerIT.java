@@ -52,7 +52,7 @@ public class PartyControllerIT {
         party2.setStartDate(new Date());
         party2.setName("Testparty 2");
 
-        String partyId = resttemplate.postForObject("http://localhost:8080/services/party", party2, String.class);
+        String partyId = resttemplate.postForObject("http://localhost:8080/services/parties", party2, String.class);
 
 
         Map<String, String> vars = new HashMap<String, String>();
@@ -63,7 +63,7 @@ public class PartyControllerIT {
         TypeReference<HashSet<Party>> typeRef
                 = new TypeReference<
                 HashSet<Party>>() {};
-        Set<Party> parties = mapper.readValue(resttemplate.getForObject("http://localhost:8080/services/party/search/{lon}/{lat}/{maxdistance}", String.class, vars), typeRef);
+        Set<Party> parties = resttemplate.getForObject("http://localhost:8080/services/parties/search/{lon}/{lat}/{maxdistance}", HashSet.class, vars);
         assertNotNull(parties);
         assertNotNull(partyId);
     }
