@@ -1,5 +1,9 @@
 package com.comsysto.findparty;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: tim.hoheisel
@@ -9,6 +13,15 @@ package com.comsysto.findparty;
  */
 public enum CategoryType {
 
-    RUNNING, BIKING, JOGGING,CLUBBING, MUSIC, HIKING, SWIMMING
+    RUNNING, BIKING, JOGGING,CLUBBING, MUSIC, HIKING, SWIMMING;
 
+    public static List<String> names() {
+        ArrayList list = new ArrayList();
+
+        for (CategoryType type : values()) {
+            list.add(type.name());
+        }
+        return list;
+
+    }
 }

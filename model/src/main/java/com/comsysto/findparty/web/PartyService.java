@@ -1,5 +1,6 @@
 package com.comsysto.findparty.web;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.comsysto.findparty.Party;
@@ -30,5 +31,4 @@ public interface PartyService {
     public void delete(String partyId);
     
     public String echo(String input);
-
 }

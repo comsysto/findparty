@@ -56,6 +56,7 @@ public abstract class AbstractPartyListActivity extends ListActivity {
 		this.parties = getPartyManagerApplication().getParties();
 		setArrayAdapter(new PartyListAdapter(this, parties));
 		setListAdapter(getArrayAdapter());
+//        getArrayAdapter().notifyDataSetChanged();
 	}
 
     @Override
@@ -124,6 +125,6 @@ public abstract class AbstractPartyListActivity extends ListActivity {
 
 	public void notifyDataSetChanged() {
 		initArrayAdapter();
-	}	
+	}
 
 }

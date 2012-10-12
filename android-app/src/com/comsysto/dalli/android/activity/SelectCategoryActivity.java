@@ -1,14 +1,17 @@
 package com.comsysto.dalli.android.activity;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import com.comsysto.dalli.android.R;
-import com.comsysto.findparty.Party;
+import com.comsysto.dalli.android.application.PartyManagerApplication;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,7 +26,10 @@ public class SelectCategoryActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.select_category);
 
-        ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<String>(this, R.layout.category_item) {
+        List<String> categories = ((PartyManagerApplication) getApplication()).getAllCategories();
+
+
+        ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<String>(this, R.layout.category_item, categories) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 final String category = getItem(position);
@@ -49,14 +55,9 @@ public class SelectCategoryActivity extends ListActivity {
 
                 return convertView;
             }
+
+
         };
-        stringArrayAdapter.add("Running");
-        stringArrayAdapter.add("Cycling");
-        stringArrayAdapter.add("Clubbing");
-        stringArrayAdapter.add("Play Dodge Ball");
-        stringArrayAdapter.add("Snuggling");
-        stringArrayAdapter.add("Hiking");
-        stringArrayAdapter.add("Singing");
 
         setListAdapter(stringArrayAdapter);
         super.onCreate(savedInstanceState);

@@ -40,6 +40,7 @@ import org.springframework.web.client.RestTemplate;
 public class PartyControllerIT {
 
     private static final String PARTY_SERVICE_URL = "http://localhost:8080/services/parties";
+//    private static final String PARTY_SERVICE_URL = "http://snuggle.eu01.aws.af.cm/services/parties";
     @Autowired
     private RestTemplate resttemplate;
 
@@ -72,7 +73,7 @@ public class PartyControllerIT {
         party2.setName("Jubigrat");
         party2.setPicture(pic);
 
-        String partyId = resttemplate.postForObject("http://localhost:8080/services/parties", party2, String.class);
+        String partyId = resttemplate.postForObject(PARTY_SERVICE_URL, party2, String.class);
     }
 
     @Test
@@ -96,11 +97,11 @@ public class PartyControllerIT {
         vars.put("lon", "11.550380");
         vars.put("maxdistance", "15");
         ObjectMapper mapper = new ObjectMapper();
-        Set<Party> parties = resttemplate.getForObject("http://localhost:8080/services/parties/search/{lon}/{lat}/{maxdistance}", HashSet.class, vars);
+        Set<Party> parties = resttemplate.getForObject(PARTY_SERVICE_URL + "/search/{lon}/{lat}/{maxdistance}", HashSet.class, vars);
         assertNotNull(parties);
         assertNotNull(partyId);
 
-        resttemplate.delete("http://localhost:8080/services/parties/{partyId}", partyId);
+        resttemplate.delete(PARTY_SERVICE_URL + "/{partyId}", partyId);
     }
     
     @Test

@@ -1,10 +1,8 @@
 package com.comsysto.findparty.web;
 
 import com.comsysto.findparty.Category;
-import com.comsysto.findparty.Party;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,7 +29,7 @@ public class CategoryController {
     public
     @ResponseBody
     Set<Category> getAllCategories() throws Exception {
-        Set<Category> categories = categoryService.getAll();
+        Set<Category> categories = categoryService.getAllCategories();
         return categories;
     }
 }

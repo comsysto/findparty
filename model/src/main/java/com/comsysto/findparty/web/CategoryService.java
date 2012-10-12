@@ -13,5 +13,5 @@ import java.util.Set;
  */
 public interface CategoryService {
 
-    public Set<Category> getAll();
+    public Set<Category> getAllCategories();
 }

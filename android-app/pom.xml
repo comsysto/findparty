@@ -46,6 +46,13 @@
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.9.9</version>
         </dependency>
+<dependency>
+  <groupId>com.google.android.maps</groupId>
+  <artifactId>maps</artifactId>
+  <version>7_r1</version>
+  <scope>provided</scope>
+</dependency>
+
     </dependencies>
 
     <build>

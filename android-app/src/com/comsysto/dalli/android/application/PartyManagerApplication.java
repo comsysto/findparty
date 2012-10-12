@@ -1,7 +1,5 @@
 package com.comsysto.dalli.android.application;
 
-import java.util.List;
-
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -9,12 +7,14 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
 import com.comsysto.dalli.android.service.PartyManagementServiceImpl;
 import com.comsysto.dalli.android.service.PartyManagementServiceMock;
+import com.comsysto.findparty.CategoryType;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.User;
 import com.comsysto.findparty.web.PartyService;
+
+import java.util.List;
 
 /**
  * {@link PartyManagerApplication} holds relevant stuff for the whole app .
@@ -34,7 +34,7 @@ public class PartyManagerApplication extends Application {
 	private Party selectedParty;
 
 	private PartyService partyService;
-	
+
 	private boolean ready;
 	
 	private User user;
@@ -48,7 +48,8 @@ public class PartyManagerApplication extends Application {
 		this.ready = false;
 		SharedPreferences defaultSharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		String host = defaultSharedPreferences.getString("host", "10.0.2.2:8080");
+		//String host = defaultSharedPreferences.getString("host", "10.0.2.2:8080");
+		String host = defaultSharedPreferences.getString("host", "snuggle.eu01.aws.af.cm");
 		if (isConnected()) {
 			initializeOnlineService(host);
 		} else {
@@ -111,7 +112,6 @@ public class PartyManagerApplication extends Application {
 	}
 
 	public void saveParty(Party updatedParty) {
-	    updatedParty.setOwner(user.getUsername());
 		this.partyService.update(updatedParty);
 	}
 
@@ -140,5 +140,10 @@ public class PartyManagerApplication extends Application {
 
     public List<Party> searchParties(Double longitude, Double latitude, Double maxDistance) {
         return this.partyService.searchParties(longitude, latitude, maxDistance);
+    }
+
+    public List<String> getAllCategories() {
+        return CategoryType.names();
+
     }
 }

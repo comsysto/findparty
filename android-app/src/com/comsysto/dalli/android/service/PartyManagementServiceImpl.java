@@ -1,11 +1,10 @@
 package com.comsysto.dalli.android.service;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import android.util.Log;
+import com.comsysto.findparty.Category;
+import com.comsysto.findparty.web.CategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -22,25 +21,28 @@ import com.comsysto.findparty.web.PartyService;
  * @author stefandjurasic
  * 
  */
-public class PartyManagementServiceImpl implements PartyService {
+public class PartyManagementServiceImpl implements PartyService, CategoryService {
 
     private RestTemplate restTemplate;
     private UrlBuilder urlBuilder;
 
     private final static String PARTY_SERVICE_PATH = "/services/parties";
+    private final static String CATEGORY_SERVICE_PATH = "/services/category";
+
     private final static String SUBSCRIPTIONS = "subscriptions";
 
     public PartyManagementServiceImpl(String host) {
-        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
-        requestFactory.setConnectTimeout(1000);
+        HttpComponentsClientHttpRequestFactory requestFactory = createHttpRequestFactory();
 
         this.restTemplate = new RestTemplate(true, requestFactory);
-        
-        List<HttpMessageConverter<?>> converters = restTemplate.getMessageConverters();
-        
-        
-        
+
         this.urlBuilder = new UrlBuilder(host);
+    }
+
+    private HttpComponentsClientHttpRequestFactory createHttpRequestFactory() {
+        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+        requestFactory.setConnectTimeout(2000);
+        return requestFactory;
     }
 
     @Override
@@ -116,8 +118,9 @@ public class PartyManagementServiceImpl implements PartyService {
         params.put("user", username);
         
         String url = urlBuilder.createUri(params, PARTY_SERVICE_PATH);
-        
+
         Party[] response = restTemplate.getForObject(url, Party[].class);
+        //Party[] response = new RestTemplate(true, createHttpRequestFactory()).getForObject(url, Party[].class);
         return Arrays.asList(response);
     }
 
@@ -129,4 +132,11 @@ public class PartyManagementServiceImpl implements PartyService {
         return forEntity.getBody();
     }
 
+    @Override
+    public Set<Category> getAllCategories() {
+        String url = urlBuilder.createUri(CATEGORY_SERVICE_PATH, "getall");
+        ResponseEntity<Set> forEntity = restTemplate.getForEntity(url, Set.class);
+
+        return forEntity.getBody();
+    }
 }

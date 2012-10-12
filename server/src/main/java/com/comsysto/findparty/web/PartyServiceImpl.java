@@ -1,6 +1,7 @@
 package com.comsysto.findparty.web;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +20,8 @@ import com.comsysto.findparty.User;
 public class PartyServiceImpl implements PartyService {
 
     @Autowired
-    @Qualifier("partiesMongoOperations")
-    public MongoOperations partyMongoOperations;
+    public MongoOperations mongoOperations;
     
-    @Autowired
-    @Qualifier("userMongoOperations")
-    public MongoOperations userMongoOperations;
-    
-
     public static final Double KILOMETER = 111.0d;
 
     /**
@@ -41,7 +36,7 @@ public class PartyServiceImpl implements PartyService {
 	}
 
     private Party findById(String partyId) {
-        Party party = partyMongoOperations.findById(partyId, Party.class);     
+        Party party = mongoOperations.findById(partyId, Party.class);
         if(party==null)
             throw new NotFoundException("an existing party with id="+partyId+" was not found on server!");
         
@@ -57,7 +52,7 @@ public class PartyServiceImpl implements PartyService {
     private void cancelParty(String username, Party party) {
         party.getParticipants().remove(username);
         party.getCandidates().remove(username);
-        partyMongoOperations.save(party);        
+        mongoOperations.save(party);
     }
 
     @Override
@@ -66,7 +61,7 @@ public class PartyServiceImpl implements PartyService {
     	User user = findUserAndCreateIfNotExists(username);
 
     	party.getCandidates().add(user.getUsername());
-    	partyMongoOperations.save(party);
+    	mongoOperations.save(party);
 	}
 
 	
@@ -75,13 +70,13 @@ public class PartyServiceImpl implements PartyService {
 	    //checks if party with same id exists
 	    findById(party.getId());
 	    	    
-	    partyMongoOperations.save(party);
+	    mongoOperations.save(party);
 	}
 	
 	@Override
 	public String createParty(Party party) {
 	    
-		partyMongoOperations.insert(party);
+		mongoOperations.insert(party);
         
 		User user = findUserAndCreateIfNotExists(party.getOwner());
 		
@@ -91,7 +86,7 @@ public class PartyServiceImpl implements PartyService {
     private User findUserAndCreateIfNotExists(String username) {
         Criteria criteria = Criteria.where("username").is(username);
         Query query = new Query(criteria );
-        User user = userMongoOperations.findOne(query , User.class);
+        User user = mongoOperations.findOne(query , User.class);
         if(user!=null) {
             return user;
         }
@@ -104,21 +99,21 @@ public class PartyServiceImpl implements PartyService {
     private User createUser(String username) {
         User user = new User();
         user.setUsername(username);
-        userMongoOperations.insert(user);
+        mongoOperations.insert(user);
         return user;
     }
 
     @Override
     public List<Party> getAllParties(String username) {
         Criteria criteria = Criteria.where("owner").is(username);
-        List<Party> parties = partyMongoOperations.find(new Query(criteria), Party.class);
+        List<Party> parties = mongoOperations.find(new Query(criteria), Party.class);
         return parties;
     }
 
     @Override
     public void delete(String partyId) {
         Party party = findById(partyId);
-        partyMongoOperations.remove(party);
+        mongoOperations.remove(party);
     }
 	
     /**
@@ -143,7 +138,7 @@ public class PartyServiceImpl implements PartyService {
     public List<Party> searchParties(Double lon, Double lat, Double maxdistance) {
         Criteria criteria = new Criteria(LOCATION).near(new Point(lon, lat)).maxDistance(getInKilometer(maxdistance));
         List<Party> parties = new ArrayList<Party>();
-        parties.addAll(partyMongoOperations.find(new Query(criteria),
+        parties.addAll(mongoOperations.find(new Query(criteria),
                 Party.class));
         return parties;
     }
