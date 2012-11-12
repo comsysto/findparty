@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-
 import com.comsysto.dalli.android.R;
 import com.comsysto.dalli.android.menu.OptionMenuHandler;
 
@@ -67,7 +66,7 @@ public class SplashScreenActivity extends AbstractActivity {
             @Override
             public void onClick(View v) {
                 if (getPartyManagerApplication().isReady()) {
-                    goTo(SplashScreenActivity.this, SelectCategoryActivity.class);
+                    goTo(SplashScreenActivity.this, CreatePartyActivity.class);
                 } else {
                     SplashScreenActivity.this.showDialog(5);
                 }
