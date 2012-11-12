@@ -12,19 +12,12 @@
     <packaging>apk</packaging>
     <name>Findparty App</name>
 
-	<repositories>
-		<repository>
-		    <id>org.springframework.maven.milestone</id>
-		    <name>Spring Maven Milestone Repository</name>
-		    <url>http://maven.springframework.org/milestone</url>
-		</repository>	
-	</repositories>
 
     <dependencies>
         <dependency>
             <groupId>com.google.android</groupId>
             <artifactId>android</artifactId>
-            <version>2.1.2</version>
+            <version>4.0.1.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -36,22 +29,22 @@
             <artifactId>spring-android-rest-template</artifactId>
             <version>1.0.0.RELEASE</version>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>com.google.android</groupId>
             <artifactId>support-v4</artifactId>
             <version>r7</version>
-        </dependency>
+        </dependency-->
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.9.9</version>
         </dependency>
-<dependency>
+<!--dependency>
   <groupId>com.google.android.maps</groupId>
   <artifactId>maps</artifactId>
   <version>7_r1</version>
   <scope>provided</scope>
-</dependency>
+</dependency-->
 
     </dependencies>
 
@@ -66,7 +59,7 @@
                 <configuration>
                     <sdk>
                         <!-- platform or api level (api level 4 = platform 1.6)-->
-                        <platform>7</platform>
+                        <platform>14</platform>
                     </sdk>
                     <emulator>
                         <!-- the name of the avd device to use for starting the emulator -->

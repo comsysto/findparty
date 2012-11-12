@@ -19,7 +19,7 @@ public class EditPartyActivity extends PartyActivity {
 	 * Initializes fields from existing Task
 	 */
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         this.saveButton.setText(R.string.SAVE_PARTY_BUTTON);

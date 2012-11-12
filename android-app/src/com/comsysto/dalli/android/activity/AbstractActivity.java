@@ -3,8 +3,8 @@ package com.comsysto.dalli.android.activity;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
 import com.comsysto.dalli.android.authentication.AccountAuthenticator;
 
@@ -14,7 +14,7 @@ import com.comsysto.dalli.android.authentication.AccountAuthenticator;
  * @author stefandjurasic
  *
  */
-public abstract class AbstractActivity extends FragmentActivity {
+public abstract class AbstractActivity extends Activity {
 
 	/**
 	 * goes to another activity
@@ -46,7 +46,7 @@ public abstract class AbstractActivity extends FragmentActivity {
 	}
 
 	@Override
-	protected void onResume() {
+	public void onResume() {
 		super.onResume();
 		AccountManager mAccountManager = AccountManager.get(this);
 		Account[] accountsByType = mAccountManager.getAccountsByType(AccountAuthenticator.AUTH_TYPE);

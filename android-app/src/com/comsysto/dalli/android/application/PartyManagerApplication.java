@@ -49,7 +49,8 @@ public class PartyManagerApplication extends Application {
 		SharedPreferences defaultSharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		//String host = defaultSharedPreferences.getString("host", "10.0.2.2:8080");
-		String host = defaultSharedPreferences.getString("host", "snuggle.eu01.aws.af.cm");
+		//String host = defaultSharedPreferences.getString("host", "snuggle.eu01.aws.af.cm");
+		String host = "snuggle.eu01.aws.af.cm";
 		if (isConnected()) {
 			initializeOnlineService(host);
 		} else {

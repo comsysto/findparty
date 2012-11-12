@@ -107,7 +107,7 @@ public class LocationChangeListener extends Observable implements LocationListen
      * locations updates are requested. If the this LocationChangeListener was
      * already deactivated, nothing will happen.
      */
-    public void deactivate() {
+    public synchronized void deactivate() {
         if (isActive) {
             locationManager.removeUpdates(this);
         }
@@ -119,7 +119,7 @@ public class LocationChangeListener extends Observable implements LocationListen
      * is requested every 15 minutes. If the this LocationChangeListener was
      * already active, it will be first deactivated and then reactivated.
      */
-    public void activate() {
+    public synchronized void activate() {
         deactivate();
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 15 * 60 * 1000, 0, this);
         isActive = true;

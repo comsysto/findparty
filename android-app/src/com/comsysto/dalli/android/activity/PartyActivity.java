@@ -1,12 +1,8 @@
 package com.comsysto.dalli.android.activity;
 
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.TimePickerDialog;
+import android.app.*;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
 import android.text.method.DigitsKeyListener;
 import android.view.Menu;
@@ -50,7 +46,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
 
     @Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		this.optionMenuHandler = new OptionMenuHandler(this);
@@ -120,7 +116,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
 
                 };
-                fragment.show(getSupportFragmentManager(), "numberOfParticipantsPicker");
+                fragment.show(getFragmentManager(), "numberOfParticipantsPicker");
 
             }
         });
@@ -141,7 +137,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
                     }
                 };
 
-                fragment.show(getSupportFragmentManager(), "datePicker");
+                fragment.show(getFragmentManager(), "datePicker");
             }
         });
         setTimeOnView();
@@ -177,7 +173,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
                 return new TimePickerDialog(getActivity(), PartyActivity.this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), DateFormat.is24HourFormat(getActivity()));
             }
         };
-        fragment.show(getSupportFragmentManager(), "timePicker");
+        fragment.show(getFragmentManager(), "timePicker");
         Calendar calendarFromParty = getCalendarFromParty();
 
         calendarFromParty.set(Calendar.YEAR, year);

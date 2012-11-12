@@ -106,7 +106,7 @@ public class SplashScreenActivity extends AbstractActivity {
 	}
 
 	@Override
-	protected void onResume() {
+	public void onResume() {
 		super.onResume();
 		showProgressDialogIfNotReady();
 	}

@@ -39,7 +39,10 @@ public class FindPartiesMapActivity extends MapActivity implements Observer {
         mapView = (MapView) findViewById(R.id.find_parties_map_view);
         mapView.setBuiltInZoomControls(true);
 
+        zoomToMyLocation();
+
         locationService = new LocationService(getApplicationContext(), this);
+
         locationService.activate();
     }
 
@@ -61,32 +64,11 @@ public class FindPartiesMapActivity extends MapActivity implements Observer {
         LocationInfo locationInfo = (LocationInfo)o;
         locationService.deactivate();
 
-        List<Party> parties = getPartyManagerApplication().searchParties(locationInfo.getLongitude(), locationInfo.getLatitude(), this.currentDistance);
 
+        loadPartiesAndShowOnMap(locationInfo);
+    }
 
-
-
-        List<Overlay> mapOverlays = mapView.getOverlays();
-        Drawable drawable = this.getResources().getDrawable(R.drawable.androidmarker);
-
-        for (Party party : parties) {
-            PartyItemizedOverlay itemizedoverlay = null;
-            if (party.getPicture() != null && party.getPicture().getContent() != null)  {
-                Drawable image = new BitmapDrawable(BitmapFactory.decodeByteArray(party.getPicture().getContent(), 0, party.getPicture().getContent().length));
-                itemizedoverlay = new PartyItemizedOverlay(image, this);
-            } else {
-                itemizedoverlay = new PartyItemizedOverlay(drawable, this);
-            }
-
-
-            GeoPoint currentLocation = new GeoPoint(getMicroDegrees(party.getLocation().getLat()), getMicroDegrees(party.getLocation().getLon().doubleValue()));
-
-            OverlayItem overlayitem = new OverlayItem(currentLocation, party.getCategory(), party.getOwner() + " " + new SimpleDateFormat().format(party.getStartDate()));
-            itemizedoverlay.addOverlay(overlayitem);
-            mapOverlays.add(itemizedoverlay);
-        }
-
-
+    private void zoomToMyLocation() {
         final MyLocationOverlay myLocOverlay = new MyLocationOverlay(this, mapView);
         myLocOverlay.enableMyLocation();
         mapView.getOverlays().add(myLocOverlay);
@@ -98,6 +80,39 @@ public class FindPartiesMapActivity extends MapActivity implements Observer {
                 mapView.getController().animateTo(myLocOverlay.getMyLocation());
             }
         });
+    }
+
+    private void loadPartiesAndShowOnMap(final LocationInfo locationInfo) {
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<Party> parties = getPartyManagerApplication().searchParties(locationInfo.getLongitude(), locationInfo.getLatitude(), FindPartiesMapActivity.this.currentDistance);
+
+
+                List<Overlay> mapOverlays = mapView.getOverlays();
+                Drawable drawable = FindPartiesMapActivity.this.getResources().getDrawable(R.drawable.androidmarker);
+
+                for (Party party : parties) {
+                    PartyItemizedOverlay itemizedoverlay = null;
+
+                    if (party.getPicture() != null && party.getPicture().getContent() != null)  {
+                        Drawable image = new BitmapDrawable(BitmapFactory.decodeByteArray(party.getPicture().getContent(), 0, party.getPicture().getContent().length));
+                        itemizedoverlay = new PartyItemizedOverlay(image, FindPartiesMapActivity.this);
+                    } else {
+                        itemizedoverlay = new PartyItemizedOverlay(drawable, FindPartiesMapActivity.this);
+                    }
+
+
+                    GeoPoint currentLocation = new GeoPoint(getMicroDegrees(party.getLocation().getLat()), getMicroDegrees(party.getLocation().getLon().doubleValue()));
+
+                    OverlayItem overlayitem = new OverlayItem(currentLocation, party.getCategory(), party.getOwner() + " " + new SimpleDateFormat().format(party.getStartDate()));
+                    itemizedoverlay.addOverlay(overlayitem);
+                    mapOverlays.add(itemizedoverlay);
+                }            }
+        });
+
+        thread.start();
     }
 
     private int getMicroDegrees(Double coordinate) {
