@@ -3,11 +3,15 @@
 	android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical">
 
 
-
-    <TextView android:autoLink="web" android:id="@+id/textView2" 
+    <Space
+            android:layout_width="20px"
+            android:layout_height="20px"
+            android:id="@+id/space" android:layout_gravity="center"/>
+    <TextView android:autoLink="web" android:id="@+id/textView2"
     	android:gravity="center" android:layout_height="wrap_content" 
-    	android:layout_width="fill_parent" android:clickable="true" 
-    	android:text="@string/SIGNUP_LABEL" android:textSize="24dip" android:textStyle="bold"></TextView>
+    	android:layout_width="fill_parent" android:clickable="true"
+    	android:text="@string/SIGNUP_LABEL" android:textSize="24dip" android:textStyle="bold"
+        android:textColor="#000000"></TextView>
     	
    	<TextView android:id="@+id/error" android:gravity="center" 
     	android:layout_height="wrap_content" 
