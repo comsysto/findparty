@@ -23,9 +23,9 @@ import com.comsysto.findparty.User;
  */
 public class StartActivity extends Activity {
 
-	@Override
+    @Override
 	protected void onResume() {
-		super.onResume();
+        super.onResume();
 
 	    AccountManager mAccountManager = AccountManager.get(this);
 	    Account[] accountsByType = mAccountManager.getAccountsByType(AccountAuthenticator.AUTH_TYPE);

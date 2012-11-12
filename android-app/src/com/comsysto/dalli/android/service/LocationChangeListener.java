@@ -1,18 +1,14 @@
 package com.comsysto.dalli.android.service;
 
+import android.content.Context;
+import android.location.*;
+import android.os.Bundle;
+import android.util.Log;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Observable;
-
-import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.util.Log;
 
 
 /**
@@ -26,6 +22,8 @@ public class LocationChangeListener extends Observable implements LocationListen
     private final Geocoder geocoderSystemLanguage;
     private LocationManager locationManager;
     private boolean isActive;
+    private final Criteria accuracyCoarseCriteria;
+    private final Criteria accuracyFineCriteria;
 
     public LocationChangeListener(Context con, LocationManager locationManager) {
         // Log.d("LocationChangeListener","Constructor");
@@ -34,6 +32,12 @@ public class LocationChangeListener extends Observable implements LocationListen
         geocoderSystemLanguage = new Geocoder(con);
 
         this.locationManager = locationManager;
+
+        accuracyCoarseCriteria = new Criteria();
+        accuracyCoarseCriteria.setAccuracy(Criteria.ACCURACY_COARSE);
+        accuracyFineCriteria = new Criteria();
+        accuracyFineCriteria.setAccuracy(Criteria.ACCURACY_FINE);
+
     }
 
     @Override
@@ -121,8 +125,12 @@ public class LocationChangeListener extends Observable implements LocationListen
      */
     public synchronized void activate() {
         deactivate();
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 15 * 60 * 1000, 0, this);
+        String provider = locationManager.getBestProvider(accuracyCoarseCriteria, true);
+
+        locationManager.requestSingleUpdate(provider, this, null);
         isActive = true;
+
+
     }
 
     /**
@@ -141,24 +149,28 @@ public class LocationChangeListener extends Observable implements LocationListen
      * </ol>
      */
     public void initializeFromHistory() {
-        Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-        if (lastKnownLocation == null) {
-            lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Location lastKnownLocation = getLastKnownLocation();
 
-        } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-                && !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            // there can be still no location even if the gps provider is
-            // enabled
-            Location gpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (gpsLocation != null) {
-                lastKnownLocation = gpsLocation;
-            }
-        }
-
-        if (lastKnownLocation != null) {
+        if(lastKnownLocation!=null) {
             extractRelevantLocationAndInformObserver(lastKnownLocation);
+        } else {
+            Log.i("LocationChangeListener", "no last known location found");
         }
+
+    }
+
+    private Location getLastKnownLocation() {
+        Location lastKnownLocation = null;
+        String fineProvider = locationManager.getBestProvider(accuracyFineCriteria, true);
+        String coarseProvider = locationManager.getBestProvider(accuracyCoarseCriteria, true);
+
+        if(fineProvider!=null) {
+            lastKnownLocation = locationManager.getLastKnownLocation(fineProvider);
+        } else if(coarseProvider!=null && lastKnownLocation==null) {
+            lastKnownLocation = locationManager.getLastKnownLocation(coarseProvider);
+        }
+        return lastKnownLocation;
     }
 
 }
