@@ -90,16 +90,24 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
                     @Override
                     public Dialog onCreateDialog(Bundle savedInstanceState) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        final EditText editText = new EditText(getActivity());
-                        editText.setText("" + party.getSize());
-                        editText.setKeyListener(new DigitsKeyListener());
-                        builder.setView(editText);
+                        final NumberPicker picker = new NumberPicker(getActivity());
+                        picker.setMinValue(1);
+                        picker.setMaxValue(100);
+                        picker.setEnabled(true);
+                        picker.setValue(party.getSize());
+                        picker.setFormatter(new NumberPicker.Formatter() {
+                            @Override
+                            public String format(int value) {
+                                return value + " Participants";
+                            }
+                        });
+                        builder.setView(picker);
                         builder.setTitle(getResources().getString(R.string.NUMBER_OF_PARTICIPANTS_DIALOG_TITLE));
                         builder.setPositiveButton(R.string.OK_BUTTON, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
-                                    int numberOfParticipants = Integer.parseInt(editText.getText().toString());
+                                    int numberOfParticipants = picker.getValue();
                                     party.setSize(numberOfParticipants);
                                     setTextOnNumberOfParticipantsButton(numberOfParticipants);
                                 } catch (NumberFormatException e) {

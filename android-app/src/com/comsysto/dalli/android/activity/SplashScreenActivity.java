@@ -72,12 +72,13 @@ public class SplashScreenActivity extends AbstractActivity {
                 }
             }
         });
+
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Loading. Please wait...");
 	}
 
 	private void showProgressDialogIfNotReady() {
-		if (!getPartyManagerApplication().isReady()) {
-			dialog = new ProgressDialog(this);
-			dialog.setMessage("Loading. Please wait...");
+		if (!dialog.isShowing() && !getPartyManagerApplication().isReady()) {
 			dialog.show();
 			new AsyncTask<Void, Void, Void>() {
 				
@@ -94,10 +95,7 @@ public class SplashScreenActivity extends AbstractActivity {
 				}
 				
 				protected void onPostExecute(Void result) {
-					if (dialog != null) {
-						dialog.cancel();
-						dialog = null;
-					}
+                    dialog.hide();
 				};
 				
 			}.execute();
