@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical">
-    <ImageView android:layout_height="wrap_content" android:layout_width="wrap_content" 
-    	android:src="@drawable/findparty_logo" android:id="@+id/imageView1"
-    	android:layout_gravity="center_horizontal"></ImageView>
-    	
+
+
+
     <TextView android:autoLink="web" android:id="@+id/textView2" 
     	android:gravity="center" android:layout_height="wrap_content" 
     	android:layout_width="fill_parent" android:clickable="true" 
-    	android:text="@string/SIGNUP_LABEL" android:textStyle="bold"></TextView>
+    	android:text="@string/SIGNUP_LABEL" android:textSize="24dip" android:textStyle="bold"></TextView>
     	
    	<TextView android:id="@+id/error" android:gravity="center" 
     	android:layout_height="wrap_content" 
