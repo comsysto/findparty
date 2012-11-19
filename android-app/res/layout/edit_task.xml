@@ -1,27 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView 
-	android:layout_width="fill_parent" 
-	android:layout_height="fill_parent"
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:widget="http://www.comsysto.com/dalli/android/widget">
+<ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        >
 	<LinearLayout
 		android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical">
 	    <ImageView android:src="@drawable/findparty_logo" android:id="@+id/imageView1"
 	    	android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"></ImageView>
 
-
+        <!--
         <TextView android:layout_height="25dip" android:layout_width="fill_parent" android:text="@string/SPACE_LABEL"/>
-
         <TextView android:layout_width="fill_parent" android:layout_height="30dip" android:gravity="center"
 	        android:id="@+id/categoryNameText" android:text="Test" style="@android:style/TextAppearance.Large.Inverse"></TextView>
-
         <TextView android:layout_height="25dip" android:layout_width="fill_parent" android:text="@string/SPACE_LABEL"/>
-
+        -->
 	    <Spinner
 	        android:id="@+id/levelSpinner"
 	        android:layout_height="wrap_content"
 	        android:prompt="@string/EXPERIENCE_LABEL"
+            android:layout_width="200dip"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+        />
+
+        <Spinner
+            android:id="@+id/categorySpinner"
+            android:layout_height="wrap_content"
+            android:prompt="@string/EXPERIENCE_LABEL"
             android:layout_width="200dip"
             android:layout_gravity="center_horizontal"
             android:gravity="center"

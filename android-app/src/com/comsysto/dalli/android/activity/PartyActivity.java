@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import com.comsysto.dalli.android.R;
+import com.comsysto.dalli.android.application.PartyManagerApplication;
 import com.comsysto.dalli.android.menu.OptionMenuHandler;
 import com.comsysto.dalli.android.service.LocationInfo;
 import com.comsysto.dalli.android.service.LocationService;
@@ -18,23 +19,20 @@ import com.comsysto.findparty.Party;
 import com.comsysto.findparty.Point;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 /**
  * Super class for {@link EditPartyActivity} and {@link CreatePartyActivity}.
- * 
- * @author stefandjurasic
  *
+ * @author stefandjurasic
  */
 public abstract class PartyActivity extends AbstractActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, Observer {
 
-	private OptionMenuHandler optionMenuHandler;
-	TextView categoryNameText;
-	Spinner levelSpinner;
-	Button saveButton;
+    private OptionMenuHandler optionMenuHandler;
+    TextView categoryNameText;
+    Spinner levelSpinner;
+    Spinner categorySpinner;
+    Button saveButton;
 
     SimpleDateFormat formatter = new SimpleDateFormat();
     private Button partyTime;
@@ -46,19 +44,19 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
 
     @Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		this.optionMenuHandler = new OptionMenuHandler(this);
-		
-		setContentView(R.layout.edit_task);
-		
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        this.optionMenuHandler = new OptionMenuHandler(this);
+
+        setContentView(R.layout.edit_task);
+
         this.party = getParty();
-        
-		initCategory();
-		initLevelSpinner();
-		initPartyTimeButton();
-		initSaveButton();
+
+        initCategory();
+        initLevelSpinner();
+        initPartyTimeButton();
+        initSaveButton();
         initParticipantsButton();
         initPartyLocationButton();
     }
@@ -67,17 +65,17 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
     private void initPartyLocationButton() {
         locationService = new LocationService(getApplicationContext(), this);
-        this.partyLocationButton = (Button)findViewById(R.id.partyLocationButton);
+        this.partyLocationButton = (Button) findViewById(R.id.partyLocationButton);
 
         this.partyLocationButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-               locationService.activate();
+                locationService.activate();
             }
         });
 
         if (party.getLocation() != null) {
-                partyLocationButton.setText(locationService.getLocationFromPoint(party.getLocation()));
+            partyLocationButton.setText(locationService.getLocationFromPoint(party.getLocation()));
         } else {
             locationService.activate();
         }
@@ -104,8 +102,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
                                     int numberOfParticipants = Integer.parseInt(editText.getText().toString());
                                     party.setSize(numberOfParticipants);
                                     setTextOnNumberOfParticipantsButton(numberOfParticipants);
-                                }
-                                catch(NumberFormatException e) {
+                                } catch (NumberFormatException e) {
                                     //Ignore wrong entered numbers
                                 }
 
@@ -133,7 +130,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
                     @Override
                     public Dialog onCreateDialog(Bundle savedInstanceState) {
                         Calendar calendar = getCalendarFromParty();
-                        return new DatePickerDialog(getActivity(), PartyActivity.this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
+                        return new DatePickerDialog(getActivity(), PartyActivity.this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                     }
                 };
 
@@ -185,17 +182,17 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
     }
 
-	private void initSaveButton() {
-		this.saveButton = (Button) findViewById(R.id.addButton);
-		this.saveButton.setOnClickListener(getOnClickListener());
-	}
+    private void initSaveButton() {
+        this.saveButton = (Button) findViewById(R.id.addButton);
+        this.saveButton.setOnClickListener(getOnClickListener());
+    }
 
-	private void initLevelSpinner() {
-		levelSpinner = (Spinner) findViewById(R.id.levelSpinner);
+    private void initLevelSpinner() {
+        levelSpinner = (Spinner) findViewById(R.id.levelSpinner);
 
-	    final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,  android.R.layout.simple_spinner_item, LEVELS);
-	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	    levelSpinner.setAdapter(adapter);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, LEVELS);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        levelSpinner.setAdapter(adapter);
         levelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -207,44 +204,52 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
             }
         });
-        levelSpinner.setSelection(getLevelSpinnerSelectionPosition(party.getLevel()));
+        levelSpinner.setSelection(getPositionFromList(Arrays.asList(LEVELS), party.getLevel()));
 
     }
 
-    public int getLevelSpinnerSelectionPosition(String selectedLevel) {
-        for (int i = 0; i< LEVELS.length; i++) {
-            if (LEVELS[i].equals(selectedLevel)) {
-                return i;
+    private void initCategory() {
+        this.categorySpinner = (Spinner) findViewById(R.id.categorySpinner);
+
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getAllCategories());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(adapter);
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                party.setCategory(adapter.getItem(position));
             }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        categorySpinner.setSelection(getPositionFromList(getAllCategories(), party.getCategory()));
+    }
+
+    private int getPositionFromList(List<String> list, String item) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).equals(item))
+                return i;
         }
         return 0;
     }
 
+    public abstract String getCategory();
 
+    public abstract OnClickListener getOnClickListener();
 
-    private void initCategory() {
-		this.categoryNameText = (TextView)findViewById(R.id.categoryNameText);
-		String category = getCategory();
-		if (category != null) {
-			categoryNameText.setText(category);
-		}
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return this.optionMenuHandler.onCreateOptionsMenu(menu);
+    }
 
-	public abstract String getCategory();
-	
-	public abstract OnClickListener getOnClickListener();
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		return this.optionMenuHandler.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		this.optionMenuHandler.onOptionsItemSelected(item);
-		return super.onOptionsItemSelected(item);
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        this.optionMenuHandler.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
+    }
 
     void setTextOnNumberOfParticipantsButton(int numberOfParticipants) {
         this.numberOfParticipantsButton.setText("Required Participants : " + numberOfParticipants);
@@ -260,5 +265,10 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
         location.setLon(locationInfo.getLongitude());
         this.party.setLocation(location);
         locationService.deactivate();
+    }
+
+
+    protected List<String> getAllCategories() {
+        return ((PartyManagerApplication) getApplication()).getAllCategories();
     }
 }

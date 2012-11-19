@@ -18,7 +18,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.SelectCategoryActivity"/>
         <activity android:name=".activity.SplashScreenActivity" android:launchMode="singleTop"/>
         <activity android:name=".activity.MyPartiesActivity"/>
         <activity android:name=".activity.LoginActivity"/>

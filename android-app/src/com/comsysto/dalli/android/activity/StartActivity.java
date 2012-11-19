@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.StrictMode;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
 import com.comsysto.dalli.android.authentication.AccountAuthenticator;
 import com.comsysto.findparty.User;
@@ -25,6 +26,8 @@ public class StartActivity extends Activity {
 
     @Override
 	protected void onResume() {
+        StrictMode.enableDefaults();
+
         super.onResume();
 
 	    AccountManager mAccountManager = AccountManager.get(this);
