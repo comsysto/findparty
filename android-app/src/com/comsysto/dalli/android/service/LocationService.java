@@ -1,9 +1,5 @@
 package com.comsysto.dalli.android.service;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Observer;
-
 import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
@@ -11,6 +7,10 @@ import android.location.Geocoder;
 import android.location.LocationManager;
 import android.util.Log;
 import com.comsysto.findparty.Point;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Observer;
 
 public class LocationService extends Activity {
 
@@ -26,7 +26,10 @@ public class LocationService extends Activity {
 
     public void activate() {
         if (locationListener == null) {
-            locationListener = new LocationChangeListener(context, (LocationManager) context.getSystemService(LOCATION_SERVICE));
+
+            LocationManager locationManager = (LocationManager)context.getSystemService( Context.LOCATION_SERVICE );
+
+            locationListener = new LocationChangeListener(context, locationManager);
 
             if (observers != null) {
                 for (Observer observer : observers) {

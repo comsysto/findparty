@@ -1,10 +1,8 @@
 package com.comsysto.dalli.android.activity;
 
 import android.graphics.BitmapFactory;
-import android.graphics.Picture;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.PictureDrawable;
 import android.os.Bundle;
 import com.comsysto.dalli.android.R;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
@@ -80,6 +78,7 @@ public class FindPartiesMapActivity extends MapActivity implements Observer {
                 mapView.getController().animateTo(myLocOverlay.getMyLocation());
             }
         });
+
     }
 
     private void loadPartiesAndShowOnMap(final LocationInfo locationInfo) {

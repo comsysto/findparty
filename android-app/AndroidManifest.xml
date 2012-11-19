@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.comsysto.dalli.android"
-      android:versionCode="1"
-      android:versionName="1.0">
-    <application android:debuggable="true" android:name=".application.PartyManagerApplication" android:theme="@style/CustomTheme"
-    			 android:icon="@drawable/ic_launcher_dailly" android:label="@string/APP_NAME">
+          package="com.comsysto.dalli.android"
+          android:versionCode="1"
+          android:versionName="1.0">
+    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="14"/>
+    <application android:debuggable="true" android:name=".application.PartyManagerApplication"
+                 android:theme="@style/CustomTheme"
+                 android:icon="@drawable/ic_launcher_dailly" android:label="@string/APP_NAME">
         <uses-library android:name="com.google.android.maps"/>
 
 
@@ -12,12 +14,12 @@
                   android:label="@string/APP_NAME"
                   android:noHistory="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.SelectCategoryActivity" />
-        <activity android:name=".activity.SplashScreenActivity" android:launchMode="singleTop" />
+        <activity android:name=".activity.SelectCategoryActivity"/>
+        <activity android:name=".activity.SplashScreenActivity" android:launchMode="singleTop"/>
         <activity android:name=".activity.MyPartiesActivity"/>
         <activity android:name=".activity.LoginActivity"/>
         <activity android:name=".activity.CreatePartyActivity"/>
@@ -28,28 +30,26 @@
                   android:theme="@android:style/Theme.NoTitleBar"/>
 
         <service
-            android:name=".authentication.AuthenticationService"
-            android:exported="true">
+                android:name=".authentication.AuthenticationService"
+                android:exported="true">
             <intent-filter>
                 <action
-                    android:name="android.accounts.AccountAuthenticator" />
+                        android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>
             <meta-data
-                android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator" />
+                    android:name="android.accounts.AccountAuthenticator"
+                    android:resource="@xml/authenticator"/>
         </service>
 
     </application>
-    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="14"/>
-
 
 
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
-<uses-permission android:name="android.permission.GET_ACCOUNTS"></uses-permission>
-<uses-permission android:name="android.permission.MANAGE_ACCOUNTS"></uses-permission>
-<uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"></uses-permission>
-<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"></uses-permission>
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"></uses-permission>
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
 
 </manifest> 
