@@ -9,7 +9,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import com.comsysto.dalli.android.service.PartyManagementServiceImpl;
 import com.comsysto.dalli.android.service.PartyManagementServiceMock;
-import com.comsysto.findparty.CategoryType;
+import com.comsysto.dalli.android.model.CategoryType;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.User;
 import com.comsysto.findparty.web.PartyService;

@@ -1,7 +1,6 @@
-package com.comsysto.findparty;
+package com.comsysto.dalli.android.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -22,6 +21,7 @@ public enum CategoryType {
             list.add(type.name());
         }
         return list;
-
     }
+
+
 }

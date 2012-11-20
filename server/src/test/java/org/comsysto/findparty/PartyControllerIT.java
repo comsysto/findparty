@@ -3,10 +3,8 @@ package org.comsysto.findparty;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertNotNull;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.io.InputStream;
 import java.net.URL;
@@ -14,13 +12,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.comsysto.findparty.*;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +44,7 @@ public class PartyControllerIT {
     public void createPartytest() throws IOException {
         Party party2 = new Party();
         party2.setSize(3);
-        party2.setCategory(CategoryType.BIKING.name());
+        party2.setCategory("BIKING");
         party2.setLevel(LevelType.BEGINNER.name());
         Point location = new Point();
         location.setLon(11.53144);
@@ -80,7 +76,7 @@ public class PartyControllerIT {
     public void searchParties() throws IOException {
         Party party2 = new Party();
         party2.setSize(3);
-        party2.setCategory(CategoryType.BIKING.name());
+        party2.setCategory("BIKING");
         party2.setLevel(LevelType.BEGINNER.name());
         Point location = new Point();
         location.setLon(11.53144);
@@ -116,7 +112,7 @@ public class PartyControllerIT {
         Party party = new Party();
 
         party.setSize(2);
-        party.setCategory(CategoryType.MUSIC.name());
+        party.setCategory("MUSIC");
         party.setLevel(LevelType.EXPERIENCED.name());
         party.setLocation(location);
         party.setStartDate(cal.getTime());
@@ -151,7 +147,7 @@ public class PartyControllerIT {
         
         assertNotNull(storedParty.getId());
         assertEquals("Robert", storedParty.getOwner());
-        assertEquals(CategoryType.MUSIC.name(), storedParty.getCategory());
+        assertEquals("MUSIC", storedParty.getCategory());
         assertEquals(LevelType.EXPERIENCED.name(), storedParty.getLevel());
         assertEquals(new Double(11.53110d), storedParty.getLocation().getLon());
         assertEquals(new Double(48.1562d), storedParty.getLocation().getLat());
@@ -186,7 +182,7 @@ public class PartyControllerIT {
         location.setLon(11.53154);
         location.setLat(48.1576);
         party.setLocation(location);
-        party.setCategory(CategoryType.SWIMMING.name());
+        party.setCategory("SWIMMING");
         party.setLevel(LevelType.BEGINNER.name());
         Picture pic = new Picture();
         ByteArrayOutputStream result = new ByteArrayOutputStream();

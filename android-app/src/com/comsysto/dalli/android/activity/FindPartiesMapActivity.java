@@ -7,15 +7,14 @@ import android.os.Bundle;
 import com.comsysto.dalli.android.R;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
 import com.comsysto.dalli.android.map.PartyItemizedOverlay;
+import com.comsysto.dalli.android.model.CategoryType;
 import com.comsysto.dalli.android.service.LocationInfo;
 import com.comsysto.dalli.android.service.LocationService;
 import com.comsysto.findparty.Party;
 import com.google.android.maps.*;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,14 +31,17 @@ public class FindPartiesMapActivity extends MapActivity implements Observer {
     private MyLocationOverlay myLocOverlay;
     private PartyItemizedOverlay itemizedoverlay;
 
+    private Map<CategoryType, Drawable> categoryDrawables;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.find_parties_map);
 
+        setContentView(R.layout.find_parties_map);
         mapView = (MapView) findViewById(R.id.find_parties_map_view);
         mapView.setBuiltInZoomControls(true);
 
+        initCategoryDrawables();
 
         initializeOverlays();
 
@@ -48,6 +50,18 @@ public class FindPartiesMapActivity extends MapActivity implements Observer {
         locationService = new LocationService(getApplicationContext(), this);
 
         locationService.activate();
+
+    }
+
+    private void initCategoryDrawables() {
+        categoryDrawables = new HashMap<CategoryType, Drawable>();
+        categoryDrawables.put(CategoryType.BIKING, getDrawable(R.drawable.androidmarker_red));
+        categoryDrawables.put(CategoryType.CLUBBING, getDrawable(R.drawable.androidmarker));
+        categoryDrawables.put(CategoryType.HIKING, getDrawable(R.drawable.androidmarker_red));
+        categoryDrawables.put(CategoryType.JOGGING, getDrawable(R.drawable.androidmarker_red));
+        categoryDrawables.put(CategoryType.MUSIC, getDrawable(R.drawable.androidmarker));
+        categoryDrawables.put(CategoryType.RUNNING, getDrawable(R.drawable.androidmarker_red));
+        categoryDrawables.put(CategoryType.SWIMMING, getDrawable(R.drawable.androidmarker_red));
     }
 
     private void initializeOverlays() {
@@ -55,12 +69,16 @@ public class FindPartiesMapActivity extends MapActivity implements Observer {
         myLocOverlay.enableMyLocation();
 
 
-        Drawable androidMarker = FindPartiesMapActivity.this.getResources().getDrawable(R.drawable.androidmarker);
+        Drawable androidMarker = getDrawable(R.drawable.androidmarker);
         itemizedoverlay = new PartyItemizedOverlay(androidMarker, FindPartiesMapActivity.this);
 
         List<Overlay> overlays = mapView.getOverlays();
         overlays.add(myLocOverlay);
         overlays.add(itemizedoverlay);
+    }
+
+    private Drawable getDrawable(int id) {
+        return PartyItemizedOverlay.boundCenterBottom(FindPartiesMapActivity.this.getResources().getDrawable(id));
     }
 
     @Override
@@ -109,9 +127,8 @@ public class FindPartiesMapActivity extends MapActivity implements Observer {
                     GeoPoint currentLocation = new GeoPoint(getMicroDegrees(party.getLocation().getLat()), getMicroDegrees(party.getLocation().getLon().doubleValue()));
 
                     OverlayItem overlayitem = new OverlayItem(currentLocation, party.getCategory(), party.getOwner() + " " + new SimpleDateFormat().format(party.getStartDate()));
-                    if (party.getPicture() != null && party.getPicture().getContent() != null)  {
-                        Drawable image = new BitmapDrawable(BitmapFactory.decodeByteArray(party.getPicture().getContent(), 0, party.getPicture().getContent().length));
-                        overlayitem.setMarker(PartyItemizedOverlay.boundCenterBottom(image));
+                    if (categoryDrawables.containsKey(CategoryType.valueOf(party.getCategory()))) {
+                        overlayitem.setMarker(categoryDrawables.get(CategoryType.valueOf(party.getCategory())));
                     }
                     itemizedoverlay.addOverlay(party.getId(), overlayitem);
                 }
@@ -125,3 +142,4 @@ public class FindPartiesMapActivity extends MapActivity implements Observer {
         return (int)(coordinate.doubleValue() * 1E6);
     }
 }
+
