@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import com.comsysto.dalli.android.R;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
+import com.comsysto.dalli.android.map.PartyItemizedOverlay;
 import com.comsysto.dalli.android.service.LocationInfo;
 import com.comsysto.dalli.android.service.LocationService;
 import com.comsysto.findparty.Party;
@@ -28,6 +29,8 @@ public class FindPartiesMapActivity extends MapActivity implements Observer {
     private MapView mapView;
     private Double currentDistance = 10.;
     private LocationService locationService;
+    private MyLocationOverlay myLocOverlay;
+    private PartyItemizedOverlay itemizedoverlay;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,11 +40,27 @@ public class FindPartiesMapActivity extends MapActivity implements Observer {
         mapView = (MapView) findViewById(R.id.find_parties_map_view);
         mapView.setBuiltInZoomControls(true);
 
+
+        initializeOverlays();
+
         zoomToMyLocation();
 
         locationService = new LocationService(getApplicationContext(), this);
 
         locationService.activate();
+    }
+
+    private void initializeOverlays() {
+        myLocOverlay = new MyLocationOverlay(this, mapView);
+        myLocOverlay.enableMyLocation();
+
+
+        Drawable androidMarker = FindPartiesMapActivity.this.getResources().getDrawable(R.drawable.androidmarker);
+        itemizedoverlay = new PartyItemizedOverlay(androidMarker, FindPartiesMapActivity.this);
+
+        List<Overlay> overlays = mapView.getOverlays();
+        overlays.add(myLocOverlay);
+        overlays.add(itemizedoverlay);
     }
 
     @Override
@@ -62,20 +81,14 @@ public class FindPartiesMapActivity extends MapActivity implements Observer {
         LocationInfo locationInfo = (LocationInfo)o;
         locationService.deactivate();
 
-
         loadPartiesAndShowOnMap(locationInfo);
     }
 
     private void zoomToMyLocation() {
-        final MyLocationOverlay myLocOverlay = new MyLocationOverlay(this, mapView);
-        myLocOverlay.enableMyLocation();
-        mapView.getOverlays().add(myLocOverlay);
-
-
         myLocOverlay.runOnFirstFix(new Runnable() {
             public void run() {
-                mapView.getController().setZoom(15);
-                mapView.getController().animateTo(myLocOverlay.getMyLocation());
+                    mapView.getController().setZoom(15);
+                    mapView.getController().animateTo(myLocOverlay.getMyLocation());
             }
         });
 
@@ -88,27 +101,21 @@ public class FindPartiesMapActivity extends MapActivity implements Observer {
             public void run() {
                 List<Party> parties = getPartyManagerApplication().searchParties(locationInfo.getLongitude(), locationInfo.getLatitude(), FindPartiesMapActivity.this.currentDistance);
 
-
-                List<Overlay> mapOverlays = mapView.getOverlays();
-                Drawable drawable = FindPartiesMapActivity.this.getResources().getDrawable(R.drawable.androidmarker);
-
                 for (Party party : parties) {
-                    PartyItemizedOverlay itemizedoverlay = null;
-
-                    if (party.getPicture() != null && party.getPicture().getContent() != null)  {
-                        Drawable image = new BitmapDrawable(BitmapFactory.decodeByteArray(party.getPicture().getContent(), 0, party.getPicture().getContent().length));
-                        itemizedoverlay = new PartyItemizedOverlay(image, FindPartiesMapActivity.this);
-                    } else {
-                        itemizedoverlay = new PartyItemizedOverlay(drawable, FindPartiesMapActivity.this);
+                    if (itemizedoverlay.contains(party.getId())) {
+                        continue;
                     }
-
 
                     GeoPoint currentLocation = new GeoPoint(getMicroDegrees(party.getLocation().getLat()), getMicroDegrees(party.getLocation().getLon().doubleValue()));
 
                     OverlayItem overlayitem = new OverlayItem(currentLocation, party.getCategory(), party.getOwner() + " " + new SimpleDateFormat().format(party.getStartDate()));
-                    itemizedoverlay.addOverlay(overlayitem);
-                    mapOverlays.add(itemizedoverlay);
-                }            }
+                    if (party.getPicture() != null && party.getPicture().getContent() != null)  {
+                        Drawable image = new BitmapDrawable(BitmapFactory.decodeByteArray(party.getPicture().getContent(), 0, party.getPicture().getContent().length));
+                        overlayitem.setMarker(PartyItemizedOverlay.boundCenterBottom(image));
+                    }
+                    itemizedoverlay.addOverlay(party.getId(), overlayitem);
+                }
+            }
         });
 
         thread.start();
