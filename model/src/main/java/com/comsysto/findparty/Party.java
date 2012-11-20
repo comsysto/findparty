@@ -129,4 +129,12 @@ public class Party implements Serializable{
     public void setPicture(Picture picture) {
         this.picture = picture;
     }
+
+    @Override
+    public String toString() {
+        return "Party{" +
+                "id='" + id + '\'' +
+                ", category='" + category + '\'' +
+                '}';
+    }
 }

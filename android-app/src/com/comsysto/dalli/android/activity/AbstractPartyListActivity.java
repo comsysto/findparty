@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView.AdapterContextMenuInfo;
@@ -54,6 +55,7 @@ public abstract class AbstractPartyListActivity extends ListActivity {
 
 	protected void initArrayAdapter() {
 		this.parties = getPartyManagerApplication().getParties();
+        Log.i("MY_PARTIES", "retrieved my parties from server: " + this.parties);
 		setArrayAdapter(new PartyListAdapter(this, parties));
 		setListAdapter(getArrayAdapter());
 //        getArrayAdapter().notifyDataSetChanged();
@@ -85,10 +87,12 @@ public abstract class AbstractPartyListActivity extends ListActivity {
 //			 this.notifyDataSetChanged();
 //			 return true;
 		case R.id.delete_party:
+            Log.i("MY_PARTIES", "deleting party: " +selectedParty);
 			getPartyManagerApplication().deleteParty(selectedParty);
             this.notifyDataSetChanged();
 			return true;
 		case R.id.edit_party:
+            Log.i("MY_PARTIES", "editing party: " +selectedParty);
 			getPartyManagerApplication().setSelectedParty(selectedParty);
 			Intent intent = new Intent(this,
 					EditPartyActivity.class);

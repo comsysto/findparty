@@ -48,9 +48,10 @@ public class PartyManagerApplication extends Application {
 		this.ready = false;
 		SharedPreferences defaultSharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		//String host = defaultSharedPreferences.getString("host", "10.0.2.2:8080");
+//		String host = defaultSharedPreferences.getString("host", "192.168.1.189");
 		//String host = defaultSharedPreferences.getString("host", "snuggle.eu01.aws.af.cm");
 		String host = "snuggle.eu01.aws.af.cm";
+        //String host = "192.168.1.189:8080";
 		if (isConnected()) {
 			initializeOnlineService(host);
 		} else {
@@ -71,11 +72,10 @@ public class PartyManagerApplication extends Application {
 						Log.i("Server Check", "Server is online");
 					} else {
 						Log.e("Server Check", "Server returned wrong echo ("+ echo + "), going offline.");
-						PartyManagerApplication.this.partyService = new PartyManagementServiceMock();
 					}
 				} catch (Exception e) {
 					Log.e("Server Check", "Server not reachable", e);
-					PartyManagerApplication.this.partyService = new PartyManagementServiceMock();
+
 				}
 				PartyManagerApplication.this.ready = true;
 				return null;

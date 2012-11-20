@@ -6,6 +6,7 @@ import android.util.Log;
 import com.comsysto.findparty.Category;
 import com.comsysto.findparty.web.CategoryService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
@@ -35,7 +36,7 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
         HttpComponentsClientHttpRequestFactory requestFactory = createHttpRequestFactory();
 
         this.restTemplate = new RestTemplate(true, requestFactory);
-
+        this.restTemplate.setInterceptors(Arrays.<ClientHttpRequestInterceptor>asList(new NoCacheClientRequestInterceptor()));
         this.urlBuilder = new UrlBuilder(host);
     }
 
@@ -57,20 +58,12 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
     @Override
     public String createParty(Party party) {
         String url = urlBuilder.createFrom(PARTY_SERVICE_PATH);
-        ResponseEntity<String> postForEntity;
         try {
             return restTemplate.postForEntity(url, party, String.class).getBody();
         } catch (Exception e) {
-            Log.e("createpartyPostEntity", "didn't create", e);
+            Log.i("MY_PARTIES", "didn't create party: " + party, e);
+            return null;
         }
-        try {
-            return restTemplate.postForObject(url, party, String.class);
-        }
-         catch (Exception e) {
-            Log.e("createpartyPostLocation", "didn't create", e);
-        }
-
-        return null;
     }
 
     @Override
@@ -93,22 +86,32 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
     @Override
     public Party showDetails(String partyId) {
         String url = urlBuilder.createUri(PARTY_SERVICE_PATH, partyId);
-
-        return restTemplate.getForObject(url, Party.class);
+        try {
+            return restTemplate.getForObject(url, Party.class);
+        } catch (Exception e) {
+            Log.i("MY_PARTIES", "Fehler beim Löschen der Party mit ID="+partyId);
+            return null;
+        }
     }
 
     @Override
     public void update(Party party) {
         String url = urlBuilder.createUri(PARTY_SERVICE_PATH, party.getId());
-
-        restTemplate.put(url, party);
+        try {
+            restTemplate.put(url, party);
+        } catch (Exception e) {
+            Log.i("MY_PARTIES", "Fehler beim updaten der Party: " +party);
+        }
     }
 
     @Override
     public void delete(String partyId) {
         String url = urlBuilder.createUri(PARTY_SERVICE_PATH, partyId);
-        
-        restTemplate.delete(url);
+        try {
+            restTemplate.delete(url);
+        } catch(Exception e) {
+            Log.i("MY_PARTIES", "Fehler beim Löschen der Party mit ID="+partyId);
+        }
     }
 
     
