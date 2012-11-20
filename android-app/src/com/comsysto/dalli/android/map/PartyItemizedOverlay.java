@@ -1,4 +1,4 @@
-package com.comsysto.dalli.android.activity;
+package com.comsysto.dalli.android.map;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -18,6 +18,8 @@ import java.util.ArrayList;
 public class PartyItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 
     private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
+    private ArrayList<String> partyIds = new ArrayList<String>();
+
     private Context context;
 
     public PartyItemizedOverlay(Drawable defaultMarker, Context context) {
@@ -27,7 +29,7 @@ public class PartyItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 
     @Override
     protected OverlayItem createItem(int i) {
-        return mOverlays.get(0);  //To change body of implemented methods use File | Settings | File Templates.
+        return mOverlays.get(i);  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -45,8 +47,19 @@ public class PartyItemizedOverlay extends ItemizedOverlay<OverlayItem> {
         return true;
     }
 
-    public void addOverlay(OverlayItem overlay) {
-        mOverlays.add(overlay);
+    public void addOverlay(String partyId, OverlayItem overlay) {
+        this.mOverlays.add(overlay);
+        this.partyIds.add(partyId);
+
         populate();
+    }
+
+    public boolean contains(String partyId) {
+        return partyIds.contains(partyId);
+    }
+
+
+    public static Drawable boundCenterBottom(Drawable image) {
+        return ItemizedOverlay.boundCenterBottom(image);
     }
 }
