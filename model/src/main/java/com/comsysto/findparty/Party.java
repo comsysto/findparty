@@ -135,6 +135,8 @@ public class Party implements Serializable{
         return "Party{" +
                 "id='" + id + '\'' +
                 ", category='" + category + '\'' +
+                ", lon='" + location.getLon() + '\'' +
+                ", lat='" + location.getLat() + '\'' +
                 '}';
     }
 }

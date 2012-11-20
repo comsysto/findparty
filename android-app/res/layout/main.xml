@@ -4,23 +4,42 @@
 	android:layout_height="wrap_content">
 
 
-	<ImageView android:src="@drawable/findparty_logo" android:id="@+id/imageView1"
+	<ImageView android:src="@drawable/logo_findbuddies_460px_v02" android:id="@+id/imageView1"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"
 		android:layout_gravity="center_horizontal"></ImageView>
 
 
     <TextView android:layout_height="50dip" android:layout_width="fill_parent" android:text="@string/SPACE_LABEL"/>
-	<Button android:layout_weight="1" android:text="@string/CREATE_NEW_PARTY_BUTTON"
-		android:id="@+id/CREATE_NEW_PARTY_BUTTON" android:layout_width="200dip"
-		android:layout_height="wrap_content" android:layout_gravity="center_horizontal"></Button>
 
-	<Button android:layout_weight="1" android:text="@string/FIND_PARTY_BUTTON"
-		android:id="@+id/FIND_PARTY_BUTTON" android:layout_width="200dip"
-		android:layout_height="wrap_content" android:layout_gravity="center_horizontal"></Button>
+    <Button
+            android:background="@drawable/blue_button"
+            style="@style/ButtonText"
+            android:layout_weight="1"
+            android:text="@string/CREATE_NEW_PARTY_BUTTON"
+		    android:id="@+id/CREATE_NEW_PARTY_BUTTON"
+            android:layout_width="200dip"
+		    android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
 
-	<Button android:layout_weight="1" android:text="@string/MY_PARTIES_BUTTON"
-		android:id="@+id/MY_PARTIES_BUTTON" android:layout_width="200dip"
-		android:layout_height="wrap_content" android:layout_gravity="center_horizontal"></Button>
+	<Button
+            android:background="@drawable/blue_button"
+            style="@style/ButtonText"
+            android:layout_weight="1"
+            android:text="@string/FIND_PARTY_BUTTON"
+            android:id="@+id/FIND_PARTY_BUTTON"
+            android:layout_width="200dip"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
+
+	<Button
+            android:background="@drawable/blue_button"
+            style="@style/ButtonText"
+            android:layout_weight="1"
+            android:text="@string/MY_PARTIES_BUTTON"
+            android:id="@+id/MY_PARTIES_BUTTON"
+            android:layout_width="200dip"
+	    	android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
 
 	<!--Button android:layout_weight="1" android:text="@string/SETTINGS_BUTTON"
 		android:id="@+id/SETTINGS_BUTTON" android:layout_width="200dip"

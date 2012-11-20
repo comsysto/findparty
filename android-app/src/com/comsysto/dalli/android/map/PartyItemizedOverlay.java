@@ -40,11 +40,14 @@ public class PartyItemizedOverlay extends ItemizedOverlay<OverlayItem> {
     @Override
     protected boolean onTap(int index) {
         OverlayItem item = mOverlays.get(index);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-        dialog.setTitle(item.getTitle());
-        dialog.setMessage(item.getSnippet());
-        dialog.show();
-        return true;
+        if(item!=null) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+            dialog.setTitle(item.getTitle());
+            dialog.setMessage(item.getSnippet());
+            dialog.show();
+            return true;
+        }
+        return false;
     }
 
     public void addOverlay(String partyId, OverlayItem overlay) {
@@ -54,12 +57,16 @@ public class PartyItemizedOverlay extends ItemizedOverlay<OverlayItem> {
         populate();
     }
 
-    public boolean contains(String partyId) {
+    public boolean containsParty(String partyId) {
         return partyIds.contains(partyId);
     }
 
 
     public static Drawable boundCenterBottom(Drawable image) {
         return ItemizedOverlay.boundCenterBottom(image);
+    }
+
+    public void populateNow() {
+        populate();
     }
 }

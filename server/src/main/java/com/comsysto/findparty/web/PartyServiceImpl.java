@@ -1,11 +1,8 @@
 package com.comsysto.findparty.web;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
+import com.comsysto.findparty.Party;
+import com.comsysto.findparty.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.geo.Point;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -13,8 +10,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Component;
 
-import com.comsysto.findparty.Party;
-import com.comsysto.findparty.User;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class PartyServiceImpl implements PartyService {
@@ -136,8 +133,9 @@ public class PartyServiceImpl implements PartyService {
 
     @Override
     public List<Party> searchParties(Double lon, Double lat, Double maxdistance) {
-        Criteria criteria = new Criteria(LOCATION).near(new Point(lat, lon)).maxDistance(getInKilometer(maxdistance));
+        Criteria criteria = new Criteria(LOCATION).near(new Point(lon, lat)).maxDistance(getInKilometer(maxdistance));
         List<Party> parties = new ArrayList<Party>();
+
         parties.addAll(mongoOperations.find(new Query(criteria),
                 Party.class));
         return parties;

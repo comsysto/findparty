@@ -9,13 +9,13 @@ import com.comsysto.dalli.android.R;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
 import com.comsysto.dalli.android.map.PartyItemizedOverlay;
 import com.comsysto.dalli.android.model.CategoryType;
-import com.comsysto.dalli.android.service.LocationInfo;
-import com.comsysto.dalli.android.service.LocationService;
 import com.comsysto.findparty.Party;
 import com.google.android.maps.*;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,6 +28,9 @@ public class FindPartiesMapActivity extends MapActivity {
 
     private MapView mapView;
     private Double currentDistance = 1000.;
+
+    private static final Double SEARCH_DISTANCE = 20d;
+
     private MyLocationOverlay myLocOverlay;
     private PartyItemizedOverlay itemizedoverlay;
 
@@ -80,7 +83,7 @@ public class FindPartiesMapActivity extends MapActivity {
 
         Drawable androidMarker = getDrawable(R.drawable.androidmarker);
         itemizedoverlay = new PartyItemizedOverlay(androidMarker, FindPartiesMapActivity.this);
-
+        itemizedoverlay.populateNow();
         List<Overlay> overlays = mapView.getOverlays();
         overlays.add(myLocOverlay);
         overlays.add(itemizedoverlay);
@@ -116,30 +119,35 @@ public class FindPartiesMapActivity extends MapActivity {
     }
 
     private void loadPartiesAndShowOnMap() {
+        Log.d("FindPartiesMapActivity", "Map moved --> looking for nearby parties");
         final GeoPoint geoPoint = mapView.getMapCenter();
 
         locationUpdateThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 synchronized (FindPartiesMapActivity.this) {
-                    Log.d(FindPartiesMapActivity.class.getName(), "Starting updating the parties and showing them on longitude " + (geoPoint.getLongitudeE6()/1E6) + " and latitude " + geoPoint.getLatitudeE6()/1E6);
-                    List<Party> parties = getPartyManagerApplication().searchParties(geoPoint.getLongitudeE6()/1E6, geoPoint.getLatitudeE6()/1E6 , FindPartiesMapActivity.this.currentDistance);
-                    Log.d(FindPartiesMapActivity.class.getName(), "Following parties found" + parties.toString());
+                    double mapLongitude = geoPoint.getLongitudeE6()/1E6;
+                    double mapLatitude = geoPoint.getLatitudeE6()/1E6;
+
+                    Log.d("FindPartiesMapActivity", "Current map center lon/lat : " + mapLongitude + " / " + mapLatitude);
+
+                    List<Party> parties = getPartyManagerApplication().searchParties(mapLongitude, mapLatitude, SEARCH_DISTANCE);
+
+                    Log.d("FindPartiesMapActivity", parties.size() + " parties found in " + SEARCH_DISTANCE + " km area: " + parties.toString());
 
                     for (Party party : parties) {
-                        if (itemizedoverlay.contains(party.getId())) {
+                        if (itemizedoverlay.containsParty(party.getId())) {
                             continue;
                         }
 
-                        GeoPoint currentLocation = new GeoPoint(getMicroDegrees(party.getLocation().getLat()), getMicroDegrees(party.getLocation().getLon().doubleValue()));
+                        GeoPoint partyLocation = new GeoPoint(getMicroDegrees(party.getLocation().getLat()), getMicroDegrees(party.getLocation().getLon().doubleValue()));
 
-                        OverlayItem overlayitem = new OverlayItem(currentLocation, party.getCategory(), party.getOwner() + " " + new SimpleDateFormat().format(party.getStartDate()));
+                        OverlayItem overlayitem = new OverlayItem(partyLocation, party.getCategory(), party.getOwner() + " " + new SimpleDateFormat().format(party.getStartDate()));
                         if (categoryDrawables.containsKey(CategoryType.valueOf(party.getCategory()))) {
                             overlayitem.setMarker(categoryDrawables.get(CategoryType.valueOf(party.getCategory())));
                         }
                         itemizedoverlay.addOverlay(party.getId(), overlayitem);
                     }
-                    Log.d(FindPartiesMapActivity.class.getName(), "Starting updating the parties and showing them finished.");
                 }
             }
         });
