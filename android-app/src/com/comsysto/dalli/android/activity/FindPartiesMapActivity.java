@@ -1,9 +1,10 @@
 package com.comsysto.dalli.android.activity;
 
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import com.comsysto.dalli.android.R;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
 import com.comsysto.dalli.android.map.PartyItemizedOverlay;
@@ -23,15 +24,15 @@ import java.util.*;
  * Time: 13:42
  * To change this template use File | Settings | File Templates.
  */
-public class FindPartiesMapActivity extends MapActivity implements Observer {
+public class FindPartiesMapActivity extends MapActivity {
 
     private MapView mapView;
-    private Double currentDistance = 10.;
-    private LocationService locationService;
+    private Double currentDistance = 1000.;
     private MyLocationOverlay myLocOverlay;
     private PartyItemizedOverlay itemizedoverlay;
 
     private Map<CategoryType, Drawable> categoryDrawables;
+    private Thread locationUpdateThread;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,18 @@ public class FindPartiesMapActivity extends MapActivity implements Observer {
 
         setContentView(R.layout.find_parties_map);
         mapView = (MapView) findViewById(R.id.find_parties_map_view);
-        mapView.setBuiltInZoomControls(true);
+        //mapView.setBuiltInZoomControls(true);
+
+        mapView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    loadPartiesAndShowOnMap();
+                }
+
+                return false;
+            }
+        });
 
         initCategoryDrawables();
 
@@ -47,10 +59,7 @@ public class FindPartiesMapActivity extends MapActivity implements Observer {
 
         zoomToMyLocation();
 
-        locationService = new LocationService(getApplicationContext(), this);
-
-        locationService.activate();
-
+        loadPartiesAndShowOnMap();
     }
 
     private void initCategoryDrawables() {
@@ -94,48 +103,48 @@ public class FindPartiesMapActivity extends MapActivity implements Observer {
         return (PartyManagerApplication) getApplication();
     }
 
-    @Override
-    public void update(Observable observable, Object o) {
-        LocationInfo locationInfo = (LocationInfo)o;
-        locationService.deactivate();
-
-        loadPartiesAndShowOnMap(locationInfo);
-    }
-
     private void zoomToMyLocation() {
         myLocOverlay.runOnFirstFix(new Runnable() {
             public void run() {
                     mapView.getController().setZoom(15);
                     mapView.getController().animateTo(myLocOverlay.getMyLocation());
+                    mapView.invalidate();
+                    loadPartiesAndShowOnMap();
             }
         });
 
     }
 
-    private void loadPartiesAndShowOnMap(final LocationInfo locationInfo) {
+    private void loadPartiesAndShowOnMap() {
+        final GeoPoint geoPoint = mapView.getMapCenter();
 
-        Thread thread = new Thread(new Runnable() {
+        locationUpdateThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                List<Party> parties = getPartyManagerApplication().searchParties(locationInfo.getLongitude(), locationInfo.getLatitude(), FindPartiesMapActivity.this.currentDistance);
+                synchronized (FindPartiesMapActivity.this) {
+                    Log.d(FindPartiesMapActivity.class.getName(), "Starting updating the parties and showing them on longitude " + (geoPoint.getLongitudeE6()/1E6) + " and latitude " + geoPoint.getLatitudeE6()/1E6);
+                    List<Party> parties = getPartyManagerApplication().searchParties(geoPoint.getLongitudeE6()/1E6, geoPoint.getLatitudeE6()/1E6 , FindPartiesMapActivity.this.currentDistance);
+                    Log.d(FindPartiesMapActivity.class.getName(), "Following parties found" + parties.toString());
 
-                for (Party party : parties) {
-                    if (itemizedoverlay.contains(party.getId())) {
-                        continue;
+                    for (Party party : parties) {
+                        if (itemizedoverlay.contains(party.getId())) {
+                            continue;
+                        }
+
+                        GeoPoint currentLocation = new GeoPoint(getMicroDegrees(party.getLocation().getLat()), getMicroDegrees(party.getLocation().getLon().doubleValue()));
+
+                        OverlayItem overlayitem = new OverlayItem(currentLocation, party.getCategory(), party.getOwner() + " " + new SimpleDateFormat().format(party.getStartDate()));
+                        if (categoryDrawables.containsKey(CategoryType.valueOf(party.getCategory()))) {
+                            overlayitem.setMarker(categoryDrawables.get(CategoryType.valueOf(party.getCategory())));
+                        }
+                        itemizedoverlay.addOverlay(party.getId(), overlayitem);
                     }
-
-                    GeoPoint currentLocation = new GeoPoint(getMicroDegrees(party.getLocation().getLat()), getMicroDegrees(party.getLocation().getLon().doubleValue()));
-
-                    OverlayItem overlayitem = new OverlayItem(currentLocation, party.getCategory(), party.getOwner() + " " + new SimpleDateFormat().format(party.getStartDate()));
-                    if (categoryDrawables.containsKey(CategoryType.valueOf(party.getCategory()))) {
-                        overlayitem.setMarker(categoryDrawables.get(CategoryType.valueOf(party.getCategory())));
-                    }
-                    itemizedoverlay.addOverlay(party.getId(), overlayitem);
+                    Log.d(FindPartiesMapActivity.class.getName(), "Starting updating the parties and showing them finished.");
                 }
             }
         });
 
-        thread.start();
+        locationUpdateThread.start();
     }
 
     private int getMicroDegrees(Double coordinate) {

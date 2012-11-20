@@ -136,7 +136,7 @@ public class PartyServiceImpl implements PartyService {
 
     @Override
     public List<Party> searchParties(Double lon, Double lat, Double maxdistance) {
-        Criteria criteria = new Criteria(LOCATION).near(new Point(lon, lat)).maxDistance(getInKilometer(maxdistance));
+        Criteria criteria = new Criteria(LOCATION).near(new Point(lat, lon)).maxDistance(getInKilometer(maxdistance));
         List<Party> parties = new ArrayList<Party>();
         parties.addAll(mongoOperations.find(new Query(criteria),
                 Party.class));
