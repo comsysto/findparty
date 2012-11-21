@@ -24,6 +24,7 @@ import com.comsysto.findparty.User;
  */
 public class StartActivity extends Activity {
 
+    
     @Override
 	protected void onResume() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().detectAll().permitAll().build();
@@ -31,6 +32,8 @@ public class StartActivity extends Activity {
 
         super.onResume();
 
+        StrictMode.enableDefaults();
+        
 	    AccountManager mAccountManager = AccountManager.get(this);
 	    Account[] accountsByType = mAccountManager.getAccountsByType(AccountAuthenticator.AUTH_TYPE);
 	    if (accountsByType.length == 0) {
