@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical">
+              android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical"
+              android:background="@drawable/gradient_background">
 
 
     <Space
@@ -8,24 +9,24 @@
             android:layout_height="20px"
             android:id="@+id/space" android:layout_gravity="center"/>
     <TextView android:autoLink="web" android:id="@+id/textView2"
-    	android:gravity="center" android:layout_height="wrap_content" 
-    	android:layout_width="fill_parent" android:clickable="true"
-    	android:text="@string/SIGNUP_LABEL" android:textSize="24dip" android:textStyle="bold"
-        android:textColor="#000000"></TextView>
-    	
-   	<TextView android:id="@+id/error" android:gravity="center" 
-    	android:layout_height="wrap_content" 
-    	android:layout_width="fill_parent" 
-    	android:visibility="invisible"
-    	android:textColor="@color/red"/>
-   		
-	<EditText android:hint="Email" android:id="@+id/editText1"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"></EditText>
-		
-	<EditText android:layout_width="fill_parent" android:id="@+id/editText2"
-		android:hint="Password" android:layout_height="wrap_content"></EditText>
-		
-	<Button android:layout_weight="1" android:text="@string/LOGIN_BUTTON"
-		android:id="@+id/LOGIN_BUTTON" android:layout_width="150px"
-		android:layout_height="wrap_content" android:layout_gravity="center_vertical|center_horizontal"></Button>
+              android:gravity="center" android:layout_height="wrap_content"
+              android:layout_width="fill_parent" android:clickable="true"
+              android:text="@string/SIGNUP_LABEL" android:textSize="24dip" android:textStyle="bold"
+              android:textColor="#000000"></TextView>
+
+    <TextView android:id="@+id/error" android:gravity="center"
+              android:layout_height="wrap_content"
+              android:layout_width="fill_parent"
+              android:visibility="invisible"
+              android:textColor="@color/red"/>
+
+    <EditText android:hint="Email" android:id="@+id/editText1"
+              android:layout_width="fill_parent" android:layout_height="wrap_content"></EditText>
+
+    <EditText android:layout_width="fill_parent" android:id="@+id/editText2"
+              android:hint="Password" android:layout_height="wrap_content"></EditText>
+
+    <Button android:layout_weight="1" android:text="@string/LOGIN_BUTTON"
+            android:id="@+id/LOGIN_BUTTON" android:layout_width="150px"
+            android:layout_height="wrap_content" android:layout_gravity="center_vertical|center_horizontal"></Button>
 </LinearLayout>

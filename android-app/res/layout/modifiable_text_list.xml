@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="wrap_content">
-	
-	
-	<LinearLayout 
-		android:orientation="horizontal" 
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content">
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradient_background">
 
-		<!--  todo move the hint as attribute for the componentoutside -->
-	    <EditText 
-	    	android:layout_width="fill_parent" 
-    		android:layout_height="wrap_content" 
-	        android:id="@+id/newEntryEditText"
-	        android:hint="Entry"
-	        android:layout_weight="0.2">
-	    </EditText>
-	    <Button 
-	    	android:layout_height="wrap_content" 
-			android:layout_width="fill_parent" 	    	
-	    	android:text="@string/ADD_BUTTON" android:id="@+id/addEntryButton" 
-	    	android:layout_weight="0.8"></Button>    		
-	</LinearLayout>
-	<ListView android:id="@+id/listView" 
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content" />
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+        <!--  todo move the hint as attribute for the componentoutside -->
+        <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/newEntryEditText"
+                android:hint="Entry"
+                android:layout_weight="0.2">
+        </EditText>
+        <Button
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:text="@string/ADD_BUTTON" android:id="@+id/addEntryButton"
+                android:layout_weight="0.8"></Button>
+    </LinearLayout>
+    <ListView android:id="@+id/listView"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"/>
 </LinearLayout>

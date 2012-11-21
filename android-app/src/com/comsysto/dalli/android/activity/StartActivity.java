@@ -26,7 +26,8 @@ public class StartActivity extends Activity {
 
     @Override
 	protected void onResume() {
-        StrictMode.enableDefaults();
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().detectAll().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         super.onResume();
 

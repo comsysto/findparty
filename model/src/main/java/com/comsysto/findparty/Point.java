@@ -31,4 +31,12 @@ public class Point implements Serializable {
     public void setLat(Double lat) {
     	this.lat = lat;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "lon=" + lon +
+                ", lat=" + lat +
+                '}';
+    }
 }
