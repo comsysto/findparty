@@ -75,7 +75,6 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
                     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
                         View view = inflater.inflate(R.layout.adress_input, container);
                         getDialog().setTitle(R.string.LOCATION_INPUT_TITLE);
-
                         final EditText address = (EditText)view.findViewById(R.id.addressEditText);
 
                         Button cancelButton = (Button)view.findViewById(R.id.cancelLocationInputButton);

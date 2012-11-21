@@ -60,8 +60,7 @@
         <Button
                 style="@style/AddPartyButton"
                 android:text="@string/ADD_PARTY_BUTTON"
-                android:id="@+id/addButton"
-                android:layout_gravity="center_vertical|center_horizontal"/>
+                android:id="@+id/addButton"/>
 
     </LinearLayout>
 </ScrollView>

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.comsysto.dalli.android.R;
 import com.comsysto.findparty.Party;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -38,7 +39,7 @@ public class PartyListAdapter extends ArrayAdapter<Party> {
 		}
 		final TextView textView = (TextView) convertView
 				.findViewById(android.R.id.text1);
-		textView.setText(party.getCategory());
+		textView.setText(party.getCategory() + ", " + new SimpleDateFormat("MM/dd/yyyy").format(party.getStartDate()));
 
 		return convertView;
 	}
