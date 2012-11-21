@@ -40,6 +40,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     private Button partyLocationButton;
     LocationService locationService;
     Party party;
+    private boolean alreadyCalled;
 
 
     @Override
@@ -198,6 +199,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
                 DialogFragment fragment = new DialogFragment() {
                     @Override
                     public Dialog onCreateDialog(Bundle savedInstanceState) {
+                        alreadyCalled = false;
                         Calendar calendar = getCalendarFromParty();
                         return new DatePickerDialog(getActivity(), PartyActivity.this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                     }
@@ -231,6 +233,11 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        if (alreadyCalled) {
+            return;
+        }
+        alreadyCalled = true;
+
         DialogFragment fragment = new DialogFragment() {
 
             @Override
