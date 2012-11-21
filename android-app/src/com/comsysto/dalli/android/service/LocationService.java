@@ -4,17 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.util.Log;
-import com.comsysto.dalli.android.activity.LocationRequester;
 import com.comsysto.findparty.Point;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Observer;
-import java.util.concurrent.Executor;
 
 public class LocationService extends Activity {
 

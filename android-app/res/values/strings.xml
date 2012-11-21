@@ -35,6 +35,9 @@
     <string name="LOCATION_GPS_BUTTON">GPS</string>
     <string name="STREET_LABEL">Adresse</string>
     <string name="LOCATION_BUTTON_WAITING_TEXT">Waiting For Location</string>
+    <string name="DATE_TIME_LABEL"><![CDATA[Date & Time]]></string>
+    <string name="PARTY_SIZE">Size</string>
+    <string name="USER_LABEL">User</string>
 
 
 

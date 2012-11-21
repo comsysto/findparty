@@ -1,4 +1,4 @@
-package com.comsysto.dalli.android.activity;
+package com.comsysto.dalli.android.service;
 
 import com.comsysto.findparty.Point;
 

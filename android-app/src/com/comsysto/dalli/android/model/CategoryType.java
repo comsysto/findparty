@@ -1,5 +1,7 @@
 package com.comsysto.dalli.android.model;
 
+import com.comsysto.dalli.android.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +14,14 @@ import java.util.List;
  */
 public enum CategoryType {
 
-    SNUGGLING, BIKING, JOGGING,CLUBBING, MUSIC, HIKING, SWIMMING;
+    SNUGGLING(R.drawable.snuggling), BIKING(R.drawable.biking), JOGGING(R.drawable.jogging),CLUBBING(R.drawable.clubbing), MUSIC(R.drawable.music), HIKING(R.drawable.hiking), SWIMMING(R.drawable.androidmarker);
+
+
+    int drawableId;
+
+    CategoryType(int drawableId) {
+        this.drawableId = drawableId;
+    }
 
     public static List<String> names() {
         ArrayList list = new ArrayList();
@@ -21,6 +30,10 @@ public enum CategoryType {
             list.add(type.name());
         }
         return list;
+    }
+
+    public int getDrawableId() {
+        return drawableId;
     }
 
 

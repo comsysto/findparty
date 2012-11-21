@@ -13,6 +13,7 @@ import com.comsysto.dalli.android.R;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
 import com.comsysto.dalli.android.menu.OptionMenuHandler;
 import com.comsysto.dalli.android.service.LocationInfo;
+import com.comsysto.dalli.android.service.LocationRequester;
 import com.comsysto.dalli.android.service.LocationService;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.Point;

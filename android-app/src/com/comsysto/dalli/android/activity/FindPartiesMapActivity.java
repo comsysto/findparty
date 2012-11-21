@@ -1,15 +1,21 @@
 package com.comsysto.dalli.android.activity;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import com.comsysto.dalli.android.R;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
 import com.comsysto.dalli.android.map.PartyItemizedOverlay;
+import com.comsysto.dalli.android.map.PartyOverlayItem;
 import com.comsysto.dalli.android.model.CategoryType;
 import com.comsysto.findparty.Party;
 import com.google.android.maps.*;
@@ -38,6 +44,7 @@ public class FindPartiesMapActivity extends MapActivity {
 
     private Map<CategoryType, Drawable> categoryDrawables;
     private Thread locationUpdateThread;
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,7 +92,45 @@ public class FindPartiesMapActivity extends MapActivity {
 
 
         Drawable androidMarker = getDrawable(R.drawable.androidmarker);
-        itemizedoverlay = new PartyItemizedOverlay(androidMarker, FindPartiesMapActivity.this);
+        itemizedoverlay = new PartyItemizedOverlay(androidMarker, FindPartiesMapActivity.this) {
+            @Override
+            protected boolean onTap(int index) {
+                final PartyOverlayItem item = this.mOverlays.get(index);
+
+                if(item != null) {
+                    final Party party = item.getParty();
+
+                    DialogFragment fragment = new DialogFragment() {
+                        @Override
+                        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+                            View view = inflater.inflate(R.layout.party_overlay_info, container);
+                            getDialog().setTitle(party.getCategory());
+                            ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
+                            imageView.setImageResource(CategoryType.valueOf(party.getCategory()).getDrawableId());
+
+                            TextView size = (TextView)view.findViewById(R.id.sizeValue);
+                            size.setText(party.getSize().toString());
+                            TextView date = (TextView)view.findViewById(R.id.dateValue);
+                            date.setText(simpleDateFormat.format(party.getStartDate()));
+                            TextView user = (TextView)view.findViewById(R.id.userValue);
+                            user.setText(party.getOwner());
+                            TextView experience = (TextView)view.findViewById(R.id.experienceValue);
+                            experience.setText(party.getLevel());
+
+
+                            return view;
+                        }
+                    };
+                    fragment.show(getFragmentManager(),"partyOverlayInfo");
+
+
+                return true;
+                }
+
+
+                return super.onTap(index);    //To change body of overridden methods use File | Settings | File Templates.
+            }
+        };
         itemizedoverlay.populateNow();
         List<Overlay> overlays = mapView.getOverlays();
         overlays.add(myLocOverlay);
@@ -112,10 +157,10 @@ public class FindPartiesMapActivity extends MapActivity {
     private void zoomToMyLocation() {
         myLocOverlay.runOnFirstFix(new Runnable() {
             public void run() {
-                    mapView.getController().setZoom(15);
-                    mapView.getController().animateTo(myLocOverlay.getMyLocation());
-                    //mapView.invalidate();
-                    loadPartiesAndShowOnMap();
+                mapView.getController().setZoom(15);
+                mapView.getController().animateTo(myLocOverlay.getMyLocation());
+                //mapView.invalidate();
+                loadPartiesAndShowOnMap();
             }
         });
 
@@ -145,7 +190,9 @@ public class FindPartiesMapActivity extends MapActivity {
 
                         GeoPoint partyLocation = new GeoPoint(getMicroDegrees(party.getLocation().getLat()), getMicroDegrees(party.getLocation().getLon().doubleValue()));
 
-                        OverlayItem overlayitem = new OverlayItem(partyLocation, party.getCategory(), party.getOwner() + " " + new SimpleDateFormat().format(party.getStartDate()));
+                        PartyOverlayItem overlayitem = new PartyOverlayItem(partyLocation, null, null, party);
+
+
                         if (categoryDrawables.containsKey(CategoryType.valueOf(party.getCategory()))) {
                             overlayitem.setMarker(categoryDrawables.get(CategoryType.valueOf(party.getCategory())));
                         }
@@ -160,6 +207,13 @@ public class FindPartiesMapActivity extends MapActivity {
 
     private int getMicroDegrees(Double coordinate) {
         return (int)(coordinate.doubleValue() * 1E6);
+    }
+
+
+    @Override
+    protected void onPause() {
+        myLocOverlay.disableMyLocation();
+        super.onPause();    //To change body of overridden methods use File | Settings | File Templates.
     }
 }
 
