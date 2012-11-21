@@ -10,7 +10,7 @@
 
     <string name="EXPERIENCE_LABEL">Experience</string>
     <string name="SELECT_CATEGORY_TITLE">Select activity type</string>
-    <string name="SIGNUP_LABEL">Sign Up for FindParty</string>
+    <string name="LOGIN_LABEL">Login</string>
     <string name="DAY_AND_TIME_CONTEXT_LABEL">Day and Time</string>
 
     <string name="NUMBER_OF_PARTICIPANTS_DIALOG_TITLE">How many buddies?</string>
@@ -25,6 +25,8 @@
     <string name="SAVE_PARTY_BUTTON">Save Party</string>
 
     <string name="LOGIN_BUTTON">Sign In</string>
+    <string name="REGISTER_BUTTON">Register</string>
+    <string name="LOGIN_FAILED_LABEL">Username and/or password incorrect. Check values or register new account</string>
 
 	<string name="SPACE_LABEL"> </string>
 	<string name="CREDITS_LABEL">Credits</string>

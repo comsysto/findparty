@@ -1,6 +1,7 @@
 package com.comsysto.dalli.android.service;
 
 import com.comsysto.findparty.Party;
+import com.comsysto.findparty.User;
 import com.comsysto.findparty.web.PartyService;
 
 import java.util.*;
@@ -68,5 +69,20 @@ public class PartyManagementServiceMock implements PartyService {
 	public String echo(String echo) {
 		return echo;
 	}
+
+    @Override
+    public User createUser(String username, String password) {
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        return null;
+    }
+
+    @Override
+    public User getUser(String username) {
+        User user = new User();
+        user.setUsername(username);
+        return null;
+    }
 
 }

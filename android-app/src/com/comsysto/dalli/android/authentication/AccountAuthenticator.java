@@ -40,10 +40,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 			String[] requiredFeatures, Bundle options)
 			throws NetworkErrorException {
         final Intent intent = new Intent(context, LoginActivity.class);
-        intent.putExtra(LoginActivity.PARAM_AUTHTOKEN_TYPE,
-            authTokenType);
-        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
-            response);
+        intent.putExtra(LoginActivity.PARAM_AUTHTOKEN_TYPE, authTokenType);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
         final Bundle bundle = new Bundle();
         bundle.putParcelable(AccountManager.KEY_INTENT, intent);
         return bundle;

@@ -4,49 +4,59 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:gravity="center_horizontal"
         android:background="@drawable/gradient_background">
 
+    <ImageView
+            android:src="@drawable/logo_findbuddies_460px_v02"
+            android:id="@+id/imageView1"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"/>
+
     <Space
-            android:layout_width="20px"
-            android:layout_height="20px"
-            android:id="@+id/space"
-            android:layout_gravity="center"/>
-
-    <TextView
-            android:autoLink="web"
-            android:id="@+id/textView2"
-            android:gravity="center"
-            android:layout_height="wrap_content"
             android:layout_width="fill_parent"
-            android:clickable="true"
-            android:text="@string/SIGNUP_LABEL"
-            android:textSize="24dip"
-            android:textStyle="bold"
-            android:textColor="#000000"/>
+            android:layout_height="20dp"/>
 
-    <TextView
-            android:id="@+id/error"
-            android:gravity="center"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:visibility="invisible"
-            android:textColor="@color/red"/>
 
     <EditText
-            android:hint="Email"
             android:id="@+id/editText1"
-            android:layout_width="fill_parent"
+            android:hint="Email"
+            android:layout_width="260dp"
             android:layout_height="wrap_content"/>
 
     <EditText
-            android:layout_width="fill_parent"
             android:id="@+id/editText2"
             android:hint="Password"
-            android:layout_height="wrap_content" />
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:password="true"/>
 
     <Button
             android:text="@string/LOGIN_BUTTON"
             android:id="@+id/LOGIN_BUTTON"
             style="@style/CommonPartyButton"/>
+
+    <Space
+            android:layout_width="fill_parent"
+            android:layout_height="4dp"/>
+
+    <Button
+            android:text="@string/REGISTER_BUTTON"
+            android:id="@+id/REGISTER_BUTTON"
+            style="@style/CommonPartyButton"/>
+
+    <Space
+            android:layout_width="fill_parent"
+            android:layout_height="10dp"/>
+
+    <TextView
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:textSize="14sp"
+            android:id="@+id/error"
+            android:visibility="invisible"
+            android:gravity="center"/>
 
 </LinearLayout>

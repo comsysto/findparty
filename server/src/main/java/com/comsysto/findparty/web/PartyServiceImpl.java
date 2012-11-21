@@ -88,15 +88,23 @@ public class PartyServiceImpl implements PartyService {
             return user;
         }
         else {
-            return createUser(username);
+            return createUser(username, "test1234");
         }
     }
 
-
-    private User createUser(String username) {
+    @Override
+    public User createUser(String username, String password) {
         User user = new User();
         user.setUsername(username);
+        user.setPassword(password);
         mongoOperations.insert(user);
+        return user;
+    }
+
+    @Override
+    public User getUser(String username) {
+        Query query = new Query(Criteria.where("username").is(username));
+        User user = mongoOperations.findOne(query, User.class);
         return user;
     }
 

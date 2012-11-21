@@ -16,92 +16,152 @@ import android.widget.TextView;
 import com.comsysto.dalli.android.R;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
 import com.comsysto.dalli.android.authentication.AccountAuthenticator;
+import com.comsysto.findparty.User;
 
 /**
  * Displays the login page.
- * 
- * @author stefandjurasic
  *
+ * @author stefandjurasic
  */
 public class LoginActivity extends AccountAuthenticatorActivity {
 
-	public static final String PARAM_AUTHTOKEN_TYPE = "authtokenType";
-	boolean loggedIn = false;
-	private EditText userName;
-	private EditText password;
-	private AccountManager accountManager;
-	private TextView error;
+    public static final String PARAM_AUTHTOKEN_TYPE = "authtokenType";
+    boolean loggedIn = false;
+    protected EditText userName;
+    protected EditText password;
+    protected AccountManager accountManager;
+    protected TextView error;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.login);
+    protected Button loginButton;
+    protected Button registerButton;
+    private boolean loginOnly;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.login);
 
-		Button button = (Button) findViewById(R.id.LOGIN_BUTTON);
-		userName = (EditText)findViewById(R.id.editText1);
-		password = (EditText)findViewById(R.id.editText2);
-		
-		OnTouchListener fadeOutOnTouchListener = new View.OnTouchListener() {
-			
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-	    		error.startAnimation(AnimationUtils.loadAnimation(LoginActivity.this, android.R.anim.fade_out));
-	    		error.setVisibility(View.INVISIBLE);
-	    		return false;
-			}
-		};
-		userName.setOnTouchListener(fadeOutOnTouchListener);
-		password.setOnTouchListener(fadeOutOnTouchListener);
-		
-		accountManager = AccountManager.get(LoginActivity.this);
-		error = (TextView)findViewById(R.id.error);		
-		
-		button.setOnClickListener(new View.OnClickListener() {
+        accountManager = AccountManager.get(LoginActivity.this);
 
-			@Override
-			public void onClick(View v) {
-				finishCreateAccount();
-			}
-		});
-	}
+        loginButton = (Button) findViewById(R.id.LOGIN_BUTTON);
+        registerButton = (Button) findViewById(R.id.REGISTER_BUTTON);
+        error = (TextView) findViewById(R.id.error);
 
+        userName = (EditText) findViewById(R.id.editText1);
+        password = (EditText) findViewById(R.id.editText2);
 
-    private void finishCreateAccount() {
-    	if (isNotEmpty(userName) && isNotEmpty(password) && createUserInBackend() && createAccountExplicitly()){
-    		Intent intent = new Intent(this, StartActivity.class);
-    		startActivity(intent);        
-    		finish();
-    	}
-    	else {
-    		error.setText("Could not authenticate. Check values!");
-    		error.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
-    		error.setVisibility(View.VISIBLE);
-    	}
+        OnTouchListener fadeOutOnTouchListener = createErrorTextViewListener();
+        userName.setOnTouchListener(fadeOutOnTouchListener);
+        password.setOnTouchListener(fadeOutOnTouchListener);
+
+        createLoginButtonListener();
+        createRegisterButtonListener();
+
+        if(comesFromRegistration()) {
+            loginRegisteredUser();
+        }
+    }
+
+    private void loginRegisteredUser() {
+        Bundle extras = getIntent().getExtras();
+        if(extras!=null) {
+            User user = (User) extras.get("registeredUser");
+            login(user.getUsername(), user.getPassword());
+        }
+    }
+
+    private boolean comesFromRegistration() {
+        Bundle extras = getIntent().getExtras();
+        if(extras != null && extras.containsKey("register")) {
+            return((Boolean)extras.get("register"));
+        }
+        return false;
+    }
+
+    protected void register(String username, String password) {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        intent.putExtra("username", username);
+        intent.putExtra("password", password);
+        startActivity(intent);
+        finish();
     }
 
 
-	private boolean createUserInBackend() {
-		if (((PartyManagerApplication)getApplication()).createAccount(userName.getText().toString(), password.getText().toString()) != null) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
+    protected void login(String username, String password) {
+        if (isNotEmpty(username) && isNotEmpty(password) && authenticate(username, password)) {
+            createApplicationAccount(username, password);
+            Intent intent = new Intent(this, StartActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            error.setText(getString(R.string.LOGIN_FAILED_LABEL));
+            error.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
+            error.setVisibility(View.VISIBLE);
+        }
+    }
 
 
-	private boolean isNotEmpty(EditText userName) {
-		if (userName == null || userName.getText() == null || userName.getText().toString().length() == 0) {
-			return false;
-		}
-		return true;
-	}
 
+    protected boolean authenticate(String username, String password) {
+        return ((PartyManagerApplication)getApplication()).authenticate(username, password);
+    }
 
-	private boolean createAccountExplicitly() {
-        final Account account = new Account(userName.getText().toString(), AccountAuthenticator.AUTH_TYPE);
-        return accountManager.addAccountExplicitly(account, password.getText().toString(), null);
-	}
+    protected void setLoginButtonVisible(boolean visible) {
+        if (visible) {
+            loginButton.setVisibility(View.VISIBLE);
+        } else {
+            loginButton.setVisibility(View.GONE);
+        }
+    }
+
+    protected boolean isNotEmpty(String value) {
+        if (value != null && value.length()>0) {
+            return true;
+        }
+        return false;
+    }
+
+    private void createRegisterButtonListener() {
+        if (registerButton != null) {
+            registerButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+                    register(userName.getText().toString(), password.getText().toString());
+                }
+            });
+        }
+    }
+
+    private void createLoginButtonListener() {
+        if (loginButton != null) {
+            loginButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    login(userName.getText().toString(), password.getText().toString());
+                }
+            });
+        }
+    }
+
+    private OnTouchListener createErrorTextViewListener() {
+        return new OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                error.startAnimation(AnimationUtils.loadAnimation(LoginActivity.this, android.R.anim.fade_out));
+                error.setVisibility(View.INVISIBLE);
+                return false;
+            }
+        };
+    }
+
+    private void createApplicationAccount(String username, String password) {
+        final Account account = new Account(username, AccountAuthenticator.AUTH_TYPE);
+        Account[] accountsByType = accountManager.getAccountsByType(AccountAuthenticator.AUTH_TYPE);
+        if(accountsByType.length==0)
+            accountManager.addAccountExplicitly(account, password, null);
+    }
 
 }

@@ -33,7 +33,7 @@ public class PartyManagerApplication extends Application {
 
     private static final String CLOUD_HOST =  "snuggle.eu01.aws.af.cm";
     private static final String LOCAL_EMULATOR = "10.0.2.2:8080";
-    private static final String LOCAL_ROB = "192.168.1.189:8080";
+    private static final String LOCAL_ROB = "192.168.1.169:8080";
 
 	private Party selectedParty;
 
@@ -131,10 +131,7 @@ public class PartyManagerApplication extends Application {
 	}
 
 	public User createAccount(String userName, String password) {
-		User user = new User();
-		user.setUsername(userName);
-        return user;
-		//return this.partyManagementService.createUser(user, password);
+        return this.partyService.createUser(userName, password);
 	}
 
     public List<Party> searchParties(Double longitude, Double latitude, Double maxDistance) {
@@ -144,5 +141,13 @@ public class PartyManagerApplication extends Application {
     public List<String> getAllCategories() {
         return CategoryType.names();
 
+    }
+
+    public boolean authenticate(String username, String password) {
+        User user = partyService.getUser(username);
+        if(user!=null && user.getPassword().equals(password)) {
+            return true;
+        }
+        return false;
     }
 }

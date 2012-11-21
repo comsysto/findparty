@@ -1,5 +1,6 @@
 package com.comsysto.findparty;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,11 +11,14 @@ import java.util.Set;
  * Time: 13:15
  * To change this template use File | Settings | File Templates.
  */
-public class User {
+public class User implements Serializable {
 
     private String id;
 
     private String username;
+
+
+    private String password;
 
     private Picture picture;
 
@@ -42,4 +46,13 @@ public class User {
     public void setPicture(Picture picture) {
         this.picture = picture;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 }

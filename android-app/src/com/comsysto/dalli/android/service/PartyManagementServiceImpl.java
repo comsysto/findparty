@@ -4,6 +4,7 @@ import java.util.*;
 
 import android.util.Log;
 import com.comsysto.findparty.Category;
+import com.comsysto.findparty.User;
 import com.comsysto.findparty.web.CategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -27,6 +28,7 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
     private RestTemplate restTemplate;
     private UrlBuilder urlBuilder;
 
+    private final static String USER_SERVICE_PATH = "/services/users";
     private final static String PARTY_SERVICE_PATH = "/services/parties";
     private final static String CATEGORY_SERVICE_PATH = "/services/category";
 
@@ -133,6 +135,23 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
         ResponseEntity<String> forEntity = restTemplate.getForEntity(url, String.class);
         
         return forEntity.getBody();
+    }
+
+    @Override
+    public User createUser(String username, String password) {
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        ResponseEntity<User> entity = restTemplate.postForEntity(urlBuilder.createFrom(USER_SERVICE_PATH), user, User.class);
+
+        //TODO check status code
+
+        return entity.getBody();
+    }
+
+    @Override
+    public User getUser(String username) {
+        return restTemplate.getForObject(urlBuilder.createUri(USER_SERVICE_PATH, username), User.class);
     }
 
     @Override

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.comsysto.findparty.Party;
+import com.comsysto.findparty.User;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,4 +32,8 @@ public interface PartyService {
     public void delete(String partyId);
     
     public String echo(String input);
+
+    public User createUser(String username, String password);
+
+    public User getUser(String username);
 }

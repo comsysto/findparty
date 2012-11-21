@@ -21,6 +21,7 @@
         <activity android:name=".activity.SplashScreenActivity" android:launchMode="singleTop"/>
         <activity android:name=".activity.MyPartiesActivity"/>
         <activity android:name=".activity.LoginActivity"/>
+        <activity android:name=".activity.RegisterActivity"/>
         <activity android:name=".activity.CreatePartyActivity"/>
         <activity android:name=".activity.EditPartyActivity"/>
         <activity android:name=".activity.CreditsActivity"/>
