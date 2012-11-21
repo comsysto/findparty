@@ -1,5 +1,7 @@
 package com.comsysto.dalli.android.activity;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -67,13 +69,14 @@ public class FindPartiesMapActivity extends MapActivity {
 
     private void initCategoryDrawables() {
         categoryDrawables = new HashMap<CategoryType, Drawable>();
-        categoryDrawables.put(CategoryType.BIKING, getDrawable(R.drawable.androidmarker_red));
-        categoryDrawables.put(CategoryType.CLUBBING, getDrawable(R.drawable.androidmarker));
-        categoryDrawables.put(CategoryType.HIKING, getDrawable(R.drawable.androidmarker_red));
-        categoryDrawables.put(CategoryType.JOGGING, getDrawable(R.drawable.androidmarker_red));
-        categoryDrawables.put(CategoryType.MUSIC, getDrawable(R.drawable.androidmarker));
-        categoryDrawables.put(CategoryType.RUNNING, getDrawable(R.drawable.androidmarker_red));
-        categoryDrawables.put(CategoryType.SWIMMING, getDrawable(R.drawable.androidmarker_red));
+
+        categoryDrawables.put(CategoryType.BIKING, getDrawable(R.drawable.biking));
+        categoryDrawables.put(CategoryType.CLUBBING, getDrawable(R.drawable.clubbing));
+        categoryDrawables.put(CategoryType.HIKING, getDrawable(R.drawable.hiking));
+        categoryDrawables.put(CategoryType.JOGGING, getDrawable(R.drawable.jogging));
+        categoryDrawables.put(CategoryType.MUSIC, getDrawable(R.drawable.music));
+        categoryDrawables.put(CategoryType.SNUGGLING, getDrawable(R.drawable.snuggling));
+        categoryDrawables.put(CategoryType.SWIMMING, getDrawable(R.drawable.androidmarker));
     }
 
     private void initializeOverlays() {

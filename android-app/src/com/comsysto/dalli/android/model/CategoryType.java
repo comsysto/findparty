@@ -12,7 +12,7 @@ import java.util.List;
  */
 public enum CategoryType {
 
-    RUNNING, BIKING, JOGGING,CLUBBING, MUSIC, HIKING, SWIMMING;
+    SNUGGLING, BIKING, JOGGING,CLUBBING, MUSIC, HIKING, SWIMMING;
 
     public static List<String> names() {
         ArrayList list = new ArrayList();

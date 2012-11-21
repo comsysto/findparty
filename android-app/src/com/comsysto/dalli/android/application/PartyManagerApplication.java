@@ -31,6 +31,10 @@ import java.util.List;
  */
 public class PartyManagerApplication extends Application {
 
+    private static final String CLOUD_HOST =  "snuggle.eu01.aws.af.cm";
+    private static final String LOCAL_EMULATOR = "10.0.2.2:8080";
+    private static final String LOCAL_ROB = "192.168.1.189:8080";
+
 	private Party selectedParty;
 
 	private PartyService partyService;
@@ -46,14 +50,8 @@ public class PartyManagerApplication extends Application {
 
 	public void initializeService() {
 		this.ready = false;
-		SharedPreferences defaultSharedPreferences = PreferenceManager
-				.getDefaultSharedPreferences(this);
-//		String host = defaultSharedPreferences.getString("host", "192.168.1.189");
-		//String host = defaultSharedPreferences.getString("host", "snuggle.eu01.aws.af.cm");
-		String host = "snuggle.eu01.aws.af.cm";
-        //String host = "192.168.1.189:8080";
 		if (isConnected()) {
-			initializeOnlineService(host);
+			initializeOnlineService(CLOUD_HOST);
 		} else {
             //TODO: If no network connection available close the application with a hint!
 			this.partyService = new PartyManagementServiceMock();
