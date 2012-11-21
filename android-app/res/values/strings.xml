@@ -24,14 +24,7 @@
     <string name="DELETE_PARTY_MENU_ITEM">Delete Party</string>
     <string name="SAVE_PARTY_BUTTON">Save Party</string>
 
-
-    <string name="QUICK_INSERT_MENU_ITEM">Quick Entry</string>
-	<string name="EDIT_BUTTON">Edit</string>
-    <string name="QUICK_ENTRY_BUTTON">Quick Entry</string>
     <string name="LOGIN_BUTTON">Sign In</string>
-
-
-	<string name="TASK_NAME_LABEL">Name</string>
 
 	<string name="SPACE_LABEL"> </string>
 	<string name="CREDITS_LABEL">Credits</string>

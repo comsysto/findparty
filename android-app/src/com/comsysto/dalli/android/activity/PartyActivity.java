@@ -131,8 +131,6 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
                     }
                 };
                 dialog.show(getFragmentManager(), "addressInputFragment");
-
-                locationService.activate();
             }
         });
 

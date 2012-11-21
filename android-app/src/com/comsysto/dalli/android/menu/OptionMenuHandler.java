@@ -37,12 +37,9 @@ public class OptionMenuHandler {
 	
 	public void onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.quick_insert_menu_item:
-			showQuickInsert();
-			break;
-		case R.id.preferences_menu_item:
-			goTo(activity, Preferences.class);
-			break;
+//		case R.id.preferences_menu_item:
+//			goTo(activity, Preferences.class);
+//			break;
 		case R.id.credits:
 			goTo(activity, CreditsActivity.class);
 			break;
@@ -55,7 +52,7 @@ public class OptionMenuHandler {
 	}	
 	
 	
-	void showQuickInsert() {
+/*	void showQuickInsert() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(activity).setTitle(
 				"Quick Insert").setMessage("New Task:");
 
@@ -88,7 +85,7 @@ public class OptionMenuHandler {
 					}
 				});
 		alert.show();
-	}	
+	}	*/
 	
 	PartyManagerApplication getPartyManagerApplication() {
 		return (PartyManagerApplication) activity.getApplication();
