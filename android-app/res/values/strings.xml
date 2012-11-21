@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="APP_NAME">Find Party</string>
+	<string name="APP_NAME">Find Buddies</string>
 
-    <string name="MY_PARTIES_BUTTON">My parties</string>
+
     <string name="SETTINGS_BUTTON">Settings</string>
-    <string name="CREATE_NEW_PARTY_BUTTON">Create a new party</string>
-    <string name="FIND_PARTY_BUTTON">Find an awesome party</string>
+    <string name="CREATE_NEW_PARTY_BUTTON">Create a new activity</string>
+    <string name="FIND_PARTY_BUTTON">Find activities near you</string>
+    <string name="MY_PARTIES_BUTTON">Show my activities</string>
+
     <string name="EXPERIENCE_LABEL">Experience</string>
-    <string name="SELECT_CATEGORY_TITLE">What do you want to do?</string>
+    <string name="SELECT_CATEGORY_TITLE">Select activity type</string>
     <string name="SIGNUP_LABEL">Sign Up for FindParty</string>
     <string name="DAY_AND_TIME_CONTEXT_LABEL">Day and Time</string>
-    <string name="ADD_PARTY_BUTTON">Add Party</string>
-    <string name="EDIT_PARTY_MENU_ITEM">Edit Party</string>
-    <string name="NUMBER_OF_PARTICIPANTS_DIALOG_TITLE">How many buddies do you need?</string>
-    <string name="CANCEL_BUTTON">Cancel</string>
+
+    <string name="NUMBER_OF_PARTICIPANTS_DIALOG_TITLE">How many buddies?</string>
+
     <string name="OK_BUTTON">Ok</string>
+    <string name="CANCEL_BUTTON">Cancel</string>
+
+    <string name="ADD_BUTTON">Create Party</string>
+    <string name="ADD_PARTY_BUTTON">Create new activity</string>
+    <string name="EDIT_PARTY_MENU_ITEM">Edit Party</string>
     <string name="DELETE_PARTY_MENU_ITEM">Delete Party</string>
     <string name="SAVE_PARTY_BUTTON">Save Party</string>
-    <string name="ADD_BUTTON">Create Party</string>
-
 
 
     <string name="QUICK_INSERT_MENU_ITEM">Quick Entry</string>
@@ -40,18 +44,5 @@
     <string name="LOCATION_BUTTON_WAITING_TEXT">Waiting For Location</string>
 
 
-    <style name="ButtonText">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">#ffffff</item>
-        <item name="android:gravity">center</item>
-        <item name="android:layout_margin">3dp</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:shadowColor">#000000</item>
-        <item name="android:shadowDx">1</item>
-        <item name="android:shadowDy">1</item>
-        <item name="android:shadowRadius">2</item>
-    </style>
 
 </resources>

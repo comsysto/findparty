@@ -259,20 +259,22 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     private void initLevelSpinner() {
         levelSpinner = (Spinner) findViewById(R.id.levelSpinner);
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, LEVELS);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.findbuddies_spinner, LEVELS);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         levelSpinner.setAdapter(adapter);
         levelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 party.setLevel(adapter.getItem(position));
+
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
+
         levelSpinner.setSelection(getPositionFromList(Arrays.asList(LEVELS), party.getLevel()));
 
     }
@@ -280,7 +282,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     private void initCategory() {
         this.categorySpinner = (Spinner) findViewById(R.id.categorySpinner);
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getAllCategories());
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.findbuddies_spinner, getAllCategories());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(adapter);
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -321,7 +323,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     }
 
     void setTextOnNumberOfParticipantsButton(int numberOfParticipants) {
-        this.numberOfParticipantsButton.setText("Required Participants : " + numberOfParticipants);
+        this.numberOfParticipantsButton.setText("Desired participants : " + numberOfParticipants);
     }
 
 

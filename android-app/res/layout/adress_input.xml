@@ -32,19 +32,19 @@
                 android:layout_height="wrap_content"
                 android:text="@string/CANCEL_BUTTON"
                 android:id="@+id/cancelLocationInputButton" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
-                style="@style/ButtonText"
-                android:background="@drawable/findbuddies_button"/>
+                style="@style/CommonPartyButton"/>
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/OK_BUTTON"
-                android:id="@+id/submitLocationInputButton" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
-                android:background="@drawable/findbuddies_button" style="@style/ButtonText"/>
+                android:id="@+id/submitLocationInputButton"
+                style="@style/CommonPartyButton"/>
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/LOCATION_GPS_BUTTON"
-                android:id="@+id/activateLocationViaGpsButton" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
-                android:background="@drawable/findbuddies_button" style="@style/ButtonText"/>
+                android:id="@+id/activateLocationViaGpsButton"
+                android:layout_gravity="center_horizontal|top" android:layout_weight="1"
+                style="@style/CommonPartyButton"/>
     </LinearLayout>
 </GridLayout>
