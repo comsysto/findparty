@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:rowCount="6"
+              android:columnCount="3">
+
+    <Space
+            android:layout_width="20px"
+            android:layout_height="20px"
+            android:id="@+id/space" android:layout_row="0" android:layout_column="0" android:layout_span="3"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/STREET_LABEL"
+            android:id="@+id/addressEditLabel" android:layout_row="1" android:layout_column="0"
+            android:layout_gravity="center"/>
+    <EditText
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/addressEditText" android:layout_row="1" android:layout_column="1"
+            android:layout_gravity="center|left" android:layout_margin="10dp"/>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" android:layout_row="5" android:layout_column="0"
+            android:layout_columnSpan="3">
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/CANCEL_BUTTON"
+                android:id="@+id/cancelLocationInputButton" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
+                style="@style/ButtonText"
+                android:background="@drawable/findbuddies_button"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/OK_BUTTON"
+                android:id="@+id/submitLocationInputButton" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
+                android:background="@drawable/findbuddies_button" style="@style/ButtonText"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/LOCATION_GPS_BUTTON"
+                android:id="@+id/activateLocationViaGpsButton" android:layout_gravity="center_horizontal|top" android:layout_weight="1"
+                android:background="@drawable/findbuddies_button" style="@style/ButtonText"/>
+    </LinearLayout>
+</GridLayout>

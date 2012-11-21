@@ -34,6 +34,10 @@
 	<string name="ADD_LABEL">Add Task</string>
 	<string name="PREFERENCES_LABEL">Settings</string>
 	<string name="TASK_STATUS_LABEL">Status</string>
+    <string name="LOCATION_INPUT_TITLE">Activity Location</string>
+    <string name="LOCATION_GPS_BUTTON">GPS</string>
+    <string name="STREET_LABEL">Adresse</string>
+    <string name="LOCATION_BUTTON_WAITING_TEXT">Waiting For Location</string>
 
 
     <style name="ButtonText">

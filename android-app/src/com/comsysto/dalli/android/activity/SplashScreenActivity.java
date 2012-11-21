@@ -143,4 +143,10 @@ public class SplashScreenActivity extends AbstractActivity {
 		this.optionMenuHandler.onOptionsItemSelected(item);
 		return super.onOptionsItemSelected(item);
 	}
+
+    @Override
+    protected void onDestroy() {
+        dialog.dismiss();
+        super.onDestroy();    //To change body of overridden methods use File | Settings | File Templates.
+    }
 }

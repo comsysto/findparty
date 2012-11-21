@@ -114,7 +114,7 @@ public class FindPartiesMapActivity extends MapActivity {
             public void run() {
                     mapView.getController().setZoom(15);
                     mapView.getController().animateTo(myLocOverlay.getMyLocation());
-                    mapView.invalidate();
+                    //mapView.invalidate();
                     loadPartiesAndShowOnMap();
             }
         });

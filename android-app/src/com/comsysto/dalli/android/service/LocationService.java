@@ -4,13 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.util.Log;
+import com.comsysto.dalli.android.activity.LocationRequester;
 import com.comsysto.findparty.Point;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Observer;
+import java.util.concurrent.Executor;
 
 public class LocationService extends Activity {
 
@@ -48,16 +52,75 @@ public class LocationService extends Activity {
 
     }
 
-    public String getLocationFromPoint(Point location) {
+    public void requestLocationFromPoint(final Point location, final LocationRequester locationRequester) {
         //TODO: the geocoder should be part of the LocationService and not of the listener
-        Geocoder geocoderSystemLanguage = new Geocoder(context);
-        List<Address> addresses = null;
-        try {
-            addresses = geocoderSystemLanguage.getFromLocation(location.getLat(), location.getLon(), 1);
-        } catch (IOException e) {
-            Log.e("LocationService", "Error getting the name of the location", e);
-            return "Error getting the name of the location";
-        }
-        return addresses.get(0).getAddressLine(0);  //To change body of created methods use File | Settings | File Templates.
+
+        AsyncTask<Void, Void, Address> asyncTask = new AsyncTask<Void, Void, Address>() {
+            @Override
+            protected Address doInBackground(Void... params) {
+                Geocoder geocoderSystemLanguage = new Geocoder(context);
+                List<Address> addresses = null;
+                try {
+                    addresses = geocoderSystemLanguage.getFromLocation(location.getLat(), location.getLon(), 1);
+                } catch (IOException e) {
+                    Log.e("LocationService", "Error getting the name of the location", e);
+                    return null;
+                }
+                if (!addresses.isEmpty()) {
+                    return addresses.get(0);
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Address address) {
+                if (address == null) {
+                    locationRequester.updateLocationAddress("Error getting the name of the GPS.");
+                } else {
+                    informLocationRequester(address, locationRequester);
+                }
+            }
+        };
+
+        asyncTask.execute();
+
+    }
+
+    public void requestPointFromAddress(final String address, final LocationRequester locationRequester) {
+        //TODO: the geocoder should be part of the LocationService and not of the listener
+        AsyncTask<Void, Void, Address> asyncTask = new AsyncTask<Void, Void, Address>() {
+            @Override
+            protected Address doInBackground(Void... params) {
+                Geocoder geocoderSystemLanguage = new Geocoder(context);
+                List<Address> addresses = null;
+                try {
+                    addresses = geocoderSystemLanguage.getFromLocationName(address, 1);
+                } catch (IOException e) {
+                    Log.e("LocationService", "Error getting the name of the location", e);
+                    return null;
+                }
+                if (!addresses.isEmpty()) {
+                    return addresses.get(0);
+                }
+                return null;            }
+
+            @Override
+            protected void onPostExecute(Address address) {
+                if (address == null) {
+                    locationRequester.updateLocationAddress("Error getting the name of the location");
+                } else {
+                    informLocationRequester(address, locationRequester);
+                }
+            }
+        };
+
+        asyncTask.execute();
+    }
+
+    private void informLocationRequester(Address address, LocationRequester locationRequester) {
+        Point point = new Point();
+        point.setLat(address.getLatitude());
+        point.setLon(address.getLongitude());
+        locationRequester.updateLocationPoint(point, address.getAddressLine(0));
     }
 }

@@ -3,11 +3,10 @@ package com.comsysto.dalli.android.activity;
 import android.app.*;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
-import android.text.method.DigitsKeyListener;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import com.comsysto.dalli.android.R;
@@ -26,7 +25,7 @@ import java.util.*;
  *
  * @author stefandjurasic
  */
-public abstract class PartyActivity extends AbstractActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, Observer {
+public abstract class PartyActivity extends AbstractActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, Observer, LocationRequester {
 
     private OptionMenuHandler optionMenuHandler;
     TextView categoryNameText;
@@ -70,12 +69,74 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
         this.partyLocationButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                final DialogFragment dialog = new DialogFragment() {
+
+                    @Override
+                    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+                        View view = inflater.inflate(R.layout.adress_input, container);
+                        getDialog().setTitle(R.string.LOCATION_INPUT_TITLE);
+
+                        final EditText address = (EditText)view.findViewById(R.id.addressEditText);
+
+                        Button cancelButton = (Button)view.findViewById(R.id.cancelLocationInputButton);
+                        cancelButton.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dismiss();
+                            }
+                        });
+
+                        Button activateLocationButtonViaGps = (Button)view.findViewById(R.id.activateLocationViaGpsButton);
+                        activateLocationButtonViaGps.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                partyLocationButton.setText(R.string.LOCATION_BUTTON_WAITING_TEXT);
+                                locationService.activate();
+                                dismiss();
+                            }
+                        });
+
+                        final Button submitLocationButton = (Button)view.findViewById(R.id.submitLocationInputButton);
+                        submitLocationButton.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                locationService.requestPointFromAddress(address.getText().toString(), PartyActivity.this);
+                                dismiss();
+                            }
+                        });
+                        submitLocationButton.setClickable(false);
+                        submitLocationButton.setEnabled(false);
+
+
+                        address.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                //To change body of implemented methods use File | Settings | File Templates.
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                                boolean clickable = address.getText().toString().length() > 2;
+                                submitLocationButton.setClickable(clickable);
+                                submitLocationButton.setEnabled(clickable);
+                            }
+                        });
+
+                        return view;
+                    }
+                };
+                dialog.show(getFragmentManager(), "addressInputFragment");
+
                 locationService.activate();
             }
         });
 
         if (party.getLocation() != null) {
-            partyLocationButton.setText(locationService.getLocationFromPoint(party.getLocation()));
+            locationService.requestLocationFromPoint(party.getLocation(), this);
         } else {
             locationService.activate();
         }
@@ -278,5 +339,16 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
     protected List<String> getAllCategories() {
         return ((PartyManagerApplication) getApplication()).getAllCategories();
+    }
+
+    @Override
+    public void updateLocationPoint(Point point, String address) {
+        updateLocationAddress(address);
+        this.party.setLocation(point);
+    }
+
+    @Override
+    public void updateLocationAddress(String address) {
+        partyLocationButton.setText(address);
     }
 }
