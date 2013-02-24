@@ -145,7 +145,7 @@ public class PartyManagerApplication extends Application {
 
     public boolean authenticate(String username, String password) {
         User user = partyService.getUser(username);
-        if(user!=null && user.getPassword().equals(password)) {
+        if(user!=null && user.getPassword() != null && user.getPassword().equals(password)) {
             return true;
         }
         return false;
