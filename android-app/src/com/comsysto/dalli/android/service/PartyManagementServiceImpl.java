@@ -3,13 +3,15 @@ package com.comsysto.dalli.android.service;
 import java.util.*;
 
 import android.util.Log;
+import com.comsysto.dalli.android.application.Constants;
+import com.comsysto.dalli.android.application.PartyManagerApplication;
+import com.comsysto.dalli.android.service.util.ClientAuthenticationRequestInterceptor;
 import com.comsysto.findparty.Category;
 import com.comsysto.findparty.User;
 import com.comsysto.findparty.web.CategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import com.comsysto.dalli.android.service.util.UrlBuilder;
@@ -25,6 +27,7 @@ import com.comsysto.findparty.web.PartyService;
  */
 public class PartyManagementServiceImpl implements PartyService, CategoryService {
 
+    private static final String TAG = Constants.LOG_SERVICE_PREFIX + PartyManagementServiceImpl.class.getSimpleName();
     private RestTemplate restTemplate;
     private UrlBuilder urlBuilder;
 
@@ -34,11 +37,14 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
 
     private final static String SUBSCRIPTIONS = "subscriptions";
 
-    public PartyManagementServiceImpl(String host) {
+    public PartyManagementServiceImpl(String host, PartyManagerApplication application) {
         HttpComponentsClientHttpRequestFactory requestFactory = createHttpRequestFactory();
 
         this.restTemplate = new RestTemplate(true, requestFactory);
-        this.restTemplate.setInterceptors(Arrays.<ClientHttpRequestInterceptor>asList(new NoCacheClientRequestInterceptor()));
+        NoCacheClientRequestInterceptor noCacheInterceptor = new NoCacheClientRequestInterceptor();
+        ClientAuthenticationRequestInterceptor authInterceptor = new ClientAuthenticationRequestInterceptor(application.getUser());
+
+        this.restTemplate.setInterceptors(Arrays.<ClientHttpRequestInterceptor>asList(noCacheInterceptor, authInterceptor));
         this.urlBuilder = new UrlBuilder(host);
     }
 
@@ -79,10 +85,20 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
     public List<Party> searchParties(Double lon, Double lat, Double maxDistance) {
         String url = urlBuilder.createUri(PARTY_SERVICE_PATH, "search", String.valueOf(lon), String.valueOf(lat), String.valueOf(maxDistance));
 
-        
-        Party[] response = restTemplate.getForObject(url, Party[].class);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.set("Authorization", "Basic cm9iOm51bGw=\n");
+//        ResponseEntity<Party[]> response = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<String>(headers), Party[].class);
 
-        return Arrays.asList(response);
+
+        try {
+            Log.d(TAG, "calling url: " + url);
+            Party[] parties = restTemplate.getForObject(url, Party[].class);
+            Log.d(TAG, "received parties: " + parties);
+            return Arrays.asList(parties);
+        } catch(Exception e) {
+            Log.d(TAG, "Exception: " +e.getMessage(), e);
+        }
+        return null;
     }
 
     @Override
@@ -132,6 +148,7 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
     @Override
     public String echo(String arg0) {
         String url = urlBuilder.createUri(PARTY_SERVICE_PATH, "echo", arg0);
+        Log.d(TAG, "echoing server: " + url);
         ResponseEntity<String> forEntity = restTemplate.getForEntity(url, String.class);
         
         return forEntity.getBody();
@@ -152,6 +169,11 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
     @Override
     public User getUser(String username) {
         return restTemplate.getForObject(urlBuilder.createUri(USER_SERVICE_PATH, username), User.class);
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return Arrays.asList(restTemplate.getForObject(urlBuilder.createUri(USER_SERVICE_PATH), User[].class));
     }
 
     @Override

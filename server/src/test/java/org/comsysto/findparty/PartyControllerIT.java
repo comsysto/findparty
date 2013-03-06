@@ -1,21 +1,9 @@
 package org.comsysto.findparty;
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertNotNull;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Calendar;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import com.comsysto.findparty.*;
+import com.comsysto.findparty.LevelType;
+import com.comsysto.findparty.Party;
+import com.comsysto.findparty.Picture;
+import com.comsysto.findparty.Point;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created with IntelliJ IDEA.

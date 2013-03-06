@@ -34,8 +34,9 @@ public class PartyManagerApplication extends Application {
     private static final String CLOUD_HOST =  "snuggle.eu01.aws.af.cm";
     private static final String LOCAL_EMULATOR = "10.0.2.2:8080";
     private static final String LOCAL_ROB = "192.168.1.169:8080";
+    private static final String TAG = Constants.LOG_APP_PREFIX + PartyManagerApplication.class.getSimpleName();
 
-	private Party selectedParty;
+    private Party selectedParty;
 
 	private PartyService partyService;
 
@@ -49,11 +50,13 @@ public class PartyManagerApplication extends Application {
 	}
 
 	public void initializeService() {
+        Log.d(TAG, "initializing application");
 		this.ready = false;
 		if (isConnected()) {
-			initializeOnlineService(CLOUD_HOST);
+			initializeOnlineService(LOCAL_EMULATOR);
 		} else {
             //TODO: If no network connection available close the application with a hint!
+            Log.d(TAG, "using Mock-Service");
 			this.partyService = new PartyManagementServiceMock();
 		}
 	}
@@ -63,16 +66,16 @@ public class PartyManagerApplication extends Application {
 
 			@Override
 			protected Void doInBackground(Void... params) {
-				PartyManagerApplication.this.partyService = new PartyManagementServiceImpl(host);
+				PartyManagerApplication.this.partyService = new PartyManagementServiceImpl(host, PartyManagerApplication.this);
 				try {
 					String echo = PartyManagerApplication.this.partyService.echo("echo");
 					if (echo.equals("echo")) {
-						Log.i("Server Check", "Server is online");
+						Log.i(TAG, "Server-Check ["+host+"]: Server is online");
 					} else {
-						Log.e("Server Check", "Server returned wrong echo ("+ echo + "), going offline.");
+						Log.e(TAG, "Server-Check ["+host+"]: Server returned wrong echo ("+ echo + "), going offline.");
 					}
 				} catch (Exception e) {
-					Log.e("Server Check", "Server not reachable", e);
+					Log.e(TAG, "Server-Check ["+host+"]: Server not reachable", e);
 
 				}
 				PartyManagerApplication.this.ready = true;
@@ -100,8 +103,10 @@ public class PartyManagerApplication extends Application {
 		NetworkInfo activeNetworkInfo = cm.getActiveNetworkInfo();
 		if (activeNetworkInfo != null && activeNetworkInfo.isAvailable()
 				&& activeNetworkInfo.isConnected()) {
+            Log.d(TAG, "device connected successfully to network");
 			return true;
 		} else {
+            Log.d(TAG, "device not connected to network");
 			return false;
 		}
 	}
@@ -144,10 +149,13 @@ public class PartyManagerApplication extends Application {
     }
 
     public boolean authenticate(String username, String password) {
+        Log.d(TAG, "authenticating username/password: " + username + "/" + password);
         User user = partyService.getUser(username);
-        if(user!=null && user.getPassword().equals(password)) {
+        if(user!=null && user.getPassword() != null && user.getPassword().equals(password)) {
+            Log.d(TAG, "user successfully authenticated: " + user);
             return true;
         }
+        Log.d(TAG, "authentication failed!");
         return false;
     }
 }

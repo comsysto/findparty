@@ -1,12 +1,13 @@
 package com.comsysto.findparty.web;
 
-import java.util.List;
-
 import com.comsysto.findparty.Party;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public interface PartyController {
 
-	public List<Party> search(Double lon, Double lat, Double maxdistance);
+	public List<Party> search(Double lon, Double lat, Double maxdistance, HttpServletRequest request);
 	
 	public String create(Party party);
 

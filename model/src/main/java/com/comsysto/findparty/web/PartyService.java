@@ -36,4 +36,6 @@ public interface PartyService {
     public User createUser(String username, String password);
 
     public User getUser(String username);
+
+    public List<User> getAllUsers();
 }
