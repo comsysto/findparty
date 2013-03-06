@@ -2,6 +2,8 @@ package com.comsysto.findparty.web;
 
 import com.comsysto.findparty.User;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: rpelger
@@ -14,4 +16,6 @@ public interface UserController {
     User createUser(User user);
 
     User getUser(String username);
+
+    List<User> findAll();
 }

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: rpelger
@@ -33,4 +35,12 @@ public class UserControllerImpl implements  UserController {
     public @ResponseBody User getUser(@PathVariable("username") String username) {
         return partyService.getUser(username);
     }
+
+    @Override
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    public @ResponseBody List<User> findAll() {
+        return partyService.getAllUsers();
+    }
+
+
 }

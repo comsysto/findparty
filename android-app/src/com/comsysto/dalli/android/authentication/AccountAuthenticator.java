@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.comsysto.dalli.android.activity.LoginActivity;
+import com.comsysto.dalli.android.application.Constants;
+
 /**
  * Handles requests from the app for login or creating accounts.
  * 
@@ -22,6 +24,8 @@ import com.comsysto.dalli.android.activity.LoginActivity;
  */
 public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
+    private final static String TAG = Constants.LOG_AUTH_PREFIX + AccountAuthenticator.class.getSimpleName();
+
 	private Context context;
 	
 	public static final String AUTH_TYPE = "com.comsysto.authentication";
@@ -31,7 +35,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 	public AccountAuthenticator(Context context) {
 		super(context);
 		this.context = context;
-		Log.d("AccountAuthenticator", "AccountAuthenticator created");
+		Log.d(TAG, "AccountAuthenticator created");
 	}
 
 	@Override
@@ -39,6 +43,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 			String accountType, String authTokenType,
 			String[] requiredFeatures, Bundle options)
 			throws NetworkErrorException {
+        Log.d(TAG, "preparing intent to add new account");
         final Intent intent = new Intent(context, LoginActivity.class);
         intent.putExtra(LoginActivity.PARAM_AUTHTOKEN_TYPE, authTokenType);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
