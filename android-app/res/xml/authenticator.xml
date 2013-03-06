@@ -1,0 +1,7 @@
+ <account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accountType="com.comsysto.authentication"
+    android:icon="@drawable/logo_findbuddies_460px_v02"
+    android:smallIcon="@drawable/logo_findbuddies_460px_v02"
+    android:label="@string/APP_NAME" />
+<!--  android:accountPreferences="@xml/account_preferences"
+ /> -->

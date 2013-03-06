@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="APP_NAME">Find Buddies</string>
+
+
+    <string name="SETTINGS_BUTTON">Settings</string>
+    <string name="CREATE_NEW_PARTY_BUTTON">Create a new activity</string>
+    <string name="FIND_PARTY_BUTTON">Find activities near you</string>
+    <string name="MY_PARTIES_BUTTON">Show my activities</string>
+
+    <string name="EXPERIENCE_LABEL">Experience</string>
+    <string name="SELECT_CATEGORY_TITLE">Select activity type</string>
+    <string name="LOGIN_LABEL">Login</string>
+    <string name="DAY_AND_TIME_CONTEXT_LABEL">Day and Time</string>
+
+    <string name="NUMBER_OF_PARTICIPANTS_DIALOG_TITLE">How many buddies?</string>
+
+    <string name="OK_BUTTON">Ok</string>
+    <string name="CANCEL_BUTTON">Cancel</string>
+
+    <string name="ADD_BUTTON">Create Party</string>
+    <string name="ADD_PARTY_BUTTON">Create new activity</string>
+    <string name="EDIT_PARTY_MENU_ITEM">Edit Party</string>
+    <string name="DELETE_PARTY_MENU_ITEM">Delete Party</string>
+    <string name="SAVE_PARTY_BUTTON">Save Party</string>
+
+    <string name="LOGIN_BUTTON">Sign In</string>
+    <string name="REGISTER_BUTTON">Register</string>
+    <string name="LOGIN_FAILED_LABEL">Username and/or password incorrect. Check values or register new account</string>
+
+	<string name="SPACE_LABEL"> </string>
+	<string name="CREDITS_LABEL">Credits</string>
+	<string name="ADD_LABEL">Add Task</string>
+	<string name="PREFERENCES_LABEL">Settings</string>
+	<string name="TASK_STATUS_LABEL">Status</string>
+    <string name="LOCATION_INPUT_TITLE">Activity Location</string>
+    <string name="LOCATION_GPS_BUTTON">GPS</string>
+    <string name="STREET_LABEL">Adresse</string>
+    <string name="LOCATION_BUTTON_WAITING_TEXT">Waiting For Location</string>
+    <string name="DATE_TIME_LABEL"><![CDATA[Date & Time]]></string>
+    <string name="PARTY_SIZE">Size</string>
+    <string name="USER_LABEL">User</string>
+
+
+</resources>

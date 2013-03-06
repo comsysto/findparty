@@ -1,0 +1,19 @@
+--- 
+applications: 
+  target/findparty: 
+    name: snuggle
+    instances: 1
+    framework: 
+      name: spring
+      info: 
+        exec: 
+        description: Java SpringSource Spring Application
+        mem: 512M
+    url: ${name}.${target-base}
+    infra: eu-aws
+    services: 
+      mongodb-1adb0: 
+        type: mongodb
+      snuggledb: 
+        type: mongodb
+    mem: 512M

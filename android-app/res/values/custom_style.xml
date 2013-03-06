@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="custom_theme_color">#fbf468</color>
+    <style name="CustomTheme" parent="android:Theme.Black">
+        <item name="android:windowBackground">@color/custom_theme_color</item>
+        <item name="android:colorBackground">@color/custom_theme_color</item>
+        <item name="android:buttonStyle">@style/CommonPartyButton</item>
+    </style>
+
+
+</resources>
