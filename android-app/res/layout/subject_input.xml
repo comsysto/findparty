@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:background="@drawable/gradient_background">
+
+    <ImageView
+            android:src="@drawable/logo_findbuddies_460px_v02"
+            android:id="@+id/imageView1"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"/>
+
+    <Space
+            android:layout_width="fill_parent"
+            android:layout_height="20dp"/>
+
+    <TextView
+            android:id="@+id/create_party"
+            android:text="Drescribe your new activity here."
+            android:layout_height="wrap_content"
+            android:layout_width="260dp"
+            android:textColor="#aaa"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:layout_gravity="center"/>
+
+    <EditText
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/subjectEditText"
+            android:layout_row="5"
+            android:layout_column="5"
+            android:layout_span="5"
+            android:layout_margin="10dp"/>
+
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_row="3"
+            android:layout_column="0"
+            android:layout_columnSpan="2">
+
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/CANCEL_BUTTON"
+                    android:id="@+id/cancelSubjectInputButton"
+                    style="@style/CommonPartyButton"/>
+
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/OK_BUTTON"
+                    android:id="@+id/OK_BUTTON"
+                    style="@style/CommonPartyButton"/>
+
+    </LinearLayout>
+
+</LinearLayout>

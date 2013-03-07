@@ -94,4 +94,9 @@ public class PartyManagementServiceMock implements PartyService {
         return Arrays.asList(user);
     }
 
+    @Override
+    public Boolean login(User user) {
+        return true;
+    }
+
 }

@@ -52,6 +52,12 @@
                 style="@style/CommonPartyButton"
                 android:id="@+id/partyLocationButton"
                 android:text="@string/LOCATION_BUTTON_WAITING_TEXT"/>
+
+        <Button
+                style="@style/CommonPartyButton"
+                android:text="@string/ADD_SUBJECT_BUTTON"
+                android:id="@+id/addSubjectButton"/>
+
         <Space
                 android:layout_width="fill_parent"
                 android:layout_height="40px"

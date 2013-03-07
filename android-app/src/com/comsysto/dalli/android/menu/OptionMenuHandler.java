@@ -1,18 +1,13 @@
 package com.comsysto.dalli.android.menu;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.EditText;
 import com.comsysto.dalli.android.R;
-import com.comsysto.dalli.android.activity.CreatePartyActivity;
 import com.comsysto.dalli.android.activity.CreditsActivity;
-import com.comsysto.dalli.android.activity.Preferences;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
 
 /**

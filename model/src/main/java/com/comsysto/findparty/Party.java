@@ -37,9 +37,19 @@ public class Party implements Serializable{
 
     private String owner;
 
+    private String subject;
+
     public Party() {
         this.candidates = new ArrayList<String>();
         this.participants = new ArrayList<String>();
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
     
     public String getId() {

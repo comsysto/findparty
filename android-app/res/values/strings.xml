@@ -20,6 +20,7 @@
 
     <string name="ADD_BUTTON">Create Party</string>
     <string name="ADD_PARTY_BUTTON">Create new activity</string>
+    <string name="ADD_SUBJECT_BUTTON">Describe Party</string>
     <string name="EDIT_PARTY_MENU_ITEM">Edit Party</string>
     <string name="DELETE_PARTY_MENU_ITEM">Delete Party</string>
     <string name="SAVE_PARTY_BUTTON">Save Party</string>
@@ -34,6 +35,7 @@
 	<string name="PREFERENCES_LABEL">Settings</string>
 	<string name="TASK_STATUS_LABEL">Status</string>
     <string name="LOCATION_INPUT_TITLE">Activity Location</string>
+    <string name="SUBJECT_INPUT_TITLE">Add a Description</string>
     <string name="LOCATION_GPS_BUTTON">GPS</string>
     <string name="STREET_LABEL">Adresse</string>
     <string name="LOCATION_BUTTON_WAITING_TEXT">Waiting For Location</string>

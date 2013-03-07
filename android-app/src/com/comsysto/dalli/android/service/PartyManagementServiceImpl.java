@@ -1,22 +1,25 @@
 package com.comsysto.dalli.android.service;
 
-import java.util.*;
-
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.util.Log;
 import com.comsysto.dalli.android.application.Constants;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
-import com.comsysto.dalli.android.service.util.ClientAuthenticationRequestInterceptor;
+import com.comsysto.dalli.android.authentication.AccountAuthenticator;
+import com.comsysto.dalli.android.service.interceptor.ClientAuthenticationRequestInterceptor;
+import com.comsysto.dalli.android.service.interceptor.NoCacheClientRequestInterceptor;
+import com.comsysto.dalli.android.service.util.UrlBuilder;
 import com.comsysto.findparty.Category;
+import com.comsysto.findparty.Party;
 import com.comsysto.findparty.User;
 import com.comsysto.findparty.web.CategoryService;
+import com.comsysto.findparty.web.PartyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
-import com.comsysto.dalli.android.service.util.UrlBuilder;
-import com.comsysto.findparty.Party;
-import com.comsysto.findparty.web.PartyService;
+import java.util.*;
 
 /**
  * Implementation using {@link RestTemplate} from Spring to communicate with our
@@ -42,10 +45,23 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
 
         this.restTemplate = new RestTemplate(true, requestFactory);
         NoCacheClientRequestInterceptor noCacheInterceptor = new NoCacheClientRequestInterceptor();
-        ClientAuthenticationRequestInterceptor authInterceptor = new ClientAuthenticationRequestInterceptor(application.getUser());
+        ClientAuthenticationRequestInterceptor authInterceptor = new ClientAuthenticationRequestInterceptor(getUser(application));
 
         this.restTemplate.setInterceptors(Arrays.<ClientHttpRequestInterceptor>asList(noCacheInterceptor, authInterceptor));
         this.urlBuilder = new UrlBuilder(host);
+    }
+
+    private User getUser(PartyManagerApplication application) {
+        AccountManager accountManager = AccountManager.get(application);
+        Account[] accounts = accountManager.getAccountsByType(AccountAuthenticator.AUTH_TYPE);
+        if(accounts.length>0) {
+            Account account = accounts[0];
+            User user = new User();
+            user.setUsername(account.name);
+            user.setPassword(accountManager.getPassword(account));
+            return user;
+        }
+        return null;
     }
 
     private HttpComponentsClientHttpRequestFactory createHttpRequestFactory() {
@@ -174,6 +190,11 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
     @Override
     public List<User> getAllUsers() {
         return Arrays.asList(restTemplate.getForObject(urlBuilder.createUri(USER_SERVICE_PATH), User[].class));
+    }
+
+    @Override
+    public Boolean login(User user) {
+        return restTemplate.postForObject(urlBuilder.createUri(USER_SERVICE_PATH, "login"), user, Boolean.class);
     }
 
     @Override

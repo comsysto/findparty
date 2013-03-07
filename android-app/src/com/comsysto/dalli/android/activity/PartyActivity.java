@@ -39,6 +39,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     static final String[] LEVELS = new String[]{"Beginner", "Amateur", "Professional"};
     Button numberOfParticipantsButton;
     private Button partyLocationButton;
+    private Button subjectButton;
     LocationService locationService;
     Party party;
     private boolean alreadyCalled;
@@ -60,9 +61,80 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
         initSaveButton();
         initParticipantsButton();
         initPartyLocationButton();
+        initSubjectButton();
     }
 
     protected abstract Party getParty();
+
+    private void initSubjectButton() {
+        this.subjectButton = (Button) findViewById(R.id.addSubjectButton);
+
+        this.subjectButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final DialogFragment dialog = new DialogFragment() {
+
+                    @Override
+                    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+                        View view = inflater.inflate(R.layout.subject_input, container);
+                        getDialog().setTitle(R.string.SUBJECT_INPUT_TITLE);
+                        final EditText subject = (EditText)view.findViewById(R.id.subjectEditText);
+
+                        if(party.getSubject() != null){
+                            subject.setText(party.getSubject());
+                        }
+
+                        Button cancelButton = (Button)view.findViewById(R.id.cancelSubjectInputButton);
+                        cancelButton.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dismiss();
+                            }
+                        });
+
+                        final Button submitSubjectButton = (Button)view.findViewById(R.id.OK_BUTTON);
+                        submitSubjectButton.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                party.setSubject(subject.getText().toString());
+                                dismiss();
+                            }
+                        });
+                        submitSubjectButton.setClickable(false);
+                        submitSubjectButton.setEnabled(false);
+
+
+                        subject.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                //To change body of implemented methods use File | Settings | File Templates.
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                                boolean clickable = subject.getText().toString().length() > 2;
+                                submitSubjectButton.setClickable(clickable);
+                                submitSubjectButton.setEnabled(clickable);
+                            }
+                        });
+
+                        return view;
+                    }
+                };
+                dialog.show(getFragmentManager(), "subjectInputFragment");
+            }
+        });
+
+        if (party.getLocation() != null) {
+            locationService.requestLocationFromPoint(party.getLocation(), this);
+        } else {
+            locationService.activate();
+        }
+    }
 
     private void initPartyLocationButton() {
         locationService = new LocationService(getApplicationContext(), this);

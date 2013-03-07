@@ -13,14 +13,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.comsysto.dalli.android.R;
 import com.comsysto.dalli.android.application.Constants;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
 import com.comsysto.dalli.android.authentication.AccountAuthenticator;
-import com.comsysto.dalli.android.model.UserAccount;
 import com.comsysto.findparty.User;
-import org.w3c.dom.UserDataHandler;
 
 /**
  * Displays the login page.
@@ -32,7 +29,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     private final static String TAG = Constants.LOG_AUTH_PREFIX + LoginActivity.class.getSimpleName();
 
     public static final String PARAM_AUTHTOKEN_TYPE = "authtokenType";
-    boolean loggedIn = false;
     protected EditText userName;
     protected EditText password;
     protected AccountManager accountManager;
@@ -40,14 +36,13 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 
     protected Button loginButton;
     protected Button registerButton;
-    private boolean loginOnly;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        accountManager = AccountManager.get(LoginActivity.this);
+        accountManager = AccountManager.get(getApplication());
 
         loginButton = (Button) findViewById(R.id.LOGIN_BUTTON);
         registerButton = (Button) findViewById(R.id.REGISTER_BUTTON);
