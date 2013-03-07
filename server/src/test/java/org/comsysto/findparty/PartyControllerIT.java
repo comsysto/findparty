@@ -61,10 +61,7 @@ public class PartyControllerIT {
             result.write(buffer);
         }
 
-        Picture pic = new Picture();
-        pic.setContent(result.toByteArray());
         party2.setName("Jubigrat");
-        party2.setPicture(pic);
 
         String partyId = resttemplate.postForObject(PARTY_SERVICE_URL, party2, String.class);
     }
@@ -118,7 +115,6 @@ public class PartyControllerIT {
         
         //create Party on server
         String partyId = resttemplate.postForObject(PARTY_SERVICE_URL, party, String.class);
-        Picture pic = new Picture();
         ByteArrayOutputStream result = new ByteArrayOutputStream();
         URL resource = this.getClass().getResource("/jubi.jpg");
         InputStream inStream = resource.openStream();
@@ -128,10 +124,7 @@ public class PartyControllerIT {
         while((read = inStream.read(buffer)) != -1){
             result.write(buffer);
         }
-        pic.setContent(result.toByteArray());
-        
-        party.setPicture(pic);
-        
+
         assertNotNull(partyId);
         
         //try load party from server
@@ -181,7 +174,6 @@ public class PartyControllerIT {
         party.setLocation(location);
         party.setCategory("SWIMMING");
         party.setLevel(LevelType.BEGINNER.name());
-        Picture pic = new Picture();
         ByteArrayOutputStream result = new ByteArrayOutputStream();
         URL resource = this.getClass().getResource("/jubi.jpg");
         InputStream inStream = resource.openStream();
@@ -191,9 +183,7 @@ public class PartyControllerIT {
         while((read = inStream.read(buffer)) != -1){
             result.write(buffer);
         }
-        pic.setContent(result.toByteArray());
-        
-        party.setPicture(pic);
+
         String partyId = resttemplate.postForObject(PARTY_SERVICE_URL, party, String.class);
         
         //join user
