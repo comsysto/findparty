@@ -1,6 +1,10 @@
 package com.comsysto.findparty.web;
 
 import com.comsysto.findparty.User;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -18,4 +22,8 @@ public interface UserController {
     User getUser(String username);
 
     List<User> findAll();
+
+    @RequestMapping(value="/users/login", method = RequestMethod.POST)
+    @ResponseBody
+    boolean getUser(@RequestBody User user);
 }
