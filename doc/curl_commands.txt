@@ -1,0 +1,18 @@
+# man curl for more info
+# -i : shows http-infos (status, headers, etc.)
+# -H : send Header (can be used multiple times to send multiple headers)
+# -X : specify Request Method
+# -d : specify filename
+# -basic : user Basic-Authentication
+# -u : specify username and password (user:pass)
+
+# authorized call with Basic-Auth (-basic), and user user:password (-u rob:test)
+curl -i -basic -u rob:test http://localhost:8080/services/parties/search/11.2/47.6/200
+
+# un-authorized call 
+curl -i http://localhost:8080/services/users
+
+# create a new user using POST. 
+# Replace file.json with the filename, containing user-data in JSON format
+# Replace username:password with real credentials
+curl -i -X POST -d @file.json -H "Content-Type:application/json" -basic -u username:password http://localhost:8080/services/users 
