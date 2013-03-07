@@ -122,14 +122,6 @@ public class Party implements Serializable{
         this.owner = owner;
     }
 
-    public Picture getPicture() {
-        return picture;
-    }
-
-    public void setPicture(Picture picture) {
-        this.picture = picture;
-    }
-
     @Override
     public String toString() {
         return "Party{" +
