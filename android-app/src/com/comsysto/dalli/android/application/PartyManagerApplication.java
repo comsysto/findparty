@@ -33,6 +33,7 @@ public class PartyManagerApplication extends Application {
 
     private static final String CLOUD_HOST =  "snuggle.eu01.aws.af.cm";
     private static final String LOCAL_EMULATOR = "10.0.2.2:8080";
+    private static final String LOCAL_TIM = "192.168.178.62:8080";
     private static final String LOCAL_ROB = "192.168.1.169:8080";
     private static final String LOCAL_STEFAN = "192.168.178.69:8080";
     private static final String TAG = Constants.LOG_APP_PREFIX + PartyManagerApplication.class.getSimpleName();
@@ -54,7 +55,7 @@ public class PartyManagerApplication extends Application {
         Log.d(TAG, "initializing application");
 		this.ready = false;
 		if (isConnected()) {
-			initializeOnlineService(LOCAL_STEFAN);
+    		initializeOnlineService(LOCAL_TIM);
 		} else {
             //TODO: If no network connection available close the application with a hint!
             Log.d(TAG, "using Mock-Service");
