@@ -113,6 +113,12 @@ public class PartyServiceImpl implements PartyService {
         return mongoOperations.findAll(User.class);
     }
 
+    @Override
+    public Boolean login(User user) {
+        User foundUser = mongoOperations.findOne(new Query(Criteria.where("username").is(user.getUsername()).and("password").is(user.getPassword())), User.class);
+        return foundUser!=null;
+    }
+
 
     @Override
     public List<Party> getAllParties(String username) {

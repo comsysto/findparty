@@ -3,7 +3,6 @@ package com.comsysto.dalli.android.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-
 import com.comsysto.dalli.android.R;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
 

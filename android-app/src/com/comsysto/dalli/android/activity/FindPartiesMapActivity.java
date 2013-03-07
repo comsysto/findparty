@@ -1,7 +1,5 @@
 package com.comsysto.dalli.android.activity;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.DialogFragment;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;

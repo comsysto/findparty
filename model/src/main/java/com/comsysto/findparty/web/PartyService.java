@@ -38,4 +38,6 @@ public interface PartyService {
     public User getUser(String username);
 
     public List<User> getAllUsers();
+
+    public Boolean login(User user);
 }

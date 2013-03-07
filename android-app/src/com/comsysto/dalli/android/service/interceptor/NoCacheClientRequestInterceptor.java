@@ -1,6 +1,5 @@
-package com.comsysto.dalli.android.service;
+package com.comsysto.dalli.android.service.interceptor;
 
-import android.util.Base64;
 import android.util.Log;
 import com.comsysto.dalli.android.application.Constants;
 import org.springframework.http.HttpRequest;

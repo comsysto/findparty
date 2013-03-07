@@ -1,20 +1,15 @@
 package com.comsysto.dalli.android.widget;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-
+import android.widget.*;
 import com.comsysto.dalli.android.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Custom widget combining an EditText, a button and a list.

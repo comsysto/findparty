@@ -1,4 +1,4 @@
-package com.comsysto.dalli.android.service.util;
+package com.comsysto.dalli.android.service.interceptor;
 
 import android.util.Base64;
 import android.util.Log;
@@ -8,6 +8,7 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -53,7 +54,15 @@ public class ClientAuthenticationRequestInterceptor implements ClientHttpRequest
     }
 
     private boolean isValid(User user) {
-        return user!=null && user.getUsername()!=null && user.getPassword()!=null;
+        try {
+            Assert.notNull(user, "user must not be null");
+            Assert.notNull(user.getUsername(), "username must not be null");
+            Assert.notNull(user.getPassword(), "password must not be null");
+            return true;
+        } catch (IllegalArgumentException e) {
+            Log.d(TAG, "invalid or no user for Basic-Authentication: " + e.getMessage());
+            return false;
+        }
     }
 
 }

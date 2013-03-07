@@ -3,7 +3,6 @@ package com.comsysto.dalli.android.activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.comsysto.dalli.android.R;
 import com.comsysto.dalli.android.menu.OptionMenuHandler;
 

@@ -3,7 +3,6 @@ package com.comsysto.dalli.android.activity;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
 import com.comsysto.dalli.android.authentication.AccountAuthenticator;

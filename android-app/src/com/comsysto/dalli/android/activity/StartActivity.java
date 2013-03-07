@@ -5,11 +5,9 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.StrictMode;
-import android.util.Log;
 import com.comsysto.dalli.android.application.Constants;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
 import com.comsysto.dalli.android.authentication.AccountAuthenticator;
-import com.comsysto.dalli.android.model.UserAccount;
 import com.comsysto.findparty.User;
 
 
@@ -27,8 +25,6 @@ import com.comsysto.findparty.User;
  */
 public class StartActivity extends Activity {
 
-    private final static String TAG = Constants.LOG_AUTH_PREFIX + StartActivity.class.getSimpleName();
-
     @Override
 	protected void onResume() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().detectAll().permitAll().build();
@@ -38,28 +34,13 @@ public class StartActivity extends Activity {
 
         StrictMode.enableDefaults();
         
-	    AccountManager mAccountManager = AccountManager.get(this);
+	    AccountManager mAccountManager = AccountManager.get(getApplication());
 	    Account[] accountsByType = mAccountManager.getAccountsByType(AccountAuthenticator.AUTH_TYPE);
 	    if (accountsByType.length == 0) {
 	    	mAccountManager.addAccount(AccountAuthenticator.AUTH_TYPE, null, null, null, this, null, null);
 	    } else {
-	    	PartyManagerApplication application = (PartyManagerApplication)getApplication();
-
-            Account account = accountsByType[0];
-            setUser(application, account);
-
 	    	Intent intent = new Intent(this, SplashScreenActivity.class);
 	    	startActivity(intent);
 	    }
 	}
-
-    private void setUser(PartyManagerApplication application, Account account) {
-        User user = new User();
-        user.setUsername(account.name);
-        user.setPassword(AccountManager.get(this).getPassword(account));
-        application.setUser(user);
-    }
-
-
-
 }
