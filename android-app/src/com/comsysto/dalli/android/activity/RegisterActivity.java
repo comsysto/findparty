@@ -2,8 +2,10 @@ package com.comsysto.dalli.android.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import com.comsysto.dalli.android.application.Constants;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
 import com.comsysto.findparty.User;
 
@@ -16,6 +18,8 @@ import com.comsysto.findparty.User;
  */
 public class RegisterActivity extends LoginActivity {
 
+
+    private static final String TAG = Constants.LOG_SERVICE_PREFIX + RegisterActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,7 @@ public class RegisterActivity extends LoginActivity {
     }
 
     private void register(EditText userName, EditText password) {
+        Log.d(TAG, "creating new User Account on Server: " + userName);
         User user = ((PartyManagerApplication) getApplication()).createAccount(userName.getText().toString(), password.getText().toString());
 
         Intent intent = new Intent(this, LoginActivity.class);

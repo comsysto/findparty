@@ -85,4 +85,13 @@ public class PartyManagementServiceMock implements PartyService {
         return null;
     }
 
+    @Override
+    public List<User> getAllUsers() {
+        User user = new User();
+        user.setUsername("mockedUser");
+        user.setPassword("password");
+        user.setId("1abcd");
+        return Arrays.asList(user);
+    }
+
 }
