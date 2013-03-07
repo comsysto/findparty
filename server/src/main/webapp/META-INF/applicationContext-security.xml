@@ -21,13 +21,8 @@
 
     <global-method-security pre-post-annotations="enabled"/>
 
-    <!-- this authentication-manager is based on users in mongodb backend, which are loaded via the 'mongoBackedUserDetailsService' -->
-    <authentication-manager  alias="mongoBackedAuthenticationManager">
-        <authentication-provider user-service-ref="mongoBackedUserDetailsService" />
-    </authentication-manager>
+    <!-- this authentication-manager is based on static user-details (key-value in <user-service>) -->
 
-
-    <!-- this authentication-manager is based on static user-details (key-value in <user-service>)
     <authentication-manager  alias="staticAuthenticationManager">
         <authentication-provider>
             <user-service>
@@ -38,6 +33,10 @@
             </user-service>
         </authentication-provider>
     </authentication-manager>
-    -->
+
+    <!-- this authentication-manager is based on users in mongodb backend, which are loaded via the 'mongoBackedUserDetailsService' -->
+    <authentication-manager  alias="mongoBackedAuthenticationManager">
+        <authentication-provider user-service-ref="mongoBackedUserDetailsService" />
+    </authentication-manager>
 
 </beans:beans>

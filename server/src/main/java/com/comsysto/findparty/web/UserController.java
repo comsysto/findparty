@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: rpelger
@@ -23,7 +25,5 @@ public interface UserController {
 
     List<User> findAll();
 
-    @RequestMapping(value="/users/login", method = RequestMethod.POST)
-    @ResponseBody
-    boolean getUser(@RequestBody User user);
+    boolean getUser(User user);
 }
