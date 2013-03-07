@@ -1,25 +1,17 @@
 package com.comsysto.findparty.web;
 
-import java.util.List;
-
 import com.comsysto.findparty.ErrorModel;
+import com.comsysto.findparty.Party;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-import com.comsysto.findparty.Party;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Controller
 @RequestMapping("/parties")
@@ -60,7 +52,8 @@ public class PartyControllerImpl implements PartyController {
     @RequestMapping(value = "/search/{lon}/{lat}/{maxdistance}", method = RequestMethod.GET, produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    List<Party> search(@PathVariable("lon") Double lon, @PathVariable("lat") Double lat, @PathVariable("maxdistance") Double maxdistance) {
+    List<Party> search(@PathVariable("lon") Double lon, @PathVariable("lat") Double lat, @PathVariable("maxdistance") Double maxdistance, HttpServletRequest request) {
+        LOGGER.info("Header:" + request.getHeader("Authorization"));
         List<Party> parties = partyService.searchParties(lon, lat, maxdistance);
         return parties;
     }
@@ -111,8 +104,7 @@ public class PartyControllerImpl implements PartyController {
     public void delete(@PathVariable String partyId) {
         partyService.delete(partyId);        
     }
-    
-    
+
     @RequestMapping(value="/echo/{input}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody String echo(@PathVariable("input") String input) {
         return input;

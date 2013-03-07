@@ -11,31 +11,19 @@ import android.accounts.Account;
  */
 public class UserAccount extends Account {
 
-    private String username;
-
     private String password;
 
     public UserAccount(String name, String password, String type) {
         super(name, type);
-        this.username = username;
         this.password = password;
     }
 
     public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+        return name;
     }
 
     public String getPassword() {
         return password;
     }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
 
 }

@@ -5,6 +5,7 @@ import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -14,9 +15,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.comsysto.dalli.android.R;
+import com.comsysto.dalli.android.application.Constants;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
 import com.comsysto.dalli.android.authentication.AccountAuthenticator;
+import com.comsysto.dalli.android.model.UserAccount;
 import com.comsysto.findparty.User;
+import org.w3c.dom.UserDataHandler;
 
 /**
  * Displays the login page.
@@ -24,6 +28,8 @@ import com.comsysto.findparty.User;
  * @author stefandjurasic
  */
 public class LoginActivity extends AccountAuthenticatorActivity {
+
+    private final static String TAG = Constants.LOG_AUTH_PREFIX + LoginActivity.class.getSimpleName();
 
     public static final String PARAM_AUTHTOKEN_TYPE = "authtokenType";
     boolean loggedIn = false;
@@ -66,6 +72,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         Bundle extras = getIntent().getExtras();
         if(extras!=null) {
             User user = (User) extras.get("registeredUser");
+            Log.d(TAG, "trying to login existing User: " + user);
             login(user.getUsername(), user.getPassword());
         }
     }
@@ -89,11 +96,13 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 
     protected void login(String username, String password) {
         if (isNotEmpty(username) && isNotEmpty(password) && authenticate(username, password)) {
+            Log.d(TAG, "creating Application Account on device");
             createApplicationAccount(username, password);
             Intent intent = new Intent(this, StartActivity.class);
             startActivity(intent);
             finish();
         } else {
+            Log.d(TAG, "login failed for username/password: " +username + "/" + password);
             error.setText(getString(R.string.LOGIN_FAILED_LABEL));
             error.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
             error.setVisibility(View.VISIBLE);
@@ -160,8 +169,16 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     private void createApplicationAccount(String username, String password) {
         final Account account = new Account(username, AccountAuthenticator.AUTH_TYPE);
         Account[] accountsByType = accountManager.getAccountsByType(AccountAuthenticator.AUTH_TYPE);
-        if(accountsByType.length==0)
-            accountManager.addAccountExplicitly(account, password, null);
+        if(accountsByType.length==0) {
+            Log.d(TAG, "adding new device Account: " + account);
+            Bundle userData = new Bundle();
+            userData.putString("password", password);
+            accountManager.addAccountExplicitly(account, password, userData);
+        } else if(accountsByType.length == 1) {
+            Log.d(TAG, "account already exists on device -> using this account");
+        } else {
+            Log.d(TAG, "multiple accounts for this application exists: " + accountsByType.length);
+        }
     }
 
 }

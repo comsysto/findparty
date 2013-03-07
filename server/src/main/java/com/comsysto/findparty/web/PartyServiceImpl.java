@@ -109,6 +109,12 @@ public class PartyServiceImpl implements PartyService {
     }
 
     @Override
+    public List<User> getAllUsers() {
+        return mongoOperations.findAll(User.class);
+    }
+
+
+    @Override
     public List<Party> getAllParties(String username) {
         Criteria criteria = Criteria.where("owner").is(username);
         List<Party> parties = mongoOperations.find(new Query(criteria), Party.class);
