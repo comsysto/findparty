@@ -1,0 +1,8 @@
+{
+  "username" : "tim",
+  "password" : "test",
+  "picture" : {
+    "name": "pic1.jpg",
+    "content" : "abcde"
+  }
+}
