@@ -27,7 +27,6 @@ public class ManageUserPictureDialogActivity extends AbstractActivity {
 
 
     public static final int PICTURE_SIZE = 150;
-    private Bitmap bitmap;
 
     private ImageView userPicture;
 
@@ -37,7 +36,7 @@ public class ManageUserPictureDialogActivity extends AbstractActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        User user = getPartyManagerApplication().getUser();
+        User user = getPartyManagerApplication().getUserFromBackend();
 
         setContentView(R.layout.manage_user_picture_dialog);
 
@@ -48,11 +47,11 @@ public class ManageUserPictureDialogActivity extends AbstractActivity {
 
 
         if (user.getPicture() == null) {
-
-            //hide delete button
+            deleteButton.setVisibility(View.GONE);
         }
         else {
-            //fill userPicture from user
+            byte[] content = user.getPicture().getContent();
+            userPicture.setImageBitmap(BitmapFactory.decodeByteArray(content, 0, content.length));
         }
 
         manageButton.setOnClickListener(new View.OnClickListener() {
@@ -70,19 +69,16 @@ public class ManageUserPictureDialogActivity extends AbstractActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0 && resultCode == Activity.RESULT_OK)
             try {
-                // We need to recyle unused bitmaps
-                if (bitmap != null) {
-                    bitmap.recycle();
-                }
                 InputStream stream = getContentResolver().openInputStream(
                         data.getData());
-                bitmap = BitmapFactory.decodeStream(stream);
+                Bitmap bitmap = BitmapFactory.decodeStream(stream);
 
                 Bitmap resizedBitmap = resizeBitmap(bitmap);
                 stream.close();
 
                 bitmap.recycle();
                 getPartyManagerApplication().saveUserPicture(resizedBitmap);
+                resizedBitmap.recycle();
                 finish();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
