@@ -121,6 +121,14 @@ public class PartyServiceImpl implements PartyService {
         return foundUser!=null;
     }
 
+    @Override
+    public void update(User user) {
+        //checks if user with same id exists
+        findById(user.getId());
+
+        mongoService.getMongoTemplate().save(user);
+    }
+
 
     @Override
     public List<Party> getAllParties(String username) {

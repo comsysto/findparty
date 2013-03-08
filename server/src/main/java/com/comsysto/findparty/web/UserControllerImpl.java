@@ -3,6 +3,7 @@ package com.comsysto.findparty.web;
 import com.comsysto.findparty.User;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,8 +32,8 @@ public class UserControllerImpl implements  UserController {
     }
 
     @Override
-    @RequestMapping(value="/users/{username}", method = RequestMethod.GET)
-    public @ResponseBody User getUser(@PathVariable("username") String username) {
+    @RequestMapping(value="/users", method = RequestMethod.GET)
+    public @ResponseBody User getUser(@RequestParam("username") String username) {
         return partyService.getUser(username);
     }
 
@@ -40,6 +41,16 @@ public class UserControllerImpl implements  UserController {
     @RequestMapping(value="/users/login", method = RequestMethod.POST)
     public @ResponseBody boolean getUser(@RequestBody User user) {
         return validateUser(user);
+    }
+
+    @RequestMapping(value = "/users/{userId}", method = RequestMethod.PUT, consumes = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    public void update(@RequestBody User user, @PathVariable String userId) {
+
+        if(!user.getId().equals(userId))
+            throw new IllegalArgumentException("Id mismatch of requested party(id="+userId+") and provided user(id="+user.getId()+") does not match");
+
+        partyService.update(user);
     }
 
     private boolean validateUser(User user) {
@@ -54,12 +65,4 @@ public class UserControllerImpl implements  UserController {
     private boolean isPasswordValid(User user, User foundUser) {
         return user.getPassword().equals(foundUser.getPassword());
     }
-
-    @Override
-    @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public @ResponseBody List<User> findAll() {
-        return partyService.getAllUsers();
-    }
-
-
 }

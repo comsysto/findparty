@@ -3,6 +3,7 @@ package com.comsysto.dalli.android.application;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Application;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -12,9 +13,11 @@ import com.comsysto.dalli.android.model.CategoryType;
 import com.comsysto.dalli.android.service.PartyManagementServiceImpl;
 import com.comsysto.dalli.android.service.PartyManagementServiceMock;
 import com.comsysto.findparty.Party;
+import com.comsysto.findparty.Picture;
 import com.comsysto.findparty.User;
 import com.comsysto.findparty.web.PartyService;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 /**
@@ -54,7 +57,7 @@ public class PartyManagerApplication extends Application {
         Log.d(TAG, "initializing application");
 		this.ready = false;
 		if (isConnected()) {
-			initializeOnlineService(LOCAL_ROB);
+			initializeOnlineService(LOCAL_STEFAN);
 		} else {
             //TODO: If no network connection available close the application with a hint!
             Log.d(TAG, "using Mock-Service");
@@ -165,5 +168,19 @@ public class PartyManagerApplication extends Application {
         }
         Log.d(TAG, "authentication failed!");
         return false;
+    }
+
+    public void saveUserPicture(Bitmap resizedBitmap) {
+        User user = partyService.getUser(getUser().getUsername());
+         Picture picture = user.getPicture();
+        if (picture == null) {
+            picture = new Picture();
+            user.setPicture(picture);
+        }
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        picture.setContent(stream.toByteArray());
+        partyService.update(user);
     }
 }

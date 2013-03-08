@@ -19,6 +19,7 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -184,7 +185,7 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
 
     @Override
     public User getUser(String username) {
-        return restTemplate.getForObject(urlBuilder.createUri(USER_SERVICE_PATH, username), User.class);
+        return restTemplate.getForObject(urlBuilder.createUri(USER_SERVICE_PATH+"?username=" + username), User.class);
     }
 
     @Override
@@ -195,6 +196,16 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
     @Override
     public Boolean login(User user) {
         return restTemplate.postForObject(urlBuilder.createUri(USER_SERVICE_PATH, "login"), user, Boolean.class);
+    }
+
+    @Override
+    public void update(User user) {
+        String url = urlBuilder.createUri(USER_SERVICE_PATH, user.getId());
+        try {
+            restTemplate.put(url, user);
+        } catch (Exception e) {
+            Log.i("MY_PARTIES", "Fehler beim updaten des Users: " + user);
+        }
     }
 
     @Override

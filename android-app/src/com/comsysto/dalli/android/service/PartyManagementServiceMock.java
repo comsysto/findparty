@@ -99,4 +99,9 @@ public class PartyManagementServiceMock implements PartyService {
         return true;
     }
 
+    @Override
+    public void update(User user) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
 }
