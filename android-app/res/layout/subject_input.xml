@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+
+<GridLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:background="@drawable/gradient_background">
+        android:layout_height="fill_parent"
+        android:rowCount="4"
+        android:columnCount="3"
+        android:layout_gravity="center">
 
-    <ImageView
-            android:src="@drawable/logo_findbuddies_460px_v02"
-            android:id="@+id/imageView1"
-            android:layout_width="260dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"/>
 
     <Space
             android:layout_width="fill_parent"
@@ -29,14 +24,13 @@
             android:layout_gravity="center"/>
 
     <EditText
-            android:layout_width="250dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/subjectEditText"
-            android:layout_row="5"
-            android:layout_column="5"
-            android:layout_span="5"
+            android:layout_row="2"
+            android:layout_column="0"
+            android:layout_span="3"
             android:layout_margin="10dp"/>
-
 
     <LinearLayout
             android:orientation="horizontal"
@@ -61,5 +55,4 @@
                     style="@style/CommonPartyButton"/>
 
     </LinearLayout>
-
-</LinearLayout>
+</GridLayout>
