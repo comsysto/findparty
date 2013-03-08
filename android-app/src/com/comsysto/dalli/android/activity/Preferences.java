@@ -27,7 +27,7 @@ public class Preferences extends PreferenceActivity {
 	 * when the settings are left, we go back to main screen
 	 */
 	public void onBackPressed() {
-		((PartyManagerApplication)getApplication()).initializeService();
+		((PartyManagerApplication)getApplication()).initializePartyService();
 		Intent intent = new Intent(this, SplashScreenActivity.class);
 	    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	    startActivity(intent);

@@ -8,8 +8,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
-import com.comsysto.dalli.android.authentication.AccountAuthenticator;
-import com.comsysto.dalli.android.model.CategoryType;
+import com.comsysto.dalli.android.account.AccountAuthenticator;
+import com.comsysto.dalli.android.account.AccountService;
 import com.comsysto.dalli.android.service.PartyManagementServiceImpl;
 import com.comsysto.dalli.android.service.PartyManagementServiceMock;
 import com.comsysto.findparty.Party;
@@ -37,7 +37,6 @@ public class PartyManagerApplication extends Application {
 
     private static final String CLOUD_HOST =  "snuggle.eu01.aws.af.cm";
     private static final String LOCAL_EMULATOR = "10.0.2.2:8080";
-    private static final String LOCAL_TIM = "192.168.178.62:8080";
     private static final String LOCAL_STEFAN = "192.168.178.69:8080";
     private static final String LOCAL_ROB = "192.168.178.65:8080";
     private static final String TAG = Constants.LOG_APP_PREFIX + PartyManagerApplication.class.getSimpleName();
@@ -46,18 +45,25 @@ public class PartyManagerApplication extends Application {
 
 	private PartyService partyService;
 
+    private AccountService accountService;
+
 	private boolean ready;
 
 	@Override
 	public void onCreate() {
-		initializeService();
-	}
+		initializePartyService();
+        intializeAccountService();
+    }
 
-	public void initializeService() {
+    private void intializeAccountService() {
+        accountService = new AccountService(this.getApplicationContext());
+    }
+
+    public void initializePartyService() {
         Log.d(TAG, "initializing application");
 		this.ready = false;
 		if (isConnected()) {
-			initializeOnlineService(LOCAL_STEFAN);
+			initializeOnlineService(CLOUD_HOST);
 		} else {
             //TODO: If no network connection available close the application with a hint!
             Log.d(TAG, "using Mock-Service");
@@ -89,18 +95,9 @@ public class PartyManagerApplication extends Application {
 		task.execute();
 	}
 
-	public void createParty(Party newParty) {
-		this.partyService.createParty(newParty);
-	}
-
-
-	public List<Party> getParties() {
-		return this.partyService.getAllParties(getUser().getUsername());
-	}
-
-	public void deleteParty(Party party) {
-		this.partyService.delete(party.getId());
-	}
+    public boolean isReady() {
+        return ready;
+    }
 
 	boolean isConnected() {
 		ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
@@ -115,23 +112,7 @@ public class PartyManagerApplication extends Application {
 		}
 	}
 
-	public boolean isReady() {
-		return ready;
-	}
-
-	public void saveParty(Party updatedParty) {
-		this.partyService.update(updatedParty);
-	}
-
-	public void setSelectedParty(Party selectedParty) {
-		this.selectedParty = selectedParty;
-	}
-
-	public Party getSelectedParty() {
-		return selectedParty;
-	}
-
-	public User getUser() {
+    public User getUser() {
         AccountManager accountManager = AccountManager.get(this);
         Account[] accounts = accountManager.getAccountsByType(AccountAuthenticator.AUTH_TYPE);
         if(accounts.length > 0) {
@@ -144,24 +125,6 @@ public class PartyManagerApplication extends Application {
         return null;
     }
 
-    public User getUserFromBackend() {
-        User user = getUser();
-        return partyService.getUser(user.getUsername());
-    }
-
-	public User createAccount(String userName, String password) {
-        return this.partyService.createUser(userName, password);
-	}
-
-    public List<Party> searchParties(Double longitude, Double latitude, Double maxDistance) {
-        return this.partyService.searchParties(longitude, latitude, maxDistance);
-    }
-
-    public List<String> getAllCategories() {
-        return CategoryType.names();
-
-    }
-
     public boolean authenticate(String username, String password) {
         Log.d(TAG, "authenticating username/password: " + username + "/" + password);
         User user = new User();
@@ -171,12 +134,28 @@ public class PartyManagerApplication extends Application {
             Log.d(TAG, "user successfully authenticated: " + user);
             return true;
         }
-        Log.d(TAG, "authentication failed!");
+        Log.d(TAG, "account failed!");
         return false;
     }
 
+    public PartyService getPartyService() {
+        return partyService;
+    }
+
+    public AccountService getAccountService() {
+        return accountService;
+    }
+
+    public Party getSelectedParty() {
+        return selectedParty;
+    }
+
+    public void setSelectedParty(Party selectedParty) {
+        this.selectedParty = selectedParty;
+    }
+
     public void saveUserPicture(Bitmap resizedBitmap) {
-        User user = getUserFromBackend();
+        User user = partyService.getUser(getAccountService().getUsername());
         Picture picture = user.getPicture();
         if (picture == null) {
             picture = new Picture();
@@ -190,7 +169,7 @@ public class PartyManagerApplication extends Application {
     }
 
     public void deleteUserPicture() {
-        User user = getUserFromBackend();
+        User user = partyService.getUser(getAccountService().getUsername());
         user.setPicture(null);
         partyService.update(user);
     }

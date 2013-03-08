@@ -5,10 +5,7 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.StrictMode;
-import com.comsysto.dalli.android.application.Constants;
-import com.comsysto.dalli.android.application.PartyManagerApplication;
-import com.comsysto.dalli.android.authentication.AccountAuthenticator;
-import com.comsysto.findparty.User;
+import com.comsysto.dalli.android.account.AccountAuthenticator;
 
 
 /**
@@ -32,15 +29,8 @@ public class StartActivity extends Activity {
 
         super.onResume();
 
-        StrictMode.enableDefaults();
-        
-	    AccountManager mAccountManager = AccountManager.get(getApplication());
-	    Account[] accountsByType = mAccountManager.getAccountsByType(AccountAuthenticator.AUTH_TYPE);
-	    if (accountsByType.length == 0) {
-	    	mAccountManager.addAccount(AccountAuthenticator.AUTH_TYPE, null, null, null, this, null, null);
-	    } else {
-	    	Intent intent = new Intent(this, SplashScreenActivity.class);
-	    	startActivity(intent);
-	    }
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+
 	}
 }

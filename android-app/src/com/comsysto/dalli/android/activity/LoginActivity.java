@@ -1,8 +1,6 @@
 package com.comsysto.dalli.android.activity;
 
-import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
-import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,8 +14,6 @@ import android.widget.TextView;
 import com.comsysto.dalli.android.R;
 import com.comsysto.dalli.android.application.Constants;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
-import com.comsysto.dalli.android.authentication.AccountAuthenticator;
-import com.comsysto.findparty.User;
 
 /**
  * Displays the login page.
@@ -31,7 +27,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     public static final String PARAM_AUTHTOKEN_TYPE = "authtokenType";
     protected EditText userName;
     protected EditText password;
-    protected AccountManager accountManager;
     protected TextView error;
 
     protected Button loginButton;
@@ -42,8 +37,16 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        accountManager = AccountManager.get(getApplication());
+        //if there is an Account on device -> we use this and proceed to Dashboard.
+        //else -> we create the view and display it.
+        if(isLoggedIn()) {
+            startDashboard();
+        } else {
+            createLoginView();
+        }
+    }
 
+    private void createLoginView() {
         loginButton = (Button) findViewById(R.id.LOGIN_BUTTON);
         registerButton = (Button) findViewById(R.id.REGISTER_BUTTON);
         error = (TextView) findViewById(R.id.error);
@@ -57,28 +60,13 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 
         createLoginButtonListener();
         createRegisterButtonListener();
-
-        if(comesFromRegistration()) {
-            loginRegisteredUser();
-        }
     }
 
-    private void loginRegisteredUser() {
-        Bundle extras = getIntent().getExtras();
-        if(extras!=null) {
-            User user = (User) extras.get("registeredUser");
-            Log.d(TAG, "trying to login existing User: " + user);
-            login(user.getUsername(), user.getPassword());
-        }
+    private boolean isLoggedIn() {
+        return getPartyManangerApplication().getAccountService().hasAccount();
     }
 
-    private boolean comesFromRegistration() {
-        Bundle extras = getIntent().getExtras();
-        if(extras != null && extras.containsKey("register")) {
-            return((Boolean)extras.get("register"));
-        }
-        return false;
-    }
+
 
     protected void register(String username, String password) {
         Intent intent = new Intent(this, RegisterActivity.class);
@@ -88,26 +76,31 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         finish();
     }
 
-
     protected void login(String username, String password) {
-        if (isNotEmpty(username) && isNotEmpty(password) && authenticate(username, password)) {
-            Log.d(TAG, "creating Application Account on device");
-            createApplicationAccount(username, password);
-            Intent intent = new Intent(this, StartActivity.class);
-            startActivity(intent);
-            finish();
-        } else {
-            Log.d(TAG, "login failed for username/password: " +username + "/" + password);
+        if(isEmpty(username) || isEmpty(password)) {
+            Log.d(TAG, "login failed: username and/or password may not be empty");
             error.setText(getString(R.string.LOGIN_FAILED_LABEL));
             error.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
             error.setVisibility(View.VISIBLE);
         }
+        else if (!authenticate(username, password)) {
+            Log.d(TAG, "login failed: username/password not authenticated (" +username + "/" + password+")");
+            error.setText(getString(R.string.LOGIN_FAILED_LABEL));
+            error.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
+            error.setVisibility(View.VISIBLE);
+        } else {
+            startDashboard();
+        }
     }
 
+    private boolean authenticate(String username, String password) {
+        return getPartyManangerApplication().authenticate(username, password);
+    }
 
-
-    protected boolean authenticate(String username, String password) {
-        return ((PartyManagerApplication)getApplication()).authenticate(username, password);
+    private void startDashboard() {
+        Intent intent = new Intent(this, SplashScreenActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     protected void setLoginButtonVisible(boolean visible) {
@@ -118,13 +111,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         }
     }
 
-    protected boolean isNotEmpty(String value) {
-        if (value != null && value.length()>0) {
-            return true;
-        }
-        return false;
-    }
-
+    //--- Listener ---//
     private void createRegisterButtonListener() {
         if (registerButton != null) {
             registerButton.setOnClickListener(new View.OnClickListener() {
@@ -161,19 +148,12 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         };
     }
 
-    private void createApplicationAccount(String username, String password) {
-        final Account account = new Account(username, AccountAuthenticator.AUTH_TYPE);
-        Account[] accountsByType = accountManager.getAccountsByType(AccountAuthenticator.AUTH_TYPE);
-        if(accountsByType.length==0) {
-            Log.d(TAG, "adding new device Account: " + account);
-            Bundle userData = new Bundle();
-            userData.putString("password", password);
-            accountManager.addAccountExplicitly(account, password, userData);
-        } else if(accountsByType.length == 1) {
-            Log.d(TAG, "account already exists on device -> using this account");
-        } else {
-            Log.d(TAG, "multiple accounts for this application exists: " + accountsByType.length);
-        }
+    //--- Helper functions --//
+    protected boolean isEmpty(String value) {
+        return value == null || value.length()==0;
     }
 
+    private PartyManagerApplication getPartyManangerApplication() {
+        return ((PartyManagerApplication)getApplication());
+    }
 }

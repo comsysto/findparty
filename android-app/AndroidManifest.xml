@@ -30,16 +30,12 @@
                   android:theme="@android:style/Theme.NoTitleBar"/>
         <activity android:name=".activity.ManageUserPictureDialogActivity" android:theme="@android:style/Theme.Dialog" android:excludeFromRecents="true"/>
 
-        <service
-                android:name=".authentication.AuthenticationService"
-                android:exported="true">
+
+        <service android:name=".account.AuthenticatorService">
             <intent-filter>
-                <action
-                        android:name="android.accounts.AccountAuthenticator"/>
+                <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>
-            <meta-data
-                    android:name="android.accounts.AccountAuthenticator"
-                    android:resource="@xml/authenticator"/>
+            <meta-data android:name="android.accounts.AccountAuthenticator" android:resource="@xml/authenticator"/>
         </service>
 
     </application>
@@ -48,6 +44,7 @@
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"></uses-permission>
+    <uses-permission android:name="android.permission.USE_CREDENTIALS"></uses-permission>
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"></uses-permission>
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>

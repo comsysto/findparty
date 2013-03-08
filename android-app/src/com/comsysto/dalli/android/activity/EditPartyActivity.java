@@ -32,7 +32,7 @@ public class EditPartyActivity extends PartyActivity {
 
 			@Override
 			public void onClick(View v) {
-				getPartyManagerApplication().saveParty(party);
+				getPartyManagerApplication().getPartyService().update(party);
 				goToSplashScreen(EditPartyActivity.this);
 			}
 		};

@@ -1,7 +1,5 @@
 package com.comsysto.dalli.android.activity;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +12,6 @@ import android.widget.ListView;
 import com.comsysto.dalli.android.R;
 import com.comsysto.dalli.android.adapter.PartyListAdapter;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
-import com.comsysto.dalli.android.authentication.AccountAuthenticator;
 import com.comsysto.dalli.android.menu.OptionMenuHandler;
 import com.comsysto.findparty.Party;
 
@@ -44,17 +41,20 @@ public abstract class AbstractPartyListActivity extends ListActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-	    AccountManager mAccountManager = AccountManager.get(this);
-	    Account[] accountsByType = mAccountManager.getAccountsByType(AccountAuthenticator.AUTH_TYPE);
-	    if (accountsByType.length == 0) {
-	    	finish();
-	    } else {
-	    	initArrayAdapter();
-	    }
+        String username = getUsername();
+        if(username != null) {
+            initArrayAdapter(username);
+        } else {
+            finish();
+        }
 	}
 
-	protected void initArrayAdapter() {
-		this.parties = getPartyManagerApplication().getParties();
+    private String getUsername() {
+        return getPartyManagerApplication().getAccountService().getUsername();
+    }
+
+    protected void initArrayAdapter(String username) {
+		this.parties = getPartyManagerApplication().getPartyService().getAllParties(username);
         Log.i("MY_PARTIES", "retrieved my parties from server: " + this.parties);
 		setArrayAdapter(new PartyListAdapter(this, parties));
 		setListAdapter(getArrayAdapter());
@@ -81,14 +81,9 @@ public abstract class AbstractPartyListActivity extends ListActivity {
 		Party selectedParty = getArrayAdapter().getItem((int)info.id);
 
 		switch (item.getItemId()) {
-//		case R.id.toggle_task:
-//			 TaskStatus taskStatus = selectedTask.getStatus() == TaskStatus.ACTIVE ? TaskStatus.DONE : TaskStatus.ACTIVE;
-//			 selectedTask.setStatus(taskStatus);
-//			 this.notifyDataSetChanged();
-//			 return true;
 		case R.id.delete_party:
             Log.i("MY_PARTIES", "deleting party: " +selectedParty);
-			getPartyManagerApplication().deleteParty(selectedParty);
+			getPartyManagerApplication().getPartyService().delete(selectedParty.getId());
             this.notifyDataSetChanged();
 			return true;
 		case R.id.edit_party:
@@ -128,7 +123,7 @@ public abstract class AbstractPartyListActivity extends ListActivity {
 	}
 
 	public void notifyDataSetChanged() {
-		initArrayAdapter();
+		initArrayAdapter(getUsername());
 	}
 
 }
