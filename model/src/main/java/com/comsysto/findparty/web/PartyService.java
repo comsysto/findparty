@@ -40,4 +40,6 @@ public interface PartyService {
     public List<User> getAllUsers();
 
     public Boolean login(User user);
+
+    void update(User user);
 }

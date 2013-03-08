@@ -2,6 +2,7 @@ package com.comsysto.findparty.web;
 
 import com.comsysto.findparty.ErrorModel;
 import com.comsysto.findparty.Party;
+import com.comsysto.findparty.User;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -76,7 +77,7 @@ public class PartyControllerImpl implements PartyController {
         
         partyService.update(party);            
     }
-    
+
     @RequestMapping(value = "/{partyId}/subscriptions", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void subscribe(@PathVariable String partyId, @RequestParam(value = "action", required = false) String action, @RequestBody String username) {
