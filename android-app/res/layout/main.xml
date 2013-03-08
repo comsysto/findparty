@@ -34,4 +34,9 @@
             android:text="@string/MY_PARTIES_BUTTON"
             android:id="@+id/MY_PARTIES_BUTTON"/>
 
+    <Button
+            style="@style/CommonPartyButton"
+            android:text="@string/MANAGE_USER_PICTURE_BUTTON"
+            android:id="@+id/MANAGE_USER_PICTURE_BUTTON"/>
+
 </LinearLayout>

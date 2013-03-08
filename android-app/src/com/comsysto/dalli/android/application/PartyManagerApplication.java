@@ -1,16 +1,15 @@
 package com.comsysto.dalli.android.application;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Log;
-import com.comsysto.dalli.android.authentication.AccountAuthenticator;
-import com.comsysto.dalli.android.model.CategoryType;
 import com.comsysto.dalli.android.service.PartyManagementServiceImpl;
 import com.comsysto.dalli.android.service.PartyManagementServiceMock;
+import com.comsysto.dalli.android.model.CategoryType;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.User;
 import com.comsysto.findparty.web.PartyService;
@@ -34,8 +33,9 @@ public class PartyManagerApplication extends Application {
 
     private static final String CLOUD_HOST =  "snuggle.eu01.aws.af.cm";
     private static final String LOCAL_EMULATOR = "10.0.2.2:8080";
+    private static final String LOCAL_TIM = "192.168.178.62:8080";
+    private static final String LOCAL_ROB = "192.168.1.169:8080";
     private static final String LOCAL_STEFAN = "192.168.178.69:8080";
-    private static final String LOCAL_ROB = "192.168.178.65:8080";
     private static final String TAG = Constants.LOG_APP_PREFIX + PartyManagerApplication.class.getSimpleName();
 
     private Party selectedParty;
@@ -43,6 +43,8 @@ public class PartyManagerApplication extends Application {
 	private PartyService partyService;
 
 	private boolean ready;
+	
+	private User user;
 
 	@Override
 	public void onCreate() {
@@ -53,7 +55,7 @@ public class PartyManagerApplication extends Application {
         Log.d(TAG, "initializing application");
 		this.ready = false;
 		if (isConnected()) {
-			initializeOnlineService(LOCAL_ROB);
+			initializeOnlineService(LOCAL_STEFAN);
 		} else {
             //TODO: If no network connection available close the application with a hint!
             Log.d(TAG, "using Mock-Service");
@@ -91,7 +93,7 @@ public class PartyManagerApplication extends Application {
 
 
 	public List<Party> getParties() {
-		return this.partyService.getAllParties(getUser().getUsername());
+		return this.partyService.getAllParties(user.getUsername());
 	}
 
 	public void deleteParty(Party party) {
@@ -127,18 +129,13 @@ public class PartyManagerApplication extends Application {
 		return selectedParty;
 	}
 
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	public User getUser() {
-        AccountManager accountManager = AccountManager.get(this);
-        Account[] accounts = accountManager.getAccountsByType(AccountAuthenticator.AUTH_TYPE);
-        if(accounts.length > 0) {
-            Account account = accounts[0];
-            User user = new User();
-            user.setUsername(account.name);
-            user.setPassword(accountManager.getPassword(account));
-            return user;
-        }
-        return null;
-    }
+		return user;
+	}
 
 	public User createAccount(String userName, String password) {
         return this.partyService.createUser(userName, password);
@@ -155,10 +152,8 @@ public class PartyManagerApplication extends Application {
 
     public boolean authenticate(String username, String password) {
         Log.d(TAG, "authenticating username/password: " + username + "/" + password);
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(password);
-        if(partyService.login(user)) {
+        User user = partyService.getUser(username);
+        if(user!=null && user.getPassword() != null && user.getPassword().equals(password)) {
             Log.d(TAG, "user successfully authenticated: " + user);
             return true;
         }

@@ -28,6 +28,7 @@
         <activity android:name=".activity.Preferences"/>
         <activity android:name=".activity.FindPartiesMapActivity" android:label="@string/APP_NAME"
                   android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name=".activity.ManageUserPictureDialogActivity" android:theme="@android:style/Theme.Dialog" android:excludeFromRecents="true"/>
 
         <service
                 android:name=".authentication.AuthenticationService"

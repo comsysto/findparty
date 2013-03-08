@@ -37,6 +37,8 @@ public class SplashScreenActivity extends AbstractActivity {
 		Button findPartyButton = (Button) findViewById(R.id.FIND_PARTY_BUTTON);
 		Button createNewPartyButton = (Button) findViewById(R.id.CREATE_NEW_PARTY_BUTTON);
         Button myPartiesButton = (Button) findViewById(R.id.MY_PARTIES_BUTTON);
+        Button manageUserPicture = (Button) findViewById(R.id.MANAGE_USER_PICTURE_BUTTON);
+
 
         findPartyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +69,18 @@ public class SplashScreenActivity extends AbstractActivity {
             public void onClick(View v) {
                 if (getPartyManagerApplication().isReady()) {
                     goTo(SplashScreenActivity.this, CreatePartyActivity.class);
+                } else {
+                    SplashScreenActivity.this.showDialog(5);
+                }
+            }
+        });
+
+        manageUserPicture.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (getPartyManagerApplication().isReady()) {
+                    goTo(SplashScreenActivity.this, ManageUserPictureDialogActivity.class);
                 } else {
                     SplashScreenActivity.this.showDialog(5);
                 }
