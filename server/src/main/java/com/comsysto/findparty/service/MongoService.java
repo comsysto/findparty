@@ -7,11 +7,13 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.GeospatialIndex;
 import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.query.Order;
+import org.springframework.stereotype.Service;
 
 /**
  * User: rpelger
  * Date: 07.03.13
  */
+@Service
 public class MongoService {
 
     private MongoTemplate mongoTemplate;
