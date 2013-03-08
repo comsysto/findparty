@@ -26,6 +26,7 @@ import java.io.InputStream;
 public class ManageUserPictureDialogActivity extends AbstractActivity {
 
 
+    public static final int PICTURE_SIZE = 150;
     private Bitmap bitmap;
 
     private ImageView userPicture;
@@ -76,13 +77,37 @@ public class ManageUserPictureDialogActivity extends AbstractActivity {
                 InputStream stream = getContentResolver().openInputStream(
                         data.getData());
                 bitmap = BitmapFactory.decodeStream(stream);
+
+                Bitmap resizedBitmap = resizeBitmap(bitmap);
                 stream.close();
-                userPicture.setImageBitmap(bitmap);
+
+                bitmap.recycle();
+                userPicture.setImageBitmap(resizedBitmap);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private Bitmap resizeBitmap(Bitmap bitmap) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+
+        int newWidth = 0;
+        int newHeight = 0;
+        if (height < width) {
+            newWidth = PICTURE_SIZE;
+            newHeight = (height* PICTURE_SIZE /width);
+        }
+        else {
+            newHeight = PICTURE_SIZE;
+            newWidth = (width* PICTURE_SIZE /height);
+
+        }
+
+        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
     }
 }
