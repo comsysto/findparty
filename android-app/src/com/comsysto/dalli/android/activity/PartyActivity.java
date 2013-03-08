@@ -12,6 +12,7 @@ import android.widget.*;
 import com.comsysto.dalli.android.R;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
 import com.comsysto.dalli.android.menu.OptionMenuHandler;
+import com.comsysto.dalli.android.model.CategoryType;
 import com.comsysto.dalli.android.service.LocationInfo;
 import com.comsysto.dalli.android.service.LocationRequester;
 import com.comsysto.dalli.android.service.LocationService;
@@ -417,7 +418,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
 
     protected List<String> getAllCategories() {
-        return ((PartyManagerApplication) getApplication()).getAllCategories();
+        return CategoryType.names();
     }
 
     @Override

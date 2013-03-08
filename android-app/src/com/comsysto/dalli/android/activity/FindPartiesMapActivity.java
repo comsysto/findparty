@@ -195,7 +195,7 @@ public class FindPartiesMapActivity extends MapActivity {
 
                     Log.d("FindPartiesMapActivity", "Current map center lon/lat : " + mapLongitude + " / " + mapLatitude);
 
-                    List<Party> parties = getPartyManagerApplication().searchParties(mapLongitude, mapLatitude, SEARCH_DISTANCE);
+                    List<Party> parties = getPartyManagerApplication().getPartyService().searchParties(mapLongitude, mapLatitude, SEARCH_DISTANCE);
 
                     Log.d("FindPartiesMapActivity", parties.size() + " parties found in " + SEARCH_DISTANCE + " km area: " + parties.toString());
 

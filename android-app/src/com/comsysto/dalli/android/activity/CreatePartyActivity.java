@@ -20,7 +20,7 @@ public class CreatePartyActivity extends PartyActivity {
 
 			@Override
 			public void onClick(View v) {
-                getPartyManagerApplication().createParty(party);
+                getPartyManagerApplication().getPartyService().createParty(party);
                 goToSplashScreen(CreatePartyActivity.this);
             }
 		};

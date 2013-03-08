@@ -1,8 +1,8 @@
 package com.comsysto.findparty.web;
 
 import com.comsysto.findparty.Category;
+import com.comsysto.findparty.service.MongoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -19,13 +19,13 @@ import java.util.Set;
 public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
-    public MongoOperations mongoOperations;
+    public MongoService mongoService;
 
 
     @Override
     public Set<Category> getAllCategories() {
         Set<Category> categories = new HashSet<Category>();
-        categories.addAll(mongoOperations.findAll(Category.class));
+        categories.addAll(mongoService.getMongoTemplate().findAll(Category.class));
         return categories;
     }
 

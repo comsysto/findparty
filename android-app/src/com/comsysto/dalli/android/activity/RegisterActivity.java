@@ -1,6 +1,5 @@
 package com.comsysto.dalli.android.activity;
 
-import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,14 +7,10 @@ import android.view.View;
 import android.widget.EditText;
 import com.comsysto.dalli.android.application.Constants;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
-import com.comsysto.findparty.User;
 
 /**
- * Created with IntelliJ IDEA.
  * User: rpelger
  * Date: 21.11.12
- * Time: 16:24
- * To change this template use File | Settings | File Templates.
  */
 public class RegisterActivity extends LoginActivity {
 
@@ -38,23 +33,42 @@ public class RegisterActivity extends LoginActivity {
 
     }
 
-    private void register(EditText userName, EditText password) {
-        Log.d(TAG, "creating new User Account on Server: " + userName.getText().toString());
-        User user = ((PartyManagerApplication) getApplication()).createAccount(userName.getText().toString(), password.getText().toString());
+    private void register(EditText usernameInput, EditText passwordInput) {
+        String username = usernameInput.getText().toString();
+        String password = passwordInput.getText().toString();
+
+        Log.d(TAG, "creating new User on Server: " + username+"/"+password);
+        boolean registered = createNewUser(username, password);
 
         Intent intent = new Intent(this, LoginActivity.class);
-        intent.putExtra("register", true);
-        intent.putExtra("registeredUser", user);
+        intent.putExtra("register", registered);
+
         startActivity(intent);
+    }
+
+    private boolean createNewUser(String username, String password) {
+        try {
+            getPartyManagerApplication().getPartyService().createUser(username, password);
+            getPartyManagerApplication().getAccountService().createAccount(username, password);
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, "Fehler beim Anlegen des Users: " +username+"/"+password + " :" +e.getMessage(), e);
+            return false;
+        }
+
+    }
+
+    private PartyManagerApplication getPartyManagerApplication() {
+        return ((PartyManagerApplication) getApplication());
     }
 
     private void setInputValues() {
         String inputUsername = (String) getIntent().getExtras().get("username");
         String inputPassword = (String) getIntent().getExtras().get("password");
-        if(isNotEmpty(inputUsername)) {
+        if(isEmpty(inputUsername)) {
             userName.setText(inputUsername);
         }
-        if(isNotEmpty(inputPassword)) {
+        if(isEmpty(inputPassword)) {
             password.setText(inputPassword);
         }
     }

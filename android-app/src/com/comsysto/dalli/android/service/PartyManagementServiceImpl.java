@@ -5,7 +5,7 @@ import android.accounts.AccountManager;
 import android.util.Log;
 import com.comsysto.dalli.android.application.Constants;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
-import com.comsysto.dalli.android.authentication.AccountAuthenticator;
+import com.comsysto.dalli.android.account.AccountAuthenticator;
 import com.comsysto.dalli.android.service.interceptor.ClientAuthenticationRequestInterceptor;
 import com.comsysto.dalli.android.service.interceptor.NoCacheClientRequestInterceptor;
 import com.comsysto.dalli.android.service.util.UrlBuilder;

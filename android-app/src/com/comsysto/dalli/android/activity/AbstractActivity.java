@@ -5,7 +5,7 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
 import com.comsysto.dalli.android.application.PartyManagerApplication;
-import com.comsysto.dalli.android.authentication.AccountAuthenticator;
+import com.comsysto.dalli.android.account.AccountAuthenticator;
 
 /**
  * Abstract activity for convenient methods.
