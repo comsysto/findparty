@@ -14,7 +14,7 @@
         http://www.springframework.org/schema/data/mongo
         http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
 
-    <mongo:db-factory id="mongoDbFactory" dbname="snuggledb"/>
+    <mongo:db-factory id="mongoDbFactory" dbname="snuggledb" />
 
     <context:component-scan base-package="com.comsysto.findparty"/>
 

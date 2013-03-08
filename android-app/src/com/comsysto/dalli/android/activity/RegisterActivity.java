@@ -1,5 +1,6 @@
 package com.comsysto.dalli.android.activity;
 
+import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,7 +39,7 @@ public class RegisterActivity extends LoginActivity {
     }
 
     private void register(EditText userName, EditText password) {
-        Log.d(TAG, "creating new User Account on Server: " + userName);
+        Log.d(TAG, "creating new User Account on Server: " + userName.getText().toString());
         User user = ((PartyManagerApplication) getApplication()).createAccount(userName.getText().toString(), password.getText().toString());
 
         Intent intent = new Intent(this, LoginActivity.class);

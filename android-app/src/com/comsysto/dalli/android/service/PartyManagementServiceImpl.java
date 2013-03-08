@@ -45,7 +45,7 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
 
         this.restTemplate = new RestTemplate(true, requestFactory);
         NoCacheClientRequestInterceptor noCacheInterceptor = new NoCacheClientRequestInterceptor();
-        ClientAuthenticationRequestInterceptor authInterceptor = new ClientAuthenticationRequestInterceptor(getUser(application));
+        ClientAuthenticationRequestInterceptor authInterceptor = new ClientAuthenticationRequestInterceptor(application);
 
         this.restTemplate.setInterceptors(Arrays.<ClientHttpRequestInterceptor>asList(noCacheInterceptor, authInterceptor));
         this.urlBuilder = new UrlBuilder(host);
@@ -177,7 +177,7 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
         user.setPassword(password);
         ResponseEntity<User> entity = restTemplate.postForEntity(urlBuilder.createFrom(USER_SERVICE_PATH), user, User.class);
 
-        //TODO check status code
+        Log.d(TAG, "create user response: " + entity.getStatusCode().value() + "-" + entity.getStatusCode().name() + " -> Body: " + entity.getBody());
 
         return entity.getBody();
     }
