@@ -64,6 +64,14 @@ public class ManageUserPictureDialogActivity extends AbstractActivity {
                 startActivityForResult(intent, 0);
             }
         });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getPartyManagerApplication().deleteUserPicture();
+                finish();
+            }
+        });
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

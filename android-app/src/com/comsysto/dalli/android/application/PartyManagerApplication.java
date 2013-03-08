@@ -188,4 +188,10 @@ public class PartyManagerApplication extends Application {
         picture.setContent(stream.toByteArray());
         partyService.update(user);
     }
+
+    public void deleteUserPicture() {
+        User user = getUserFromBackend();
+        user.setPicture(null);
+        partyService.update(user);
+    }
 }
