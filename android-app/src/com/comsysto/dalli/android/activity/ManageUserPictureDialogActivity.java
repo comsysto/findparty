@@ -36,7 +36,7 @@ public class ManageUserPictureDialogActivity extends AbstractActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        User user = getPartyManagerApplication().getUserFromBackend();
+        User user = getPartyManagerApplication().getUser();
 
         setContentView(R.layout.manage_user_picture_dialog);
 

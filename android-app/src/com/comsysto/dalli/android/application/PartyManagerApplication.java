@@ -113,16 +113,8 @@ public class PartyManagerApplication extends Application {
 	}
 
     public User getUser() {
-        AccountManager accountManager = AccountManager.get(this);
-        Account[] accounts = accountManager.getAccountsByType(AccountAuthenticator.AUTH_TYPE);
-        if(accounts.length > 0) {
-            Account account = accounts[0];
-            User user = new User();
-            user.setUsername(account.name);
-            user.setPassword(accountManager.getPassword(account));
-            return user;
-        }
-        return null;
+        String username = accountService.getUsername();
+        return partyService.getUser(username);
     }
 
     public boolean authenticate(String username, String password) {
@@ -155,7 +147,7 @@ public class PartyManagerApplication extends Application {
     }
 
     public void saveUserPicture(Bitmap resizedBitmap) {
-        User user = partyService.getUser(getAccountService().getUsername());
+        User user = getUser();
         Picture picture = user.getPicture();
         if (picture == null) {
             picture = new Picture();
@@ -169,7 +161,7 @@ public class PartyManagerApplication extends Application {
     }
 
     public void deleteUserPicture() {
-        User user = partyService.getUser(getAccountService().getUsername());
+        User user = getUser();
         user.setPicture(null);
         partyService.update(user);
     }
