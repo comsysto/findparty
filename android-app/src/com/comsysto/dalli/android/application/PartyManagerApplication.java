@@ -34,6 +34,7 @@ public class PartyManagerApplication extends Application {
 
     private static final String CLOUD_HOST =  "snuggle.eu01.aws.af.cm";
     private static final String LOCAL_EMULATOR = "10.0.2.2:8080";
+    private static final String LOCAL_TIM = "192.168.178.62:8080";
     private static final String LOCAL_STEFAN = "192.168.178.69:8080";
     private static final String LOCAL_ROB = "192.168.178.65:8080";
     private static final String TAG = Constants.LOG_APP_PREFIX + PartyManagerApplication.class.getSimpleName();
