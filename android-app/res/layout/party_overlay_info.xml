@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:rowCount="6"
-              android:columnCount="2"
-              android:background="@drawable/gradient_background">
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal"
+        android:background="@drawable/gradient_background">
 
     <ImageView
             android:layout_width="wrap_content"
@@ -16,13 +15,23 @@
             android:layout_column="0" android:layout_row="0" android:layout_columnSpan="2"
             android:layout_margin="5dp"/>
 
-    <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/userPicture" android:layout_gravity="center"
-            android:src="@drawable/androidmarker"
-            android:layout_column="0" android:layout_row="0" android:layout_columnSpan="2"
-            android:layout_margin="5dp"/>
+
+
+    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rowCount="6"
+                android:columnCount="2"
+                android:background="@drawable/gradient_background">
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/userPicture" android:layout_gravity="center"
+                android:src="@drawable/androidmarker"
+                android:layout_column="0" android:layout_row="0" android:layout_columnSpan="2"
+                android:layout_margin="5dp"/>
 
     <TextView
             android:layout_width="wrap_content"
@@ -101,3 +110,5 @@
 
 
 </GridLayout>
+
+</LinearLayout>

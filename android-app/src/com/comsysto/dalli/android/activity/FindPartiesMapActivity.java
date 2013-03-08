@@ -18,6 +18,7 @@ import com.comsysto.dalli.android.map.PartyItemizedOverlay;
 import com.comsysto.dalli.android.map.PartyOverlayItem;
 import com.comsysto.dalli.android.model.CategoryType;
 import com.comsysto.findparty.Party;
+import com.comsysto.findparty.Picture;
 import com.google.android.maps.*;
 
 import java.text.SimpleDateFormat;
@@ -110,8 +111,10 @@ public class FindPartiesMapActivity extends MapActivity {
 
                             Bitmap userPictureBitmap = getUserPictureBitmap();
 
-                            ImageView userPicture = (ImageView)view.findViewById(R.id.userPicture);
-                            userPicture.setImageBitmap(userPictureBitmap);
+                            if(userPictureBitmap != null){
+                                ImageView userPicture = (ImageView)view.findViewById(R.id.userPicture);
+                                userPicture.setImageBitmap(userPictureBitmap);
+                            }
 
                             TextView size = (TextView)view.findViewById(R.id.sizeValue);
                             size.setText(party.getSize().toString());
@@ -143,8 +146,11 @@ public class FindPartiesMapActivity extends MapActivity {
     }
 
     private Bitmap getUserPictureBitmap() {
-        byte[] content = getPartyManagerApplication().getUser().getPicture().getContent();
-        return BitmapFactory.decodeByteArray(content, 0, content.length);
+        Picture picture = getPartyManagerApplication().getUserFromBackend().getPicture();
+        if(picture != null){
+            return BitmapFactory.decodeByteArray(picture.getContent(), 0, picture.getContent().length);
+        }
+        return null;
     }
 
     private Drawable getDrawable(int id) {
