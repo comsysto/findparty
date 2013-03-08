@@ -144,6 +144,11 @@ public class PartyManagerApplication extends Application {
         return null;
     }
 
+    public User getUserFromBackend() {
+        User user = getUser();
+        return partyService.getUser(user.getUsername());
+    }
+
 	public User createAccount(String userName, String password) {
         return this.partyService.createUser(userName, password);
 	}
@@ -171,8 +176,8 @@ public class PartyManagerApplication extends Application {
     }
 
     public void saveUserPicture(Bitmap resizedBitmap) {
-        User user = partyService.getUser(getUser().getUsername());
-         Picture picture = user.getPicture();
+        User user = getUserFromBackend();
+        Picture picture = user.getPicture();
         if (picture == null) {
             picture = new Picture();
             user.setPicture(picture);

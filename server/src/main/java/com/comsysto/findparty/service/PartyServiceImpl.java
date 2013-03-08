@@ -3,9 +3,7 @@ package com.comsysto.findparty.service;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.User;
 import com.comsysto.findparty.web.PartyService;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.geo.Point;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -31,10 +29,10 @@ public class PartyServiceImpl implements PartyService {
 
 	@Override
 	public Party showDetails(String partyId) {
-		return findById(partyId);
+		return findPartyById(partyId);
 	}
 
-    private Party findById(String partyId) {
+    private Party findPartyById(String partyId) {
         Party party = mongoService.getMongoTemplate().findById(partyId, Party.class);
         if(party==null)
             throw new NotFoundException("an existing party with id="+partyId+" was not found on server!");
@@ -42,9 +40,18 @@ public class PartyServiceImpl implements PartyService {
         return party;
     }
 
+    private User findUserById(String userId) {
+        User user = mongoService.getMongoTemplate().findById(userId, User.class);
+        if(user==null)
+            throw new NotFoundException("an existing user with id="+userId+" was not found on server!");
+
+        return user;
+    }
+
+
     @Override
 	public void cancelParty(String username, String partyId) {
-        Party party = findById(partyId);
+        Party party = findPartyById(partyId);
         cancelParty(username, party);
     }
 
@@ -56,7 +63,7 @@ public class PartyServiceImpl implements PartyService {
 
     @Override
 	public void joinParty(String username, String partyId) {
-    	Party party = findById(partyId);
+    	Party party = findPartyById(partyId);
     	User user = findUserAndCreateIfNotExists(username);
 
     	party.getCandidates().add(user.getUsername());
@@ -67,7 +74,7 @@ public class PartyServiceImpl implements PartyService {
 	@Override
 	public void update(Party party) {
 	    //checks if party with same id exists
-	    findById(party.getId());
+	    findPartyById(party.getId());
 	    	    
 	    mongoService.getMongoTemplate().save(party);
 	}
@@ -124,7 +131,7 @@ public class PartyServiceImpl implements PartyService {
     @Override
     public void update(User user) {
         //checks if user with same id exists
-        findById(user.getId());
+        findUserById(user.getId());
 
         mongoService.getMongoTemplate().save(user);
     }
@@ -139,7 +146,7 @@ public class PartyServiceImpl implements PartyService {
 
     @Override
     public void delete(String partyId) {
-        Party party = findById(partyId);
+        Party party = findPartyById(partyId);
         mongoService.getMongoTemplate().remove(party);
     }
 	
