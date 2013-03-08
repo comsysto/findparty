@@ -1,6 +1,8 @@
 package com.comsysto.dalli.android.activity;
 
 import android.app.DialogFragment;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -106,6 +108,11 @@ public class FindPartiesMapActivity extends MapActivity {
                             ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
                             imageView.setImageResource(CategoryType.valueOf(party.getCategory()).getDrawableId());
 
+                            Bitmap userPictureBitmap = getUserPictureBitmap();
+
+                            ImageView userPicture = (ImageView)view.findViewById(R.id.userPicture);
+                            userPicture.setImageBitmap(userPictureBitmap);
+
                             TextView size = (TextView)view.findViewById(R.id.sizeValue);
                             size.setText(party.getSize().toString());
                             TextView date = (TextView)view.findViewById(R.id.dateValue);
@@ -114,8 +121,7 @@ public class FindPartiesMapActivity extends MapActivity {
                             user.setText(party.getOwner());
                             TextView experience = (TextView)view.findViewById(R.id.experienceValue);
                             experience.setText(party.getLevel());
-                            TextView subject = (TextView)view.findViewById(R.id.subjectValue);
-                            subject.setText(party.getSubject());
+
 
                             return view;
                         }
@@ -134,6 +140,11 @@ public class FindPartiesMapActivity extends MapActivity {
         List<Overlay> overlays = mapView.getOverlays();
         overlays.add(myLocOverlay);
         overlays.add(itemizedoverlay);
+    }
+
+    private Bitmap getUserPictureBitmap() {
+        byte[] content = getPartyManagerApplication().getUser().getPicture().getContent();
+        return BitmapFactory.decodeByteArray(content, 0, content.length);
     }
 
     private Drawable getDrawable(int id) {
