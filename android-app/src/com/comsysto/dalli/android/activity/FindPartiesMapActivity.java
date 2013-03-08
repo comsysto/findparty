@@ -114,7 +114,8 @@ public class FindPartiesMapActivity extends MapActivity {
                             user.setText(party.getOwner());
                             TextView experience = (TextView)view.findViewById(R.id.experienceValue);
                             experience.setText(party.getLevel());
-
+                            TextView subject = (TextView)view.findViewById(R.id.subjectValue);
+                            subject.setText(party.getSubject());
 
                             return view;
                         }

@@ -4,7 +4,7 @@
               android:orientation="horizontal"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-              android:rowCount="5"
+              android:rowCount="6"
               android:columnCount="2"
               android:background="@drawable/gradient_background">
 
@@ -58,6 +58,21 @@
             android:textColor="#000000"
             android:textSize="14sp"
             android:id="@+id/experienceValue" android:layout_gravity="center" android:layout_margin="5dp"
+            android:text="asdf"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/SUBJECT_LABEL"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:id="@+id/subjectLabel" android:layout_margin="5dp"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:id="@+id/subjectValue" android:layout_gravity="center" android:layout_margin="5dp"
             android:text="asdf"/>
 
     <TextView

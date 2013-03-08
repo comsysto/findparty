@@ -9,6 +9,7 @@
     <string name="MY_PARTIES_BUTTON">Show my activities</string>
 
     <string name="EXPERIENCE_LABEL">Experience</string>
+    <string name="SUBJECT_LABEL">Description</string>
     <string name="SELECT_CATEGORY_TITLE">Select activity type</string>
     <string name="LOGIN_LABEL">Login</string>
     <string name="DAY_AND_TIME_CONTEXT_LABEL">Day and Time</string>
