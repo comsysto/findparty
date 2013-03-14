@@ -47,9 +47,13 @@ public class FindPartiesMapActivity extends MapActivity {
     private Thread locationUpdateThread;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
 
+    private List<Party> parties;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        restoreConfigurationInstance();
 
         setContentView(R.layout.find_parties_map);
         mapView = (MapView) findViewById(R.id.find_parties_map_view);
@@ -59,6 +63,7 @@ public class FindPartiesMapActivity extends MapActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
+                    Log.d("FindPartiesMapActivity", "Map moved --> looking for nearby parties");
                     loadPartiesAndShowOnMap();
                 }
 
@@ -70,9 +75,28 @@ public class FindPartiesMapActivity extends MapActivity {
 
         initializeOverlays();
 
-        zoomToMyLocation();
+        if (parties == null) {
+            zoomToMyLocation();
+        }
+        else {
+            displayParties(this.parties);
+        }
+    }
 
-        loadPartiesAndShowOnMap();
+    private void restoreConfigurationInstance() {
+        if (getLastNonConfigurationInstance() != null) {
+
+            parties = (List<Party>)getLastNonConfigurationInstance();
+            Log.d("FindPartiesMapActivity", "Reusing parties");
+        }
+    }
+
+    @Override
+    public Object onRetainNonConfigurationInstance() {
+        if (parties != null) {
+            return parties;
+        }
+        return super.onRetainNonConfigurationInstance();
     }
 
     private void initCategoryDrawables() {
@@ -146,7 +170,7 @@ public class FindPartiesMapActivity extends MapActivity {
     }
 
     private Bitmap getUserPictureBitmap() {
-        Picture picture = getPartyManagerApplication().getUserFromBackend().getPicture();
+        Picture picture = getPartyManagerApplication().getUser().getPicture();
         if(picture != null){
             return BitmapFactory.decodeByteArray(picture.getContent(), 0, picture.getContent().length);
         }
@@ -176,6 +200,7 @@ public class FindPartiesMapActivity extends MapActivity {
                 mapView.getController().setZoom(15);
                 mapView.getController().animateTo(myLocOverlay.getMyLocation());
                 //mapView.invalidate();
+                Log.d("FindPartiesMapActivity", "Zoomed to current location --> looking for nearby parties");
                 loadPartiesAndShowOnMap();
             }
         });
@@ -183,8 +208,10 @@ public class FindPartiesMapActivity extends MapActivity {
     }
 
     private void loadPartiesAndShowOnMap() {
-        Log.d("FindPartiesMapActivity", "Map moved --> looking for nearby parties");
         final GeoPoint geoPoint = mapView.getMapCenter();
+
+
+
 
         locationUpdateThread = new Thread(new Runnable() {
             @Override
@@ -195,30 +222,40 @@ public class FindPartiesMapActivity extends MapActivity {
 
                     Log.d("FindPartiesMapActivity", "Current map center lon/lat : " + mapLongitude + " / " + mapLatitude);
 
-                    List<Party> parties = getPartyManagerApplication().getPartyService().searchParties(mapLongitude, mapLatitude, SEARCH_DISTANCE);
+                    FindPartiesMapActivity.this.parties = getPartyManagerApplication().getPartyService().searchParties(mapLongitude, mapLatitude, SEARCH_DISTANCE);
 
                     Log.d("FindPartiesMapActivity", parties.size() + " parties found in " + SEARCH_DISTANCE + " km area: " + parties.toString());
 
-                    for (Party party : parties) {
-                        if (itemizedoverlay.containsParty(party.getId())) {
-                            continue;
-                        }
-
-                        GeoPoint partyLocation = new GeoPoint(getMicroDegrees(party.getLocation().getLat()), getMicroDegrees(party.getLocation().getLon().doubleValue()));
-
-                        PartyOverlayItem overlayitem = new PartyOverlayItem(partyLocation, null, null, party);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            displayParties(FindPartiesMapActivity.this.parties);                        }
+                    });
 
 
-                        if (categoryDrawables.containsKey(CategoryType.valueOf(party.getCategory()))) {
-                            overlayitem.setMarker(categoryDrawables.get(CategoryType.valueOf(party.getCategory())));
-                        }
-                        itemizedoverlay.addOverlay(party.getId(), overlayitem);
-                    }
                 }
             }
         });
 
         locationUpdateThread.start();
+    }
+
+    private void displayParties(List<Party> parties) {
+        for (Party party : parties) {
+            if (itemizedoverlay.containsParty(party.getId())) {
+                continue;
+            }
+
+            GeoPoint partyLocation = new GeoPoint(getMicroDegrees(party.getLocation().getLat()), getMicroDegrees(party.getLocation().getLon().doubleValue()));
+
+            PartyOverlayItem overlayitem = new PartyOverlayItem(partyLocation, null, null, party);
+
+
+            if (categoryDrawables.containsKey(CategoryType.valueOf(party.getCategory()))) {
+                overlayitem.setMarker(categoryDrawables.get(CategoryType.valueOf(party.getCategory())));
+            }
+            itemizedoverlay.addOverlay(party.getId(), overlayitem);
+        }
     }
 
     private int getMicroDegrees(Double coordinate) {
