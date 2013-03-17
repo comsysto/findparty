@@ -6,13 +6,6 @@
         android:orientation="vertical"
         android:background="@drawable/gradient_background">
 
-    <ImageView
-            android:src="@drawable/logo_findbuddies_460px_v02"
-            android:id="@+id/imageView1"
-            android:layout_width="260dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"/>
-
     <Space
             android:layout_width="10px"
             android:layout_height="20px"
@@ -45,7 +38,7 @@
     <TextView
             android:id="@id/android:empty"
             android:gravity="center_vertical|center_horizontal"
-            android:text="No Partys yet, go back and create a new one or find other awesome parties!"
+            android:text="You have no activities yet. Please add one from the menu."
             android:textSize="20dip"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"/>

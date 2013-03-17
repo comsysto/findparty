@@ -10,14 +10,6 @@
             android:layout_height="fill_parent"
             android:background="@drawable/gradient_background">
 
-
-        <ImageView
-                android:src="@drawable/logo_findbuddies_460px_v02"
-                android:id="@+id/imageView1"
-                android:layout_width="260dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"/>
-
         <TextView
                 android:id="@+id/create_party"
                 android:text="Create a new activity with the following settings"

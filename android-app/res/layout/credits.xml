@@ -6,13 +6,6 @@
         android:orientation="vertical"
         android:background="@drawable/gradient_background">
 
-    <ImageView
-            android:src="@drawable/comsysto"
-            android:id="@+id/imageView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"/>
-
     <TextView
             android:layout_height="50dip"
             android:layout_width="fill_parent"

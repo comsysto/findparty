@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/add_party_menu_item"
+          android:icon="@drawable/new_party_menu_icon"
+          android:title="@string/ADD_PARTY_BUTTON"
+          android:showAsAction="ifRoom|withText" />
+    <item android:id="@+id/serach_parties_menu_item"
+          android:icon="@drawable/search_parties_menu_icon"
+          android:title="@string/FIND_PARTY_BUTTON"
+          android:showAsAction="ifRoom|withText" />
+    <item android:id="@+id/manage_picture_menu_item"
+          android:icon="@drawable/manage_picture_menu_item"
+          android:title="@string/MANAGE_USER_PICTURE_BUTTON"
+          android:showAsAction="ifRoom|withText" />
+    <item android:title="@string/LOGOUT_MENU_ITEM_TEXT"
+          android:id="@+id/logout"
+          android:showAsAction="never" />
+    <item android:title="@string/CREDITS_LABEL"
+          android:id="@+id/credits"
+          android:showAsAction="never" />
+    <item android:id="@+id/debug_new_map_api_menu_item"
+          android:title="DEBUG NEW MAP API"
+          android:showAsAction="never" />
+
+</menu>

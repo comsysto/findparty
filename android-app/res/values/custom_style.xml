@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="custom_theme_color">#fbf468</color>
-    <style name="CustomTheme" parent="android:Theme.Black">
+    <style name="CustomTheme" parent="android:Theme.Holo.Light">
         <item name="android:windowBackground">@color/custom_theme_color</item>
         <item name="android:colorBackground">@color/custom_theme_color</item>
         <item name="android:buttonStyle">@style/CommonPartyButton</item>
+        <item name="android:actionBarStyle">@style/CustomActionBar</item>
+
     </style>
 
-
+    <style name="CustomActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/custom_theme_color</item>
+    </style>
 </resources>
