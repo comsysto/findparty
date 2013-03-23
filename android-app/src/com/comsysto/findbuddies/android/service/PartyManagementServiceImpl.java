@@ -158,7 +158,9 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
 
         Party[] response = restTemplate.getForObject(url, Party[].class);
         //Party[] response = new RestTemplate(true, createHttpRequestFactory()).getForObject(url, Party[].class);
-        return Arrays.asList(response);
+        ArrayList<Party> partyArrayList = new ArrayList<Party>();
+        Collections.addAll(partyArrayList, response);
+        return partyArrayList;
     }
 
     @Override

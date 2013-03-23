@@ -65,9 +65,7 @@ public abstract class AbstractActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		AccountManager mAccountManager = AccountManager.get(this);
-		Account[] accountsByType = mAccountManager.getAccountsByType(AccountAuthenticator.AUTH_TYPE);
-		if (accountsByType.length == 0) {
+		if (!getPartyManagerApplication().getAccountService().hasAccount()) {
 			if (isTaskRoot()) {
 				Intent intent = new Intent(this, StartActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

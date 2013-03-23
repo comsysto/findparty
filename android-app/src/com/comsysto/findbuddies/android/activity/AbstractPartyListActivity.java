@@ -41,27 +41,52 @@ public abstract class AbstractPartyListActivity extends ListActivity {
         disableTitleInActionBar();
 		this.optionMenuHandler = new OptionMenuHandler(this);
 		registerForContextMenu(getListView());
-
-        dialog = new ProgressDialog(this);
-        dialog.setMessage("Loading. Please wait...");
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-        showProgressDialogIfNotReady();
+        if (getPartyManagerApplication().getAccountService().hasAccount()) {
+            dialog = new ProgressDialog(this);
+            dialog.setMessage("Loading. Please wait...");
+            dialog.show();
+            initArrayAdapter();
+        }
+        else {
+            redirectToLoginPage();
+        }
 	}
+
+    private void redirectToLoginPage() {
+        Intent intent = new Intent(this, StartActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
 
     private String getUsername() {
         return getPartyManagerApplication().getAccountService().getUsername();
     }
 
-    protected void initArrayAdapter(String username) {
-		this.parties = getPartyManagerApplication().getPartyService().getAllParties(username);
-        Log.i(LOG_MY_PARTIES, "retrieved my parties from server: " + this.parties);
-		setArrayAdapter(new PartyListAdapter(this, parties));
-		setListAdapter(getArrayAdapter());
-//        getArrayAdapter().notifyDataSetChanged();
+    protected void initArrayAdapter() {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                String userName = getUsername();
+                AbstractPartyListActivity.this.parties = getPartyManagerApplication().getPartyService().getAllParties(userName);
+                Log.i(LOG_MY_PARTIES, "retrieved my parties from server: " + AbstractPartyListActivity.this.parties);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                setArrayAdapter(new PartyListAdapter(AbstractPartyListActivity.this, AbstractPartyListActivity.this.parties));
+                setListAdapter(getArrayAdapter());
+                if (dialog.isShowing()) {
+                    dialog.hide();
+                }
+            }
+        }.execute();
 	}
 
     @Override
@@ -87,7 +112,8 @@ public abstract class AbstractPartyListActivity extends ListActivity {
 		case R.id.delete_party:
             Log.i(LOG_MY_PARTIES, "deleting party: " +selectedParty);
 			getPartyManagerApplication().getPartyService().delete(selectedParty.getId());
-            this.notifyDataSetChanged();
+            parties.remove(selectedParty);
+            getArrayAdapter().notifyDataSetChanged();
 			return true;
 		case R.id.edit_party:
             Log.i(LOG_MY_PARTIES, "editing party: " +selectedParty);
@@ -125,46 +151,12 @@ public abstract class AbstractPartyListActivity extends ListActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void notifyDataSetChanged() {
-		initArrayAdapter(getUsername());
-	}
-
     private void disableTitleInActionBar() {
         ActionBar ab = getActionBar();
         ab.setDisplayShowTitleEnabled(false);
     }
 
 
-    private void showProgressDialogIfNotReady() {
-        if (!dialog.isShowing() && !getPartyManagerApplication().isReady()) {
-            dialog.show();
-            new AsyncTask<Void, Void, Void>() {
-
-                @Override
-                protected Void doInBackground(Void... params) {
-                    while (!getPartyManagerApplication().isReady()) {
-                        try{
-                            Thread.sleep(10);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                        }
-                    }
-                    return null;
-                }
-
-                protected void onPostExecute(Void result) {
-                    dialog.hide();
-                    String username = getUsername();
-                    if(username != null) {
-                        initArrayAdapter(username);
-                    } else {
-                        finish();
-                    }
-                };
-
-            }.execute();
-        }
-    }
 
     @Override
     protected Dialog onCreateDialog(int id) {
@@ -192,10 +184,8 @@ public abstract class AbstractPartyListActivity extends ListActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onPause() {
+        super.onPause();
         dialog.dismiss();
-        super.onDestroy();    //To change body of overridden methods use File | Settings | File Templates.
     }
-
-
 }

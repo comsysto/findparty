@@ -19,7 +19,7 @@
         <uses-library android:name="com.google.android.maps"/>
 
 
-        <activity android:name="com.comsysto.findbuddies.android.activity.StartActivity" android:launchMode="singleTop"
+        <activity android:name="com.comsysto.findbuddies.android.activity.StartActivity"
                   android:label="@string/APP_NAME"
                   android:noHistory="true">
             <intent-filter>
