@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.comsysto.findbuddies.android.activity.MyPartiesActivity" android:launchMode="singleTop"/>
-        <activity android:name="com.comsysto.findbuddies.android.activity.LoginActivity" android:launchMode="singleTop"/>
+        <activity android:name="com.comsysto.findbuddies.android.activity.LoginActivity"/>
         <activity android:name="com.comsysto.findbuddies.android.activity.RegisterActivity"/>
         <activity android:name="com.comsysto.findbuddies.android.activity.CreatePartyActivity"/>
         <activity android:name="com.comsysto.findbuddies.android.activity.EditPartyActivity"/>

@@ -16,4 +16,10 @@ public class MyPartiesActivity extends AbstractPartyListActivity {
 		setContentView(R.layout.my_parties);
 		super.onCreate(savedInstanceState);
 	}
+
+    @Override
+    public void onBackPressed(){
+        moveTaskToBack(true);
+    }
+
 }

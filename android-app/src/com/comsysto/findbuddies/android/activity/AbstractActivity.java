@@ -66,14 +66,10 @@ public abstract class AbstractActivity extends Activity {
 	public void onResume() {
 		super.onResume();
 		if (!getPartyManagerApplication().getAccountService().hasAccount()) {
-			if (isTaskRoot()) {
-				Intent intent = new Intent(this, StartActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intent);
-			}
-			finish();
+            getPartyManagerApplication().goToStart(this);
 		}
 	}
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

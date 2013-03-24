@@ -1,12 +1,15 @@
 package com.comsysto.findbuddies.android.application;
 
+import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 import com.comsysto.findbuddies.android.account.AccountService;
+import com.comsysto.findbuddies.android.activity.StartActivity;
 import com.comsysto.findbuddies.android.service.PartyManagementServiceImpl;
 import com.comsysto.findbuddies.android.service.PartyManagementServiceMock;
 import com.comsysto.findparty.Party;
@@ -162,4 +165,12 @@ public class PartyManagerApplication extends Application {
         user.setPicture(null);
         partyService.update(user);
     }
+
+    public void goToStart(Activity activity) {
+        Intent intent = new Intent(activity, StartActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activity.startActivity(intent);
+        activity.finish();
+    }
+
 }

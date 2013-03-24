@@ -3,6 +3,7 @@ package com.comsysto.findbuddies.android.activity;
 import android.accounts.AccountAuthenticatorActivity;
 import android.app.ActionBar;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.comsysto.dalli.android.R;
 import com.comsysto.findbuddies.android.application.Constants;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
+import com.comsysto.findbuddies.android.widget.LoadingProgressDialog;
 
 /**
  * Displays the login page.
@@ -32,6 +34,17 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 
     protected Button loginButton;
     protected Button registerButton;
+    LoadingProgressDialog loadingProgressDialog;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.loadingProgressDialog = new LoadingProgressDialog(this, getLoadingProgressDialogText(), false );
+    }
+
+    protected String getLoadingProgressDialogText() {
+        return "Verifiying credentials...";
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +52,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         disableTitleInActionBar();
         setContentView(R.layout.login);
 
-        //if there is an Account on device -> we use this and proceed to Dashboard.
-        //else -> we create the view and display it.
-        if(isLoggedIn()) {
-            startApp();
-        } else {
-            createLoginView();
-        }
+        createLoginView();
     }
 
     private void disableTitleInActionBar() {
@@ -69,10 +76,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         createRegisterButtonListener();
     }
 
-    private boolean isLoggedIn() {
-        return getPartyManangerApplication().getAccountService().hasAccount();
-    }
-
 
 
     protected void register(String username, String password) {
@@ -80,35 +83,51 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         intent.putExtra("username", username);
         intent.putExtra("password", password);
         startActivity(intent);
-        finish();
     }
 
     protected void login(String username, String password) {
         if(isEmpty(username) || isEmpty(password)) {
             Log.d(TAG, "login failed: username and/or password may not be empty");
-            error.setText(getString(R.string.LOGIN_FAILED_LABEL));
-            error.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
-            error.setVisibility(View.VISIBLE);
-        }
-        else if (!authenticate(username, password)) {
-            Log.d(TAG, "login failed: username/password not authenticated (" +username + "/" + password+")");
-            error.setText(getString(R.string.LOGIN_FAILED_LABEL));
+            error.setText(getErrorText());
             error.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
             error.setVisibility(View.VISIBLE);
         } else {
-            startApp();
+            loadingProgressDialog.show();
+            authenticate(username, password);
         }
     }
 
-    private boolean authenticate(String username, String password) {
-        return getPartyManangerApplication().authenticate(username, password);
+    void handleResponse(boolean success) {
+        loadingProgressDialog.hide();
+        if (!success) {
+            error.setText(getErrorText());
+            error.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
+            error.setVisibility(View.VISIBLE);
+        } else {
+                getPartyManagerApplication().goToStart(this);
+        }
+
     }
 
-    private void startApp() {
-        Intent intent = new Intent(this, MyPartiesActivity.class);
-        startActivity(intent);
-        finish();
+    String getErrorText() {
+        return getString(R.string.LOGIN_FAILED_LABEL);
     }
+
+    private void authenticate(final String username, final String password) {
+        new AsyncTask<Void, Void, Boolean>() {
+
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                return LoginActivity.this.getPartyManagerApplication().authenticate(username, password);
+            }
+
+            @Override
+            protected void onPostExecute(Boolean authenticated) {
+                handleResponse(authenticated);
+            }
+        }.execute();
+    }
+
 
     protected void setLoginButtonVisible(boolean visible) {
         if (visible) {
@@ -160,10 +179,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         return value == null || value.length()==0;
     }
 
-    private PartyManagerApplication getPartyManangerApplication() {
-        return ((PartyManagerApplication)getApplication());
-    }
-
     @Override
     public void onBackPressed(){
         if (!(this instanceof RegisterActivity)) {
@@ -172,4 +187,10 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             super.onBackPressed();
         }
     }
+
+
+    PartyManagerApplication getPartyManagerApplication() {
+        return ((PartyManagerApplication) getApplication());
+    }
+
 }

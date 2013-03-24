@@ -51,19 +51,6 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
         this.urlBuilder = new UrlBuilder(host);
     }
 
-    private User getUser(PartyManagerApplication application) {
-        AccountManager accountManager = AccountManager.get(application);
-        Account[] accounts = accountManager.getAccountsByType(AccountAuthenticator.AUTH_TYPE);
-        if(accounts.length>0) {
-            Account account = accounts[0];
-            User user = new User();
-            user.setUsername(account.name);
-            user.setPassword(accountManager.getPassword(account));
-            return user;
-        }
-        return null;
-    }
-
     private HttpComponentsClientHttpRequestFactory createHttpRequestFactory() {
         HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
         requestFactory.setConnectTimeout(2000);

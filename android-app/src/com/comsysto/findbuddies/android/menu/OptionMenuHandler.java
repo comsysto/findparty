@@ -46,7 +46,7 @@ public class OptionMenuHandler {
                 break;
             case R.id.logout:
                 getPartyManagerApplication().getAccountService().removeAll();
-                goTo(activity, StartActivity.class);
+                getPartyManagerApplication().goToStart(activity);
                 break;
             case R.id.credits:
                 goTo(activity, CreditsActivity.class);

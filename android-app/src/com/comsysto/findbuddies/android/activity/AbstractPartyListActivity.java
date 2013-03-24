@@ -1,6 +1,9 @@
 package com.comsysto.findbuddies.android.activity;
 
-import android.app.*;
+import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +18,7 @@ import com.comsysto.findbuddies.android.adapter.PartyListAdapter;
 import com.comsysto.findbuddies.android.application.Constants;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 import com.comsysto.findbuddies.android.menu.OptionMenuHandler;
+import com.comsysto.findbuddies.android.widget.LoadingProgressDialog;
 import com.comsysto.findparty.Party;
 
 import java.util.List;
@@ -33,7 +37,7 @@ public abstract class AbstractPartyListActivity extends ListActivity {
 	private ArrayAdapter<com.comsysto.findparty.Party> arrayAdapter;
 	protected List<Party> parties;
 	private OptionMenuHandler optionMenuHandler;
-    private ProgressDialog dialog;
+    private LoadingProgressDialog dialog;
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +51,7 @@ public abstract class AbstractPartyListActivity extends ListActivity {
 	protected void onResume() {
 		super.onResume();
         if (getPartyManagerApplication().getAccountService().hasAccount()) {
-            dialog = new ProgressDialog(this);
-            dialog.setMessage("Loading. Please wait...");
-            dialog.show();
+            dialog = new LoadingProgressDialog(this, "Loading. Please wait...", true);
             initArrayAdapter();
         }
         else {
@@ -82,9 +84,7 @@ public abstract class AbstractPartyListActivity extends ListActivity {
             protected void onPostExecute(Void aVoid) {
                 setArrayAdapter(new PartyListAdapter(AbstractPartyListActivity.this, AbstractPartyListActivity.this.parties));
                 setListAdapter(getArrayAdapter());
-                if (dialog.isShowing()) {
-                    dialog.hide();
-                }
+                dialog.hide();
             }
         }.execute();
 	}

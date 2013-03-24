@@ -47,6 +47,7 @@
     <string name="DELETE_PICTURE">Delete Picture</string>
     <string name="MANAGE_USER_PICTURE_BUTTON">Add Some Photo Spice?</string>
     <string name="LOGOUT_MENU_ITEM_TEXT">Logout</string>
+    <string name="REGISTRATION_FAILED">Registration failed</string>
 
 
 </resources>
