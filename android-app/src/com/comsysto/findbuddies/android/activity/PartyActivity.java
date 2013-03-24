@@ -2,6 +2,7 @@ package com.comsysto.findbuddies.android.activity;
 
 import android.app.*;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,6 +16,7 @@ import com.comsysto.findbuddies.android.model.CategoryType;
 import com.comsysto.findbuddies.android.service.LocationInfo;
 import com.comsysto.findbuddies.android.service.LocationRequester;
 import com.comsysto.findbuddies.android.service.LocationService;
+import com.comsysto.findbuddies.android.widget.LoadingProgressDialog;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.Point;
 
@@ -44,6 +46,20 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     Party party;
     private boolean alreadyCalled;
 
+    LoadingProgressDialog loadingProgressDialog;
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        loadingProgressDialog.dismiss();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.loadingProgressDialog = new LoadingProgressDialog(this, getString(R.string.SAVING_PARTY), false);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -386,7 +402,29 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
     public abstract String getCategory();
 
-    public abstract OnClickListener getOnClickListener();
+    public OnClickListener getOnClickListener() {
+        return new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                loadingProgressDialog.show();
+                new AsyncTask<Void, Void, Void>() {
+
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        submit();
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void aVoid) {
+                        loadingProgressDialog.dismiss();
+                        goToTop(PartyActivity.this);
+                    }
+                }.execute();
+            }
+        };
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -430,4 +468,11 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     public void updateLocationAddress(String address) {
         partyLocationButton.setText(address);
     }
+
+
+    abstract void submit();
+
+
+
+
 }

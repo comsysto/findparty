@@ -14,17 +14,11 @@ import java.util.Date;
  */
 public class CreatePartyActivity extends PartyActivity {
 
-	@Override
-	public OnClickListener getOnClickListener() {
-		return new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-                getPartyManagerApplication().getPartyService().createParty(party);
-                goToTop(CreatePartyActivity.this);
-            }
-		};
-	}
+    @Override
+    void submit() {
+        getPartyManagerApplication().getPartyService().createParty(party);
+    }
 
     public String getCategory() {
 		return (String) getIntent().getExtras().get("category");

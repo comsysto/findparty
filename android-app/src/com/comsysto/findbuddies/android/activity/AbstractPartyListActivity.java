@@ -106,14 +106,27 @@ public abstract class AbstractPartyListActivity extends ListActivity {
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
 				.getMenuInfo();
-		Party selectedParty = getArrayAdapter().getItem((int)info.id);
+		final Party selectedParty = getArrayAdapter().getItem((int)info.id);
 
 		switch (item.getItemId()) {
 		case R.id.delete_party:
             Log.i(LOG_MY_PARTIES, "deleting party: " +selectedParty);
-			getPartyManagerApplication().getPartyService().delete(selectedParty.getId());
-            parties.remove(selectedParty);
-            getArrayAdapter().notifyDataSetChanged();
+            AbstractPartyListActivity.this.dialog.show();
+            new AsyncTask<Void, Void, Void>() {
+
+                @Override
+                protected Void doInBackground(Void... params) {
+                    getPartyManagerApplication().getPartyService().delete(selectedParty.getId());
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    AbstractPartyListActivity.this.dialog.hide();
+                    parties.remove(selectedParty);
+                    getArrayAdapter().notifyDataSetChanged();
+                }
+            }.execute();
 			return true;
 		case R.id.edit_party:
             Log.i(LOG_MY_PARTIES, "editing party: " +selectedParty);

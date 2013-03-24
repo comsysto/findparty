@@ -1,8 +1,10 @@
 package com.comsysto.findbuddies.android.activity;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.TextView;
 import com.comsysto.dalli.android.R;
 import com.comsysto.findparty.Party;
 
@@ -22,25 +24,19 @@ public class EditPartyActivity extends PartyActivity {
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        findViewById(R.id.create_party).setVisibility(View.INVISIBLE);
         this.saveButton.setText(R.string.SAVE_PARTY_BUTTON);
     }
 
-
-	@Override
-	public OnClickListener getOnClickListener() {
-		return new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				getPartyManagerApplication().getPartyService().update(party);
-				goToTop(EditPartyActivity.this);
-			}
-		};
-	}		
 	
 	public String getCategory() {
         return getPartyManagerApplication().getSelectedParty().getCategory();
 	}
+
+    @Override
+    void submit() {
+        getPartyManagerApplication().getPartyService().update(party);
+    }
 
     @Override
     protected Party getParty() {
