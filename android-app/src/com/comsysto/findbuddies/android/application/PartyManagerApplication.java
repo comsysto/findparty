@@ -11,7 +11,6 @@ import android.util.Log;
 import com.comsysto.findbuddies.android.account.AccountService;
 import com.comsysto.findbuddies.android.activity.StartActivity;
 import com.comsysto.findbuddies.android.service.PartyManagementServiceImpl;
-import com.comsysto.findbuddies.android.service.PartyManagementServiceMock;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.Picture;
 import com.comsysto.findparty.User;
@@ -26,8 +25,8 @@ import java.io.ByteArrayOutputStream;
  * <ul>
  * 	<li>caches the Tasks</li>
  * 	<li>holds the currently selectedParty (e.g. when editing a Task)</li>
- *  <li>delegates update,get,create,delete calls to the {@link com.comsysto.findbuddies.android.service.PartyManagementService}</li>
- *  <li>whether online/offline selects a corresponding {@link com.comsysto.findbuddies.android.service.PartyManagementService}</li>
+ *  <li>delegates update,get,create,delete calls to the {@link com.comsysto.findbuddies.android.service.PartyManagementServiceImpl}</li>
+ *  <li>whether online/offline selects a corresponding {@link com.comsysto.findbuddies.android.service.PartyManagementServiceImpl}</li>
  * 
  * @author stefandjurasic
  *
@@ -36,13 +35,13 @@ public class PartyManagerApplication extends Application {
 
     private static final String CLOUD_HOST =  "snuggle.eu01.aws.af.cm";
     private static final String LOCAL_EMULATOR = "10.0.2.2:8080";
-    private static final String LOCAL_STEFAN = "192.168.178.69:8080";
+    private static final String LOCAL_STEFAN = "192.168.178.52:8080";
     private static final String LOCAL_ROB = "192.168.178.65:8080";
     private static final String TAG = Constants.LOG_APP_PREFIX + PartyManagerApplication.class.getSimpleName();
 
     private Party selectedParty;
 
-	private PartyService partyService;
+	private PartyManagementServiceImpl partyService;
 
     private AccountService accountService;
 
@@ -65,8 +64,7 @@ public class PartyManagerApplication extends Application {
 			initializeOnlineService(CLOUD_HOST);
 		} else {
             //TODO: If no network connection available close the application with a hint!
-            Log.d(TAG, "using Mock-Service");
-			this.partyService = new PartyManagementServiceMock();
+            Log.i(TAG, "NO BACKEND AVAILABLE");
 		}
 	}
 
@@ -114,6 +112,10 @@ public class PartyManagerApplication extends Application {
     public User getUser() {
         String username = accountService.getUsername();
         return partyService.getUser(username);
+    }
+
+    public Picture getUserPicture(String username){
+        return partyService.getUserPicture(username);
     }
 
     public boolean authenticate(String username, String password) {

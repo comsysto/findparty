@@ -15,7 +15,7 @@
         <intercept-url pattern="/services/users/login" method="POST" access="permitAll" />
         <intercept-url pattern="/services/users" method="POST" access="permitAll" />
         <intercept-url pattern="/services/parties/echo/**" access="permitAll" />
-        <intercept-url pattern="/services/**" access="isAuthenticated()" />
+        <intercept-url pattern="/**" access="isAuthenticated()" />
         <http-basic entry-point-ref="restBasicAuthEntryPoint" />
     </http>
 

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.comsysto.findparty.Party;
+import com.comsysto.findparty.Picture;
 import com.comsysto.findparty.User;
 
 /**

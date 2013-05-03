@@ -17,6 +17,7 @@ import com.comsysto.dalli.android.R;
 import com.comsysto.findbuddies.android.application.Constants;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 import com.comsysto.findbuddies.android.widget.LoadingProgressDialog;
+import org.springframework.web.client.RestClientException;
 
 /**
  * Displays the login page.
@@ -118,7 +119,12 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 
             @Override
             protected Boolean doInBackground(Void... params) {
-                return LoginActivity.this.getPartyManagerApplication().authenticate(username, password);
+                try {
+                    return LoginActivity.this.getPartyManagerApplication().authenticate(username, password);
+
+                } catch (RestClientException e) {
+                    return false;
+                }
             }
 
             @Override

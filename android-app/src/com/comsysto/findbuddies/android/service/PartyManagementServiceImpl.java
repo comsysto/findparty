@@ -11,9 +11,11 @@ import com.comsysto.findbuddies.android.service.interceptor.NoCacheClientRequest
 import com.comsysto.findbuddies.android.service.util.UrlBuilder;
 import com.comsysto.findparty.Category;
 import com.comsysto.findparty.Party;
+import com.comsysto.findparty.Picture;
 import com.comsysto.findparty.User;
 import com.comsysto.findparty.web.CategoryService;
 import com.comsysto.findparty.web.PartyService;
+import com.comsysto.findparty.web.PictureService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -28,13 +30,14 @@ import java.util.*;
  * @author stefandjurasic
  * 
  */
-public class PartyManagementServiceImpl implements PartyService, CategoryService {
+public class PartyManagementServiceImpl implements PartyService, CategoryService, PictureService {
 
     private static final String TAG = Constants.LOG_SERVICE_PREFIX + PartyManagementServiceImpl.class.getSimpleName();
     private RestTemplate restTemplate;
     private UrlBuilder urlBuilder;
 
     private final static String USER_SERVICE_PATH = "/services/users";
+    private final static String PICTURES_SERVICE_PATH = "/services/pictures";
     private final static String PARTY_SERVICE_PATH = "/services/parties";
     private final static String CATEGORY_SERVICE_PATH = "/services/category";
 
@@ -197,10 +200,23 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
     }
 
     @Override
+    public Picture getUserPicture(String username) {
+        //String url = urlBuilder.createUri(PICTURES_SERVICE_PATH, username);
+        String url = urlBuilder.createFrom(PICTURES_SERVICE_PATH + "?username=" + username);
+        try {
+            return restTemplate.getForObject(url, Picture.class);
+        } catch (Exception e) {
+            Log.i("MY_PARTIES", "Fehler beim laden des Bildes für: " + username);
+            return null;
+        }
+    }
+
+    @Override
     public Set<Category> getAllCategories() {
         String url = urlBuilder.createUri(CATEGORY_SERVICE_PATH, "getall");
         ResponseEntity<Set> forEntity = restTemplate.getForEntity(url, Set.class);
 
         return forEntity.getBody();
     }
+
 }

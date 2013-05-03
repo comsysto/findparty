@@ -17,6 +17,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @Controller
+@RequestMapping("/users")
 public class UserControllerImpl implements  UserController {
 
     @Autowired
@@ -25,25 +26,25 @@ public class UserControllerImpl implements  UserController {
     public static final Logger LOGGER = Logger.getLogger(PartyControllerImpl.class);
 
     @Override
-    @RequestMapping(value="/users", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public @ResponseBody User createUser(@RequestBody User user) {
         User createdUser = partyService.createUser(user.getUsername(), user.getPassword());
         return createdUser;
     }
 
     @Override
-    @RequestMapping(value="/users", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody User getUser(@RequestParam("username") String username) {
         return partyService.getUser(username);
     }
 
     @Override
-    @RequestMapping(value="/users/login", method = RequestMethod.POST)
+    @RequestMapping(value="/login", method = RequestMethod.POST)
     public @ResponseBody boolean getUser(@RequestBody User user) {
         return validateUser(user);
     }
 
-    @RequestMapping(value = "/users/{userId}", method = RequestMethod.PUT, consumes = "application/json")
+    @RequestMapping(value = "/{userId}", method = RequestMethod.PUT, consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
     public void update(@RequestBody User user, @PathVariable String userId) {
 

@@ -81,6 +81,11 @@ public class FindPartiesMapActivity extends MapActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
     private void restoreConfigurationInstance() {
         if (getLastNonConfigurationInstance() != null) {
 
@@ -131,7 +136,7 @@ public class FindPartiesMapActivity extends MapActivity {
                             ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
                             imageView.setImageResource(CategoryType.valueOf(party.getCategory()).getDrawableId());
 
-                            Bitmap userPictureBitmap = getUserPictureBitmap();
+                            Bitmap userPictureBitmap = getUserPictureBitmap(party.getOwner());
 
                             if(userPictureBitmap != null){
                                 ImageView userPicture = (ImageView)view.findViewById(R.id.userPicture);
@@ -167,8 +172,8 @@ public class FindPartiesMapActivity extends MapActivity {
         overlays.add(itemizedoverlay);
     }
 
-    private Bitmap getUserPictureBitmap() {
-        Picture picture = getPartyManagerApplication().getUser().getPicture();
+    private Bitmap getUserPictureBitmap(String username) {
+        Picture picture = getPartyManagerApplication().getUserPicture(username);
         if(picture != null){
             return BitmapFactory.decodeByteArray(picture.getContent(), 0, picture.getContent().length);
         }

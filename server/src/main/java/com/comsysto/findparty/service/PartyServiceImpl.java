@@ -1,6 +1,7 @@
 package com.comsysto.findparty.service;
 
 import com.comsysto.findparty.Party;
+import com.comsysto.findparty.Picture;
 import com.comsysto.findparty.User;
 import com.comsysto.findparty.web.PartyService;
 import org.springframework.beans.factory.annotation.Autowired;
