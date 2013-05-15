@@ -1,8 +1,6 @@
 package com.comsysto.findbuddies.android.map;
 
 import com.comsysto.findparty.Party;
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.OverlayItem;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,11 +9,11 @@ import com.google.android.maps.OverlayItem;
  * Time: 15:52
  * To change this template use File | Settings | File Templates.
  */
-public class PartyOverlayItem extends OverlayItem{
+public class PartyOverlayItem { //} extends OverlayItem{
     private final Party party;
 
-    public PartyOverlayItem(GeoPoint geoPoint, String s, String s2, Party party) {
-        super(geoPoint, s, s2);
+    public PartyOverlayItem(String s, String s2, Party party) {
+//        super(geoPoint, s, s2);
         this.party = party;
     }
 

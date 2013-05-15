@@ -1,5 +1,6 @@
 package com.comsysto.findbuddies.android.activity;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,7 +20,7 @@ import com.comsysto.findbuddies.android.map.PartyOverlayItem;
 import com.comsysto.findbuddies.android.model.CategoryType;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.Picture;
-import com.google.android.maps.*;
+import com.google.android.gms.maps.MapView;
 
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -33,14 +34,14 @@ import java.util.Map;
  * Time: 13:42
  * To change this template use File | Settings | File Templates.
  */
-public class FindPartiesMapActivity extends MapActivity {
+public class FindPartiesMapActivity extends Activity {
 
     private MapView mapView;
     private Double currentDistance = 1000.;
 
     private static final Double SEARCH_DISTANCE = 20d;
 
-    private MyLocationOverlay myLocOverlay;
+//    private MyLocationOverlay myLocOverlay;
     private PartyItemizedOverlay itemizedoverlay;
 
     private Map<CategoryType, Drawable> categoryDrawables;
@@ -115,13 +116,13 @@ public class FindPartiesMapActivity extends MapActivity {
     }
 
     private void initializeOverlays() {
-        myLocOverlay = new MyLocationOverlay(this, mapView);
-        myLocOverlay.enableMyLocation();
+//        myLocOverlay = new MyLocationOverlay(this, mapView);
+//        myLocOverlay.enableMyLocation();
 
 
         Drawable androidMarker = getDrawable(R.drawable.androidmarker);
         itemizedoverlay = new PartyItemizedOverlay(androidMarker, FindPartiesMapActivity.this) {
-            @Override
+
             protected boolean onTap(int index) {
                 final PartyOverlayItem item = this.mOverlays.get(index);
 
@@ -163,13 +164,13 @@ public class FindPartiesMapActivity extends MapActivity {
                 }
 
 
-                return super.onTap(index);    //To change body of overridden methods use File | Settings | File Templates.
+                return true; //super.onTap(index);    //To change body of overridden methods use File | Settings | File Templates.
             }
         };
         itemizedoverlay.populateNow();
-        List<Overlay> overlays = mapView.getOverlays();
-        overlays.add(myLocOverlay);
-        overlays.add(itemizedoverlay);
+//        List<Overlay> overlays = mapView.getOverlays();
+//        overlays.add(myLocOverlay);
+//        overlays.add(itemizedoverlay);
     }
 
     private Bitmap getUserPictureBitmap(String username) {
@@ -181,12 +182,7 @@ public class FindPartiesMapActivity extends MapActivity {
     }
 
     private Drawable getDrawable(int id) {
-        return PartyItemizedOverlay.boundCenterBottom(FindPartiesMapActivity.this.getResources().getDrawable(id));
-    }
-
-    @Override
-    protected boolean isRouteDisplayed() {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return null; //PartyItemizedOverlay.boundCenterBottom(FindPartiesMapActivity.this.getResources().getDrawable(id));
     }
 
     /**
@@ -198,20 +194,20 @@ public class FindPartiesMapActivity extends MapActivity {
     }
 
     private void zoomToMyLocation() {
-        myLocOverlay.runOnFirstFix(new Runnable() {
-            public void run() {
-                mapView.getController().setZoom(15);
-                mapView.getController().animateTo(myLocOverlay.getMyLocation());
-                //mapView.invalidate();
-                Log.d("FindPartiesMapActivity", "Zoomed to current location --> looking for nearby parties");
-                loadPartiesAndShowOnMap();
-            }
-        });
+//        myLocOverlay.runOnFirstFix(new Runnable() {
+//            public void run() {
+//                mapView.getController().setZoom(15);
+//                mapView.getController().animateTo(myLocOverlay.getMyLocation());
+//                //mapView.invalidate();
+//                Log.d("FindPartiesMapActivity", "Zoomed to current location --> looking for nearby parties");
+//                loadPartiesAndShowOnMap();
+//            }
+//        });
 
     }
 
     private void loadPartiesAndShowOnMap() {
-        final GeoPoint geoPoint = mapView.getMapCenter();
+        //final GeoPoint geoPoint = mapView.getMapCenter();
 
 
 
@@ -220,12 +216,12 @@ public class FindPartiesMapActivity extends MapActivity {
             @Override
             public void run() {
                 synchronized (FindPartiesMapActivity.this) {
-                    double mapLongitude = geoPoint.getLongitudeE6()/1E6;
-                    double mapLatitude = geoPoint.getLatitudeE6()/1E6;
+//                    double mapLongitude = geoPoint.getLongitudeE6()/1E6;
+//                    double mapLatitude = geoPoint.getLatitudeE6()/1E6;
 
-                    Log.d("FindPartiesMapActivity", "Current map center lon/lat : " + mapLongitude + " / " + mapLatitude);
+//                    Log.d("FindPartiesMapActivity", "Current map center lon/lat : " + mapLongitude + " / " + mapLatitude);
 
-                    FindPartiesMapActivity.this.parties = getPartyManagerApplication().getPartyService().searchParties(mapLongitude, mapLatitude, SEARCH_DISTANCE);
+//                    FindPartiesMapActivity.this.parties = getPartyManagerApplication().getPartyService().searchParties(mapLongitude, mapLatitude, SEARCH_DISTANCE);
 
                     Log.d("FindPartiesMapActivity", parties.size() + " parties found in " + SEARCH_DISTANCE + " km area: " + parties.toString());
 
@@ -250,15 +246,15 @@ public class FindPartiesMapActivity extends MapActivity {
                 continue;
             }
 
-            GeoPoint partyLocation = new GeoPoint(getMicroDegrees(party.getLocation().getLat()), getMicroDegrees(party.getLocation().getLon().doubleValue()));
+//            GeoPoint partyLocation = new GeoPoint(getMicroDegrees(party.getLocation().getLat()), getMicroDegrees(party.getLocation().getLon().doubleValue()));
 
-            PartyOverlayItem overlayitem = new PartyOverlayItem(partyLocation, null, null, party);
-
-
-            if (categoryDrawables.containsKey(CategoryType.valueOf(party.getCategory()))) {
-                overlayitem.setMarker(categoryDrawables.get(CategoryType.valueOf(party.getCategory())));
-            }
-            itemizedoverlay.addOverlay(party.getId(), overlayitem);
+//            PartyOverlayItem overlayitem = new PartyOverlayItem(partyLocation, null, null, party);
+//
+//
+//            if (categoryDrawables.containsKey(CategoryType.valueOf(party.getCategory()))) {
+//                overlayitem.setMarker(categoryDrawables.get(CategoryType.valueOf(party.getCategory())));
+//            }
+//            itemizedoverlay.addOverlay(party.getId(), overlayitem);
         }
     }
 
@@ -269,7 +265,7 @@ public class FindPartiesMapActivity extends MapActivity {
 
     @Override
     protected void onPause() {
-        myLocOverlay.disableMyLocation();
+//        myLocOverlay.disableMyLocation();
         super.onPause();    //To change body of overridden methods use File | Settings | File Templates.
     }
 }
