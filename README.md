@@ -15,3 +15,6 @@ For more information on installing Google Play Services, see: [Setup Google Play
 ##### Keystore
 
 In order to properly access the Google Apis in this project, you need to copy the keystore file `debug.keystore` to `~/.android/debug.keystore`.
+
+### Server
+For *server* development, you need to have a local [MongoDB](http://www.mongodb.org) instance up and running. Just download and install a [MongoDB](http://www.mongodb.org) as described on their [webpage](http://www.mongodb.org)
