@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import com.comsysto.dalli.android.R;
+import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 import com.comsysto.findbuddies.android.account.AccountAuthenticator;
 import com.comsysto.findbuddies.android.menu.OptionMenuHandler;

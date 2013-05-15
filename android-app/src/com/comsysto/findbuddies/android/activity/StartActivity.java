@@ -3,6 +3,7 @@ package com.comsysto.findbuddies.android.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.StrictMode;
+import com.comsysto.findbuddies.android.activity.signin.DefaultSigninActivity;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 
 
@@ -33,7 +34,7 @@ public class StartActivity extends Activity {
             intent = new Intent(this, MyPartiesActivity.class);
 
         } else {
-            intent = new Intent(this, LoginActivity.class);
+            intent = new Intent(this, DefaultSigninActivity.class);
         }
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

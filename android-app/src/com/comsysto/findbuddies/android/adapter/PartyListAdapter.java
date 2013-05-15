@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.comsysto.dalli.android.R;
+import com.comsysto.findbuddies.android.R;
 import com.comsysto.findparty.Party;
 
 import java.text.SimpleDateFormat;

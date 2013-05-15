@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.comsysto.dalli.android.R;
+import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 import com.comsysto.findbuddies.android.map.PartyItemizedOverlay;
 import com.comsysto.findbuddies.android.map.PartyOverlayItem;

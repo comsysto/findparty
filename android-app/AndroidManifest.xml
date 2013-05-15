@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.comsysto.dalli.android"
+          package="com.comsysto.findbuddies.android"
           android:versionCode="1"
           android:versionName="1.0">
     <uses-sdk android:minSdkVersion="17" android:targetSdkVersion="17"/>
@@ -20,7 +20,7 @@
         <uses-library android:name="com.google.android.maps"/>
 
 
-        <activity android:name="com.comsysto.findbuddies.android.activity.StartActivity"
+        <activity android:name=".activity.StartActivity"
                   android:label="@string/APP_NAME"
                   android:noHistory="true">
             <intent-filter>
@@ -28,20 +28,22 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.comsysto.findbuddies.android.activity.MyPartiesActivity" android:launchMode="singleTop"/>
-        <activity android:name="com.comsysto.findbuddies.android.activity.LoginActivity"/>
-        <activity android:name="com.comsysto.findbuddies.android.activity.RegisterActivity"/>
-        <activity android:name="com.comsysto.findbuddies.android.activity.CreatePartyActivity"/>
-        <activity android:name="com.comsysto.findbuddies.android.activity.EditPartyActivity"/>
-        <activity android:name="com.comsysto.findbuddies.android.activity.CreditsActivity"/>
-        <activity android:name="com.comsysto.findbuddies.android.activity.Preferences"/>
-        <activity android:name="com.comsysto.findbuddies.android.activity.FindPartiesMapActivity" android:label="@string/APP_NAME"
-                  android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity android:name="com.comsysto.findbuddies.android.activity.ManageUserPictureDialogActivity" android:theme="@android:style/Theme.Dialog" android:excludeFromRecents="true"/>
-        <activity android:name="com.comsysto.findbuddies.android.activity.BuddiesMapActivity"/>
+
+        <activity android:name=".activity.signin.DefaultSigninActivity"/>
+        <activity android:name=".activity.signin.GoogleSigninActivity"/>
+        <activity android:name=".activity.signin.RegisterActivity"/>
+
+        <activity android:name=".activity.MyPartiesActivity" android:launchMode="singleTop"/>
+        <activity android:name=".activity.CreatePartyActivity"/>
+        <activity android:name=".activity.EditPartyActivity"/>
+        <activity android:name=".activity.CreditsActivity"/>
+        <activity android:name=".activity.Preferences"/>
+        <activity android:name=".activity.FindPartiesMapActivity" android:label="@string/APP_NAME" android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name=".activity.ManageUserPictureDialogActivity" android:theme="@android:style/Theme.Dialog" android:excludeFromRecents="true"/>
+        <activity android:name=".activity.BuddiesMapActivity"/>
 
 
-        <service android:name="com.comsysto.findbuddies.android.account.AuthenticatorService">
+        <service android:name=".account.AuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>

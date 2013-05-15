@@ -1,7 +1,7 @@
 package com.comsysto.findbuddies.android.activity;
 
 import android.os.Bundle;
-import com.comsysto.dalli.android.R;
+import com.comsysto.findbuddies.android.R;
 
 /**
  * Acitivty for displaying only Active Tasks!

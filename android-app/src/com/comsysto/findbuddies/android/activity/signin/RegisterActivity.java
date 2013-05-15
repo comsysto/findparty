@@ -1,21 +1,18 @@
-package com.comsysto.findbuddies.android.activity;
+package com.comsysto.findbuddies.android.activity.signin;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.EditText;
-import com.comsysto.dalli.android.R;
+import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.application.Constants;
-import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 
 /**
  * User: rpelger
  * Date: 21.11.12
  */
-public class RegisterActivity extends LoginActivity {
+public class RegisterActivity extends DefaultSigninActivity {
 
 
     private static final String TAG = Constants.LOG_SERVICE_PREFIX + RegisterActivity.class.getSimpleName();

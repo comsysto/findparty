@@ -10,7 +10,7 @@ import android.text.format.DateFormat;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
-import com.comsysto.dalli.android.R;
+import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.menu.OptionMenuHandler;
 import com.comsysto.findbuddies.android.model.CategoryType;
 import com.comsysto.findbuddies.android.service.LocationInfo;

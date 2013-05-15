@@ -1,4 +1,4 @@
-package com.comsysto.findbuddies.android.activity;
+package com.comsysto.findbuddies.android.activity.signin;
 
 import android.accounts.AccountAuthenticatorActivity;
 import android.app.ActionBar;
@@ -13,7 +13,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import com.comsysto.dalli.android.R;
+import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.application.Constants;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 import com.comsysto.findbuddies.android.widget.LoadingProgressDialog;
