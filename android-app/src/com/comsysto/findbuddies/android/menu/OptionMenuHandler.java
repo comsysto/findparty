@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import com.comsysto.dalli.android.R;
+import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.activity.*;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 

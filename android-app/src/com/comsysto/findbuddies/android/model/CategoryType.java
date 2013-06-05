@@ -1,6 +1,6 @@
 package com.comsysto.findbuddies.android.model;
 
-import com.comsysto.dalli.android.R;
+import com.comsysto.findbuddies.android.R;
 
 import java.util.ArrayList;
 import java.util.List;

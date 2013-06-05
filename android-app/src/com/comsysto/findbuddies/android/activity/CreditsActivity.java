@@ -3,7 +3,7 @@ package com.comsysto.findbuddies.android.activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.comsysto.dalli.android.R;
+import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.menu.OptionMenuHandler;
 
 /**
