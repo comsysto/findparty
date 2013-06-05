@@ -1,23 +1,30 @@
 package com.comsysto.findbuddies.android.activity;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import com.comsysto.findbuddies.android.R;
-import com.comsysto.findbuddies.android.service.LocationInfo;
-import com.comsysto.findbuddies.android.service.LocationRequester;
-import com.comsysto.findbuddies.android.service.LocationService;
-import com.comsysto.findparty.Point;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.comsysto.findbuddies.android.map.PartyItemizedOverlay;
+import com.comsysto.findbuddies.android.map.PartyOverlayItem;
+import com.comsysto.findbuddies.android.model.CategoryType;
+import com.comsysto.findparty.Party;
+import com.comsysto.findparty.Picture;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.maps.*;
+import com.google.android.gms.maps.model.*;
+import com.google.android.maps.GeoPoint;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.util.HashMap;
+import java.util.List;
+
 
 
 /**
@@ -27,16 +34,23 @@ import java.util.Observer;
  * Time: 15:42
  * To change this template use File | Settings | File Templates.
  */
-public class BuddiesMapActivity extends AbstractActivity implements LocationRequester, Observer {
+public class BuddiesMapActivity extends AbstractActivity implements
+        GooglePlayServicesClient.ConnectionCallbacks,
+        GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.OnCameraChangeListener {
 
     static final LatLng HAMBURG = new LatLng(53.558, 9.927);
     static final LatLng KIEL = new LatLng(53.551, 9.993);
     private GoogleMap map;
-    private LocationService locationService;
+    private LocationClient locationClient;
+    private List<Party> parties;
+    private Thread locationUpdateThread;
+    private static final Double SEARCH_DISTANCE = 20d;
+    private HashMap<CategoryType, Bitmap> categoryDrawables;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initCategoryDrawables();
         setContentView(R.layout.buddies_map);
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
                 .getMap();
@@ -52,51 +66,109 @@ public class BuddiesMapActivity extends AbstractActivity implements LocationRequ
                             .fromResource(R.drawable.androidmarker)));
         }
         map.setMyLocationEnabled(true);
+        map.setOnCameraChangeListener(this);
 
+        locationClient = new LocationClient(this, this, this);
+        locationClient.connect();
+        try {
+            MapsInitializer.initialize(this);
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
 
-
-
-        locationService = new LocationService(getApplicationContext(), this);
-        locationService.activate();
     }
 
-    private void zoomToMyLocation(final Point location) {
+    private void initCategoryDrawables() {
+        categoryDrawables = new HashMap<CategoryType, Bitmap>();
 
-        double mapLongitude = location.getLon();
-        double mapLatitude = location.getLat();
+        categoryDrawables.put(CategoryType.BIKING, getDrawable(R.drawable.biking));
+        categoryDrawables.put(CategoryType.CLUBBING, getDrawable(R.drawable.clubbing));
+        categoryDrawables.put(CategoryType.HIKING, getDrawable(R.drawable.hiking));
+        categoryDrawables.put(CategoryType.JOGGING, getDrawable(R.drawable.jogging));
+        categoryDrawables.put(CategoryType.MUSIC, getDrawable(R.drawable.music));
+        categoryDrawables.put(CategoryType.SNUGGLING, getDrawable(R.drawable.snuggling));
+        categoryDrawables.put(CategoryType.SWIMMING, getDrawable(R.drawable.androidmarker));
+    }
 
-        Log.d("FindPartiesMapActivity", "Current map center lon/lat : " + mapLongitude + " / " + mapLatitude);
+    private Bitmap getDrawable(int id) {
+        Drawable drawable = this.getResources().getDrawable(id);
+        return ((BitmapDrawable) drawable).getBitmap();
+    }
 
-        CameraUpdate center =
-                CameraUpdateFactory.newLatLng(new LatLng(mapLatitude,
-                        mapLongitude));
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
+    @Override
+    public void onConnected(Bundle bundle) {
+        Location location = locationClient.getLastLocation();
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 14);
+        map.animateCamera(cameraUpdate);
+        loadPartiesAndShowOnMap(latLng);
+    }
 
-        map.moveCamera(center);
-        map.animateCamera(zoom);
+    private void loadPartiesAndShowOnMap(final LatLng center) {
 
-//        FindPartiesMapActivity.this.parties = getPartyManagerApplication().getPartyService().searchParties(mapLongitude, mapLatitude, SEARCH_DISTANCE);
+        this.locationUpdateThread = new Thread(new Runnable() {
 
+            @Override
+            public void run() {
+                synchronized (BuddiesMapActivity.this) {
+                    double mapLongitude = center.longitude;
+                    double mapLatitude = center.latitude;
+
+                    Log.d("FindPartiesMapActivity", "Current map center lon/lat : " + mapLongitude + " / " + mapLatitude);
+
+                    BuddiesMapActivity.this.parties = getPartyManagerApplication().getPartyService().searchParties(mapLongitude, mapLatitude, SEARCH_DISTANCE);
+
+                    if(BuddiesMapActivity.this.parties != null){
+                        Log.d("FindPartiesMapActivity", BuddiesMapActivity.this.parties.size() + " parties found in " + SEARCH_DISTANCE + " km area: " + BuddiesMapActivity.this.parties.toString());
+                    }
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            displayParties(BuddiesMapActivity.this.parties);
+                        }
+                    });
+
+
+                }
+            }
+        });
+
+        locationUpdateThread.start();
+    }
+
+    private void displayParties(List<Party> parties) {
+        for (Party party : parties) {
+            if (map != null) {
+                Bitmap partyBitmap = categoryDrawables.get(CategoryType.valueOf(party.getCategory()));
+                map.addMarker(new MarkerOptions().position(new LatLng(party.getLocation().getLat(), party.getLocation().getLon()))
+                        .title(party.getName())
+                .icon(BitmapDescriptorFactory.fromBitmap(partyBitmap)));
+            }
+        }
+    }
+
+    private BitmapDescriptor getUserPictureBitmap(String username) {
+        Picture picture = getPartyManagerApplication().getUserPicture(username);
+        if(picture != null){
+            Bitmap bitmap = BitmapFactory.decodeByteArray(picture.getContent(), 0, picture.getContent().length);
+            return BitmapDescriptorFactory.fromBitmap(bitmap);
+        }
+        return null;
+    }
+
+    @Override
+    public void onDisconnected() {
 
     }
 
     @Override
-    public void updateLocationPoint(Point point, String address) {
-        //TODO: Refactor LoccationService - separate location/address update
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public void updateLocationAddress(String address) {
-        //TODO: Refactor LoccationService - separate location/address update
-    }
-
-    @Override
-    public void update(Observable observable, Object data) {
-        locationService.deactivate();
-        LocationInfo locationInfo = (LocationInfo) data;
-        Point location = new Point();
-        location.setLat(locationInfo.getLatitude());
-        location.setLon(locationInfo.getLongitude());
-        zoomToMyLocation(location);
+    public void onCameraChange(CameraPosition cameraPosition) {
+        loadPartiesAndShowOnMap(cameraPosition.target);
     }
 }
