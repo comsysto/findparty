@@ -9,6 +9,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+
 /**
  * Created with IntelliJ IDEA.
  * User: stefandjurasic

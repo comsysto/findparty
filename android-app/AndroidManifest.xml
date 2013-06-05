@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.comsysto.dalli.android"
+          package="com.comsysto.findbuddies.android"
           android:versionCode="1"
           android:versionName="1.0">
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="14"/>
@@ -49,7 +49,7 @@
 
         <meta-data
                 android:name="com.google.android.maps.v2.API_KEY"
-                android:value="AIzaSyDlVKpj0f_KsTc50Xy1EbB5C53KxF7V-f0" />
+                android:value="AIzaSyD7KJnImkub4Rg76VYxJnfZuWzJoN-CTMw" />
 
     </application>
 
