@@ -35,10 +35,20 @@
         <activity android:name="com.comsysto.findbuddies.android.activity.EditPartyActivity"/>
         <activity android:name="com.comsysto.findbuddies.android.activity.CreditsActivity"/>
         <activity android:name="com.comsysto.findbuddies.android.activity.Preferences"/>
-        <activity android:name="com.comsysto.findbuddies.android.activity.FindPartiesMapActivity" android:label="@string/APP_NAME"
-                  android:theme="@android:style/Theme.Holo.Light.NoActionBar"/>
         <activity android:name="com.comsysto.findbuddies.android.activity.ManageUserPictureDialogActivity" android:theme="@android:style/Theme.Holo.Light.Dialog" android:excludeFromRecents="true"/>
         <activity android:name="com.comsysto.findbuddies.android.activity.BuddiesMapActivity"/>
+
+        <activity
+                android:name=".activity.masterdetail.PartyListActivity"
+                android:label="@string/APP_NAME" >
+        </activity>
+        <activity
+                android:name=".activity.masterdetail.PartyMapActivity"
+                android:parentActivityName=".PartyListActivity" >
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".PartyListActivity" />
+        </activity>
 
 
         <service android:name="com.comsysto.findbuddies.android.account.AuthenticatorService">

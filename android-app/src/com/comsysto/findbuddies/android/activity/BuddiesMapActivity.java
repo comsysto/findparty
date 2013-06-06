@@ -1,23 +1,20 @@
 package com.comsysto.findbuddies.android.activity;
 
-import android.app.DialogFragment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.comsysto.findbuddies.android.R;
-import com.comsysto.findbuddies.android.map.PartyItemizedOverlay;
-import com.comsysto.findbuddies.android.map.PartyOverlayItem;
 import com.comsysto.findbuddies.android.model.CategoryType;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.Picture;
@@ -25,11 +22,11 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
-import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MyLocationOverlay;
-import com.google.android.maps.Overlay;
 
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -46,7 +43,7 @@ import java.util.Map;
  */
 public class BuddiesMapActivity extends AbstractActivity implements
         GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.OnCameraChangeListener, GoogleMap.InfoWindowAdapter {
+        GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.OnCameraChangeListener, GoogleMap.InfoWindowAdapter, LocationListener {
 
     static final LatLng HAMBURG = new LatLng(53.558, 9.927);
     static final LatLng KIEL = new LatLng(53.551, 9.993);
@@ -57,7 +54,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
     private static final Double SEARCH_DISTANCE = 20d;
     private HashMap<CategoryType, Bitmap> categoryDrawables;
     private MyLocationOverlay myLocOverlay;
-    private Map<Marker, Party> partyMarkerMap = new HashMap<Marker, Party>();
+    private Map<Marker, Party> partyMarkerMap;
     private LayoutInflater inflater;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
 
@@ -65,12 +62,10 @@ public class BuddiesMapActivity extends AbstractActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initCategoryDrawables();
-        initMapInitializer();
+        initGoogleStuff();
         setContentView(R.layout.buddies_map);
         initializeMap();
         initializeLocationClient();
-        inflater = (LayoutInflater) getApplicationContext().getSystemService
-                (Context.LAYOUT_INFLATER_SERVICE);
     }
 
     private void initializeLocationClient() {
@@ -81,13 +76,14 @@ public class BuddiesMapActivity extends AbstractActivity implements
     private void initializeMap() {
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
                 .getMap();
-
         map.setMyLocationEnabled(true);
         map.setOnCameraChangeListener(this);
         map.setInfoWindowAdapter(this);
     }
 
-    private void initMapInitializer() {
+    private void initGoogleStuff() {
+        inflater = (LayoutInflater) getApplicationContext().getSystemService
+                (Context.LAYOUT_INFLATER_SERVICE);
         try {
             MapsInitializer.initialize(this);
         } catch (GooglePlayServicesNotAvailableException e) {
@@ -97,7 +93,6 @@ public class BuddiesMapActivity extends AbstractActivity implements
 
     private void initCategoryDrawables() {
         categoryDrawables = new HashMap<CategoryType, Bitmap>();
-
         categoryDrawables.put(CategoryType.BIKING, getDrawable(R.drawable.biking));
         categoryDrawables.put(CategoryType.CLUBBING, getDrawable(R.drawable.clubbing));
         categoryDrawables.put(CategoryType.HIKING, getDrawable(R.drawable.hiking));
@@ -115,10 +110,22 @@ public class BuddiesMapActivity extends AbstractActivity implements
     @Override
     public void onConnected(Bundle bundle) {
         Location location = locationClient.getLastLocation();
+        if(location == null) {
+            LocationRequest request = LocationRequest.create();
+            request.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+            request.setNumUpdates(1);
+            locationClient.requestLocationUpdates(request, this);
+        } else {
+            LatLng latLng = zoomToLocation(location);
+            loadPartiesAndShowOnMap(latLng);
+        }
+    }
+
+    private LatLng zoomToLocation(Location location) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 14);
         map.animateCamera(cameraUpdate);
-        loadPartiesAndShowOnMap(latLng);
+        return latLng;
     }
 
     private void loadPartiesAndShowOnMap(final LatLng center) {
@@ -155,6 +162,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
     }
 
     private void displayParties(List<Party> parties) {
+        partyMarkerMap = new HashMap<Marker, Party>();
         for (Party party : parties) {
             if (map != null) {
                 Bitmap partyBitmap = categoryDrawables.get(CategoryType.valueOf(party.getCategory()));
@@ -229,4 +237,18 @@ public class BuddiesMapActivity extends AbstractActivity implements
     public View getInfoContents(Marker marker) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        LatLng latLng = zoomToLocation(location);
+        loadPartiesAndShowOnMap(latLng);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.search_parties_menu_item).setVisible(false);
+        return true;
+
+    }
+
 }
