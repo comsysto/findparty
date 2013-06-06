@@ -46,12 +46,19 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
     public PartyManagementServiceImpl(String host, PartyManagerApplication application) {
         HttpComponentsClientHttpRequestFactory requestFactory = createHttpRequestFactory();
 
-        this.restTemplate = new RestTemplate(requestFactory);
+        this.restTemplate = new RestTemplate(true, requestFactory);
+        this.restTemplate.setInterceptors(createInterceptors(application));
+        this.urlBuilder = new UrlBuilder(host);
+    }
+
+    private List<ClientHttpRequestInterceptor> createInterceptors(PartyManagerApplication application) {
+        List<ClientHttpRequestInterceptor> interceptors = new ArrayList<ClientHttpRequestInterceptor>();
         NoCacheClientRequestInterceptor noCacheInterceptor = new NoCacheClientRequestInterceptor();
         ClientAuthenticationRequestInterceptor authInterceptor = new ClientAuthenticationRequestInterceptor(application);
+        interceptors.add(noCacheInterceptor);
+        interceptors.add(authInterceptor);
 
-        this.restTemplate.setInterceptors(new ClientHttpRequestInterceptor[]{noCacheInterceptor, authInterceptor});
-        this.urlBuilder = new UrlBuilder(host);
+        return interceptors;
     }
 
     private HttpComponentsClientHttpRequestFactory createHttpRequestFactory() {
