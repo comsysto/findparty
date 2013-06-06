@@ -41,7 +41,7 @@ public class OptionMenuHandler {
                 goTo(activity, CreatePartyActivity.class);
                 break;
             case R.id.search_parties_menu_item:
-                goTo(activity, FindPartiesMapActivity.class);
+                goTo(activity, BuddiesMapActivity.class);
                 break;
             case R.id.manage_picture_menu_item:
                 goTo(activity, ManageUserPictureDialogActivity.class);

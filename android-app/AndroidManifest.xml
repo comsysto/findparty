@@ -41,6 +41,20 @@
         <activity android:name="com.comsysto.findbuddies.android.activity.BuddiesMapActivity"/>
 
 
+
+        <activity
+                android:name=".activity.masterdetail.PartyListActivity"
+                android:label="@string/APP_NAME" >
+        </activity>
+        <activity
+                android:name=".activity.masterdetail.PartyMapActivity"
+                android:parentActivityName=".PartyListActivity" >
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".PartyListActivity" />
+        </activity>
+
+
         <service android:name="com.comsysto.findbuddies.android.account.AuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator"/>
