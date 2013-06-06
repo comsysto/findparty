@@ -68,11 +68,11 @@ public class PartyListFragment extends android.support.v4.app.ListFragment {
         super.onCreate(savedInstanceState);
 
         // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
+        setListAdapter(new ArrayAdapter<String>(
                 getActivity(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
-                DummyContent.ITEMS));
+                new String[]{"1", "2"}));
     }
 
     @Override
@@ -112,7 +112,7 @@ public class PartyListFragment extends android.support.v4.app.ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+        mCallbacks.onItemSelected("0");
     }
 
     @Override

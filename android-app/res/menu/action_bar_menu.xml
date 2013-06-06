@@ -18,8 +18,4 @@
     <item android:title="@string/CREDITS_LABEL"
           android:id="@+id/credits"
           android:showAsAction="never" />
-    <item android:id="@+id/debug_new_map_api_menu_item"
-          android:title="DEBUG NEW MAP API"
-          android:showAsAction="never" />
-
 </menu>
