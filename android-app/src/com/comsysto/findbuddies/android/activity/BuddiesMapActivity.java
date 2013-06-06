@@ -25,6 +25,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
 import com.google.android.maps.GeoPoint;
@@ -46,7 +48,7 @@ import java.util.Map;
  */
 public class BuddiesMapActivity extends AbstractActivity implements
         GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.OnCameraChangeListener, GoogleMap.InfoWindowAdapter {
+        GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.OnCameraChangeListener, GoogleMap.InfoWindowAdapter, LocationListener {
 
     static final LatLng HAMBURG = new LatLng(53.558, 9.927);
     static final LatLng KIEL = new LatLng(53.551, 9.993);
@@ -115,10 +117,22 @@ public class BuddiesMapActivity extends AbstractActivity implements
     @Override
     public void onConnected(Bundle bundle) {
         Location location = locationClient.getLastLocation();
+        if(location == null) {
+            LocationRequest request = LocationRequest.create();
+            request.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+            request.setNumUpdates(1);
+            locationClient.requestLocationUpdates(request, this);
+        } else {
+            LatLng latLng = zoomToLocation(location);
+            loadPartiesAndShowOnMap(latLng);
+        }
+    }
+
+    private LatLng zoomToLocation(Location location) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 14);
         map.animateCamera(cameraUpdate);
-        loadPartiesAndShowOnMap(latLng);
+        return latLng;
     }
 
     private void loadPartiesAndShowOnMap(final LatLng center) {
@@ -229,4 +243,12 @@ public class BuddiesMapActivity extends AbstractActivity implements
     public View getInfoContents(Marker marker) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        LatLng latLng = zoomToLocation(location);
+        loadPartiesAndShowOnMap(latLng);
+    }
+
+
 }
