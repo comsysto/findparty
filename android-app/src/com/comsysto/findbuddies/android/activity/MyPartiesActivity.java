@@ -1,7 +1,9 @@
 package com.comsysto.findbuddies.android.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import com.comsysto.findbuddies.android.R;
+import com.comsysto.findparty.User;
 
 /**
  * Acitivty for displaying only Active Tasks!
@@ -14,6 +16,11 @@ public class MyPartiesActivity extends AbstractPartyListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.my_parties);
+
+        User user = getPartyManagerApplication().getUser();
+
+        Log.i("TEST", user.getUsername());
+
 		super.onCreate(savedInstanceState);
 	}
 
