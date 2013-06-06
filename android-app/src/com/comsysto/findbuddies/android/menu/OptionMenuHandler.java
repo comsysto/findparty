@@ -58,9 +58,6 @@ public class OptionMenuHandler {
             case R.id.credits:
                 goTo(activity, CreditsActivity.class);
                 break;
-            case R.id.debug_new_map_api_menu_item:
-                goTo(activity, BuddiesMapActivity.class);
-                break;
             default:
                 //do nothing
         }
