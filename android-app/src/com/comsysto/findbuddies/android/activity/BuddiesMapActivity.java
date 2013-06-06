@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.map.PartyItemizedOverlay;
 import com.comsysto.findbuddies.android.map.PartyOverlayItem;
