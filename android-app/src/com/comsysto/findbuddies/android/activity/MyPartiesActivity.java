@@ -16,11 +16,6 @@ public class MyPartiesActivity extends AbstractPartyListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.my_parties);
-
-        User user = getPartyManagerApplication().getUser();
-
-        Log.i("TEST", user.getUsername());
-
 		super.onCreate(savedInstanceState);
 	}
 
