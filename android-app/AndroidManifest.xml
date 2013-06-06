@@ -9,13 +9,14 @@
             android:name="com.vogella.android.locationapi.maps.permission.MAPS_RECEIVE"
             android:protectionLevel="signature" />
 
+    <!--suppress AndroidDomInspection -->
     <uses-feature
             android:glEsVersion="0x00020000"
             android:required="true" />
 
     <application android:debuggable="true" android:name="com.comsysto.findbuddies.android.application.PartyManagerApplication"
-                 android:theme="@style/CustomTheme"
-                 android:icon="@drawable/logo_findbuddies_460px_v02" android:label="@string/APP_NAME">
+                 android:theme="@android:style/Theme.Holo.Light"
+                 android:icon="@drawable/comsysto1" android:label="@string/APP_NAME">
         <uses-library android:name="com.google.android.maps"/>
 
 
@@ -28,15 +29,15 @@
             </intent-filter>
         </activity>
         <activity android:name="com.comsysto.findbuddies.android.activity.MyPartiesActivity" android:launchMode="singleTop"/>
-        <activity android:name="com.comsysto.findbuddies.android.activity.LoginActivity"/>
-        <activity android:name="com.comsysto.findbuddies.android.activity.RegisterActivity"/>
+        <activity android:name=".activity.signin.GoogleSigninActivity" android:theme="@android:style/Theme.Holo.Light.NoActionBar"/>
+        <activity android:name=".activity.signin.CreateAccountActivity" android:theme="@android:style/Theme.Holo.Light.NoActionBar"/>
         <activity android:name="com.comsysto.findbuddies.android.activity.CreatePartyActivity"/>
         <activity android:name="com.comsysto.findbuddies.android.activity.EditPartyActivity"/>
         <activity android:name="com.comsysto.findbuddies.android.activity.CreditsActivity"/>
         <activity android:name="com.comsysto.findbuddies.android.activity.Preferences"/>
         <activity android:name="com.comsysto.findbuddies.android.activity.FindPartiesMapActivity" android:label="@string/APP_NAME"
-                  android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity android:name="com.comsysto.findbuddies.android.activity.ManageUserPictureDialogActivity" android:theme="@android:style/Theme.Dialog" android:excludeFromRecents="true"/>
+                  android:theme="@android:style/Theme.Holo.Light.NoActionBar"/>
+        <activity android:name="com.comsysto.findbuddies.android.activity.ManageUserPictureDialogActivity" android:theme="@android:style/Theme.Holo.Light.Dialog" android:excludeFromRecents="true"/>
         <activity android:name="com.comsysto.findbuddies.android.activity.BuddiesMapActivity"/>
 
 

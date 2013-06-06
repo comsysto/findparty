@@ -2,16 +2,11 @@
 <resources>
 
     <style name="CommonPartyButton">
-        <item name="android:textColor">#ffffff</item>
+
         <item name="android:gravity">center</item>
         <item name="android:layout_margin">3dp</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:shadowColor">#000000</item>
-        <item name="android:shadowDx">1</item>
-        <item name="android:shadowDy">1</item>
-        <item name="android:shadowRadius">2</item>
-        <item name="android:background">@drawable/common_party_button</item>
         <item name="android:layout_width">260dp</item>
         <item name="android:layout_height">45dp</item>
         <item name="android:layout_gravity">center_horizontal</item>
@@ -29,11 +24,6 @@
         <item name="android:layout_margin">3dp</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:shadowColor">#000000</item>
-        <item name="android:shadowDx">1</item>
-        <item name="android:shadowDy">1</item>
-        <item name="android:shadowRadius">2</item>
-        <item name="android:background">@drawable/add_party_button</item>
         <item name="android:layout_width">260dp</item>
         <item name="android:layout_height">60dp</item>
         <item name="android:layout_gravity">center_horizontal|center_vertical</item>
@@ -46,11 +36,6 @@
         <item name="android:layout_margin">3dp</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:shadowColor">#000000</item>
-        <item name="android:shadowDx">1</item>
-        <item name="android:shadowDy">1</item>
-        <item name="android:shadowRadius">2</item>
-        <item name="android:background">@drawable/add_party_button</item>
         <item name="android:layout_width">260dp</item>
         <item name="android:layout_height">65dp</item>
         <item name="android:layout_gravity">center_horizontal|center_vertical</item>

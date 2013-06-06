@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
-import com.comsysto.findbuddies.android.activity.LoginActivity;
+import com.comsysto.findbuddies.android.activity.signin.GoogleSigninActivity;
 import com.comsysto.findbuddies.android.application.Constants;
 
 /**
@@ -37,7 +37,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 	public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType,
 			String[] requiredFeatures, Bundle options) throws NetworkErrorException {
 
-        final Intent intent = new Intent(context, LoginActivity.class);
+        final Intent intent = new Intent(context, GoogleSigninActivity.class);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
         final Bundle bundle = new Bundle();
         bundle.putParcelable(AccountManager.KEY_INTENT, intent);

@@ -6,7 +6,7 @@
               android:layout_height="fill_parent"
               android:rowCount="2"
               android:columnCount="2"
-              android:background="@drawable/gradient_background">
+              >
 
     <ImageView
             android:layout_width="wrap_content"

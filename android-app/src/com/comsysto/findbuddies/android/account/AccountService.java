@@ -20,21 +20,7 @@ public class AccountService {
     private final static String TAG = Constants.LOG_PREFIX + AccountService.class.getSimpleName();
 
     private Context context;
-
     private AccountManager accountManager;
-
-    private AccountManagerFuture<Bundle> myFuture = null;
-    private String token = null;
-    private AccountManagerCallback<Bundle> myCallback = new AccountManagerCallback<Bundle>() {
-        @Override public void run(final AccountManagerFuture<Bundle> arg0) {
-            try {
-                token = (String) myFuture.getResult().get(AccountManager.KEY_AUTHTOKEN); // this is your auth token
-            } catch (Exception e) {
-                Log.e(TAG, "Fehler beim Laden des Auth-Tokens: " + e.getMessage(), e);
-            }
-        }
-    };
-    private boolean receivedResult = false;
 
     public AccountService(Context applicationContext) {
         this.context = applicationContext;
@@ -66,7 +52,7 @@ public class AccountService {
 
     private Account getAccount() {
         Account[] accounts = accountManager.getAccountsByType(AccountAuthenticator.AUTH_TYPE);
-        if(accounts.length > 0) {
+        if(accounts!=null && accounts.length > 0) {
             return accounts[0];
         }
         Log.w(TAG, "No user account managed by device for Application: " + AccountAuthenticator.AUTH_TYPE);

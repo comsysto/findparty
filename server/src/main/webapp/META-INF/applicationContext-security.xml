@@ -14,6 +14,7 @@
         <!-- TODO: authenticated URLs should use 'require-channel="https"' on basic-account -->
         <intercept-url pattern="/services/users/login" method="POST" access="permitAll" />
         <intercept-url pattern="/services/users" method="POST" access="permitAll" />
+        <intercept-url pattern="/services/users" method="GET" access="permitAll" />
         <intercept-url pattern="/services/parties/echo/**" access="permitAll" />
         <intercept-url pattern="/**" access="isAuthenticated()" />
         <http-basic entry-point-ref="restBasicAuthEntryPoint" />

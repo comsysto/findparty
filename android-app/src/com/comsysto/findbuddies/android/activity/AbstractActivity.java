@@ -27,8 +27,8 @@ public abstract class AbstractActivity extends Activity {
     /**
 	 * goes to another activity
 	 * 
-	 * @param Activity coming from
-	 * @param Class going to, careful must be an Activity!
+	 * @param from Activity coming from
+	 * @param to Class going to, careful must be an Activity!
 	 */
 	void goTo(Activity from, Class<?> to) {
 		Intent intent = new Intent(from, to);

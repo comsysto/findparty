@@ -3,11 +3,13 @@ package com.comsysto.findbuddies.android.menu;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.activity.*;
+import com.comsysto.findbuddies.android.activity.signin.GoogleSigninActivity;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 
 /**
@@ -38,7 +40,7 @@ public class OptionMenuHandler {
             case R.id.add_party_menu_item:
                 goTo(activity, CreatePartyActivity.class);
                 break;
-            case R.id.serach_parties_menu_item:
+            case R.id.search_parties_menu_item:
                 goTo(activity, FindPartiesMapActivity.class);
                 break;
             case R.id.manage_picture_menu_item:
@@ -46,7 +48,12 @@ public class OptionMenuHandler {
                 break;
             case R.id.logout:
                 getPartyManagerApplication().getAccountService().removeAll();
-                getPartyManagerApplication().goToStart(activity);
+                Intent googlePlusLogout = new Intent(activity, GoogleSigninActivity.class);
+                googlePlusLogout.setAction("GOOGLE_PLUS_LOGOUT");
+                Log.i("CS_LOGOUT_OptionMenu", "removed device account");
+                Log.i("CS_LOGOUT_OptionMenu", "setting logout action: GOOGLE_PLUS_LOGOUT");
+                Log.i("CS_LOGOUT_OptionMenu", "starting Google Signin again to clear default GPlus account");
+                activity.startActivity(googlePlusLogout);
                 break;
             case R.id.credits:
                 goTo(activity, CreditsActivity.class);

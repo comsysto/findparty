@@ -2,25 +2,23 @@ package com.comsysto.findbuddies.android.activity;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+
 import com.comsysto.findbuddies.android.R;
-import com.comsysto.findbuddies.android.map.PartyItemizedOverlay;
-import com.comsysto.findbuddies.android.map.PartyOverlayItem;
 import com.comsysto.findbuddies.android.model.CategoryType;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.Picture;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
-import com.google.android.maps.GeoPoint;
 
 import java.util.HashMap;
 import java.util.List;
@@ -73,7 +71,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
         try {
             MapsInitializer.initialize(this);
         } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
 
     }
@@ -163,12 +161,11 @@ public class BuddiesMapActivity extends AbstractActivity implements
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void onCameraChange(CameraPosition cameraPosition) {
+        loadPartiesAndShowOnMap(cameraPosition.target);
     }
 
     @Override
-    public void onCameraChange(CameraPosition cameraPosition) {
-        loadPartiesAndShowOnMap(cameraPosition.target);
+    public void onConnectionFailed(ConnectionResult connectionResult) {
     }
 }
