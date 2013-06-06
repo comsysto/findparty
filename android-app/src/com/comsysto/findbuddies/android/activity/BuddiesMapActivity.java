@@ -1,5 +1,7 @@
 package com.comsysto.findbuddies.android.activity;
 
+import android.app.DialogFragment;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
@@ -8,6 +10,11 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.map.PartyItemizedOverlay;
 import com.comsysto.findbuddies.android.map.PartyOverlayItem;
@@ -21,10 +28,13 @@ import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
 import com.google.android.maps.GeoPoint;
+import com.google.android.maps.MyLocationOverlay;
+import com.google.android.maps.Overlay;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 
 /**
@@ -36,7 +46,7 @@ import java.util.List;
  */
 public class BuddiesMapActivity extends AbstractActivity implements
         GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.OnCameraChangeListener {
+        GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.OnCameraChangeListener, GoogleMap.InfoWindowAdapter {
 
     static final LatLng HAMBURG = new LatLng(53.558, 9.927);
     static final LatLng KIEL = new LatLng(53.551, 9.993);
@@ -46,36 +56,43 @@ public class BuddiesMapActivity extends AbstractActivity implements
     private Thread locationUpdateThread;
     private static final Double SEARCH_DISTANCE = 20d;
     private HashMap<CategoryType, Bitmap> categoryDrawables;
+    private MyLocationOverlay myLocOverlay;
+    private Map<Marker, Party> partyMarkerMap = new HashMap<Marker, Party>();
+    private LayoutInflater inflater;
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initCategoryDrawables();
+        initMapInitializer();
         setContentView(R.layout.buddies_map);
+        initializeMap();
+        initializeLocationClient();
+        inflater = (LayoutInflater) getApplicationContext().getSystemService
+                (Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    private void initializeLocationClient() {
+        locationClient = new LocationClient(this, this, this);
+        locationClient.connect();
+    }
+
+    private void initializeMap() {
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
                 .getMap();
 
-        if (map != null) {
-            Marker hamburg = map.addMarker(new MarkerOptions().position(HAMBURG)
-                    .title("Hamburg"));
-            Marker kiel = map.addMarker(new MarkerOptions()
-                    .position(KIEL)
-                    .title("Kiel")
-                    .snippet("Kiel is cool")
-                    .icon(BitmapDescriptorFactory
-                            .fromResource(R.drawable.androidmarker)));
-        }
         map.setMyLocationEnabled(true);
         map.setOnCameraChangeListener(this);
+        map.setInfoWindowAdapter(this);
+    }
 
-        locationClient = new LocationClient(this, this, this);
-        locationClient.connect();
+    private void initMapInitializer() {
         try {
             MapsInitializer.initialize(this);
         } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            Log.d("BuddiesMapActivity", "Could not initialize the MapInitializer", e);
         }
-
     }
 
     private void initCategoryDrawables() {
@@ -141,18 +158,28 @@ public class BuddiesMapActivity extends AbstractActivity implements
         for (Party party : parties) {
             if (map != null) {
                 Bitmap partyBitmap = categoryDrawables.get(CategoryType.valueOf(party.getCategory()));
-                map.addMarker(new MarkerOptions().position(new LatLng(party.getLocation().getLat(), party.getLocation().getLon()))
-                        .title(party.getName())
-                .icon(BitmapDescriptorFactory.fromBitmap(partyBitmap)));
+                Marker partyMarker = map.addMarker(getMarker(party, partyBitmap));
+                addToPartyMarkerMap(partyMarker, party);
             }
         }
     }
 
-    private BitmapDescriptor getUserPictureBitmap(String username) {
+    private void addToPartyMarkerMap(Marker partyMarker, Party party) {
+        partyMarkerMap.put(partyMarker, party);
+    }
+
+    private MarkerOptions getMarker(Party party, Bitmap partyBitmap) {
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(new LatLng(party.getLocation().getLat(), party.getLocation().getLon()));
+        markerOptions.title(party.getName());
+        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(partyBitmap));
+        return markerOptions;
+    }
+
+    private Bitmap getUserPictureBitmap(String username) {
         Picture picture = getPartyManagerApplication().getUserPicture(username);
         if(picture != null){
-            Bitmap bitmap = BitmapFactory.decodeByteArray(picture.getContent(), 0, picture.getContent().length);
-            return BitmapDescriptorFactory.fromBitmap(bitmap);
+            return BitmapFactory.decodeByteArray(picture.getContent(), 0, picture.getContent().length);
         }
         return null;
     }
@@ -170,5 +197,36 @@ public class BuddiesMapActivity extends AbstractActivity implements
     @Override
     public void onCameraChange(CameraPosition cameraPosition) {
         loadPartiesAndShowOnMap(cameraPosition.target);
+    }
+
+    @Override
+    public View getInfoWindow(Marker marker) {
+        View view = inflater.inflate(R.layout.party_overlay_info, null);
+        Party party = partyMarkerMap.get(marker);
+
+        ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
+        imageView.setImageResource(CategoryType.valueOf(party.getCategory()).getDrawableId());
+
+        Bitmap userPictureBitmap = getUserPictureBitmap(party.getOwner());
+
+        if(userPictureBitmap != null){
+            ImageView userPicture = (ImageView)view.findViewById(R.id.userPicture);
+            userPicture.setImageBitmap(userPictureBitmap);
+        }
+
+        TextView size = (TextView)view.findViewById(R.id.sizeValue);
+        size.setText(party.getSize().toString());
+        TextView date = (TextView)view.findViewById(R.id.dateValue);
+        date.setText(simpleDateFormat.format(party.getStartDate()));
+        TextView user = (TextView)view.findViewById(R.id.userValue);
+        user.setText(party.getOwner());
+        TextView experience = (TextView)view.findViewById(R.id.experienceValue);
+        experience.setText(party.getLevel());
+        return view;
+    }
+
+    @Override
+    public View getInfoContents(Marker marker) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }
