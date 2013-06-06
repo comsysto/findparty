@@ -184,7 +184,7 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
 
     @Override
     public User getUser(String username) {
-        return restTemplate.getForObject(urlBuilder.createUri(USER_SERVICE_PATH+"?username=" + username), User.class);
+        return restTemplate.getForObject(urlBuilder.createUri(USER_SERVICE_PATH, username), User.class);
     }
 
     @Override

@@ -23,6 +23,8 @@ public interface UserController {
 
     User getUser(String username);
 
+    List<User> getUsers();
+
     boolean getUser(User user);
 
     void update(User user, String userId);

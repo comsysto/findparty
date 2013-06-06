@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 
 /**
@@ -17,34 +20,52 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @Controller
-@RequestMapping("/users")
+
 public class UserControllerImpl implements  UserController {
 
     @Autowired
     public PartyService partyService;
 
+    @Autowired
+    RequestMappingHandlerMapping mapping;
+
     public static final Logger LOGGER = Logger.getLogger(PartyControllerImpl.class);
 
     @Override
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/users", method = RequestMethod.POST)
     public @ResponseBody User createUser(@RequestBody User user) {
         User createdUser = partyService.createUser(user.getUsername(), user.getPassword());
         return createdUser;
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET)
-    public @ResponseBody User getUser(@RequestParam("username") String username) {
+    @RequestMapping(value = "/users/{username}", method = RequestMethod.GET)
+    public @ResponseBody User getUser(@PathVariable String username) {
+        LOGGER.info("useSuffix: " + mapping.useSuffixPatternMatch());
+        LOGGER.info("useRegSuffix: " + mapping.useRegisteredSuffixPatternMatch());
+        LOGGER.info("received username: " + username);
+        try {
+            LOGGER.info("urldecoded: " + URLDecoder.decode(username, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            //nothing
+        }
+
         return partyService.getUser(username);
     }
 
     @Override
-    @RequestMapping(value="/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    public @ResponseBody List<User> getUsers() {
+        return partyService.getAllUsers();
+    }
+
+    @Override
+    @RequestMapping(value="/users/login", method = RequestMethod.POST)
     public @ResponseBody boolean getUser(@RequestBody User user) {
         return validateUser(user);
     }
 
-    @RequestMapping(value = "/{userId}", method = RequestMethod.PUT, consumes = "application/json")
+    @RequestMapping(value = "/users/{userId}", method = RequestMethod.PUT, consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
     public void update(@RequestBody User user, @PathVariable String userId) {
 
