@@ -6,9 +6,6 @@
         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 
-    <!-- TODO activate this so we can have path variables with .com -->
-    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
-        <property name="useDefaultSuffixPattern" value="false" />
-    </bean>
+
 
 </beans>

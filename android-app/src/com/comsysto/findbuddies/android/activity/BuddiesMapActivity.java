@@ -10,6 +10,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -247,6 +248,12 @@ public class BuddiesMapActivity extends AbstractActivity implements
         loadPartiesAndShowOnMap(latLng);
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.search_parties_menu_item).setVisible(false);
+        return true;
+
+    }
 
     @Override
     public void onInfoWindowClick(Marker marker) {

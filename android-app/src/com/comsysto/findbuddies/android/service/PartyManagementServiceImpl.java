@@ -177,7 +177,7 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
 
     @Override
     public User getUser(String username) {
-        return restTemplate.getForObject(urlBuilder.createUri(USER_SERVICE_PATH+"?username=" + username), User.class);
+        return restTemplate.getForObject(urlBuilder.createUri(USER_SERVICE_PATH, username), User.class);
     }
 
     @Override
@@ -203,7 +203,7 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
     @Override
     public Picture getUserPicture(String username) {
         //String url = urlBuilder.createUri(PICTURES_SERVICE_PATH, username);
-        String url = urlBuilder.createFrom(PICTURES_SERVICE_PATH + "?username=" + username);
+        String url = urlBuilder.createUri(PICTURES_SERVICE_PATH, username);
         try {
             return restTemplate.getForObject(url, Picture.class);
         } catch (Exception e) {

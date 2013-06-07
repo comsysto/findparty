@@ -2,7 +2,7 @@
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         >
 
@@ -11,17 +11,15 @@
     <TextView
             android:id="@android:id/text1"
             android:layout_width="fill_parent"
-            android:gravity="center"
             android:layout_height="40dip"
-            android:textColor="#fff"
-            android:background="@drawable/list_item_background"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
             android:text="An item"
-            android:shadowColor="#000000"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            android:shadowRadius="2"
             android:checkMark="?android:attr/listChoiceIndicatorMultiple"/>
-    <Space
-            android:layout_height="4dp"
-            android:layout_width="fill_parent"/>
+    <View
+            android:layout_height="1dp"
+            android:layout_width="fill_parent"
+
+            android:background="@android:color/darker_gray"/>
 </LinearLayout>

@@ -1,7 +1,9 @@
 package com.comsysto.findbuddies.android.activity;
 
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import com.comsysto.findbuddies.android.R;
 import com.comsysto.findparty.Party;
 
 import java.util.Date;
@@ -40,6 +42,13 @@ public class CreatePartyActivity extends PartyActivity {
         return getAllCategories().get(0);
     }
 
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.add_party_menu_item).setVisible(false);
+        return true;
+
+    }
 
 
 }
