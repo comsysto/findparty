@@ -14,7 +14,6 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.model.CategoryType;
 import com.comsysto.findparty.Party;
@@ -30,10 +29,7 @@ import com.google.android.gms.maps.model.*;
 import com.google.android.maps.MyLocationOverlay;
 
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -45,7 +41,7 @@ import java.util.Set;
  */
 public class BuddiesMapActivity extends AbstractActivity implements
         GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.InfoWindowAdapter, LocationListener, GoogleMap.OnInfoWindowClickListener {
+        GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.InfoWindowAdapter, LocationListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnCameraChangeListener {
 
     static final LatLng HAMBURG = new LatLng(53.558, 9.927);
     static final LatLng KIEL = new LatLng(53.551, 9.993);
@@ -53,6 +49,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
     private LocationClient locationClient;
     private List<Party> parties;
     private Thread locationUpdateThread;
+    private Set<String> partiesShownOnMap = new HashSet<String>();
     private static final Double SEARCH_DISTANCE = 20d;
     private HashMap<CategoryType, Bitmap> categoryDrawables;
     private MyLocationOverlay myLocOverlay;
@@ -79,10 +76,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
                 .getMap();
         map.setMyLocationEnabled(true);
-
-
-
-
+        map.setOnCameraChangeListener(this);
         map.setOnInfoWindowClickListener(this);
         map.setInfoWindowAdapter(this);
     }
@@ -122,16 +116,14 @@ public class BuddiesMapActivity extends AbstractActivity implements
             request.setNumUpdates(1);
             locationClient.requestLocationUpdates(request, this);
         } else {
-            LatLng latLng = zoomToLocation(location);
-            loadPartiesAndShowOnMap(latLng);
+            zoomToLocation(location);
         }
     }
 
-    private LatLng zoomToLocation(Location location) {
+    private void zoomToLocation(Location location) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 14);
         map.animateCamera(cameraUpdate);
-        return latLng;
     }
 
     private void loadPartiesAndShowOnMap(final LatLng center) {
@@ -168,20 +160,27 @@ public class BuddiesMapActivity extends AbstractActivity implements
     }
 
     private void displayParties(List<Party> parties) {
-        Set<Marker> keys = partyMarkerMap.keySet();
-        for(Marker key : keys){
-            key.remove();
-        }
         for (Party party : parties) {
             if (map != null) {
-                Bitmap partyBitmap = categoryDrawables.get(CategoryType.valueOf(party.getCategory()));
-                Marker partyMarker = map.addMarker(getMarker(party, partyBitmap));
-                addToPartyMarkerMap(partyMarker, party);
+                if(!isPartyAlreadyShownOnMap(party)){
+                    Bitmap partyBitmap = categoryDrawables.get(CategoryType.valueOf(party.getCategory()));
+                    Marker partyMarker = map.addMarker(getMarker(party, partyBitmap));
+                    addParty(partyMarker, party);
+                }
             }
         }
     }
 
-    private void addToPartyMarkerMap(Marker partyMarker, Party party) {
+    private boolean isPartyAlreadyShownOnMap(Party party) {
+        if(partiesShownOnMap.contains(party.getId())){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    private void addParty(Marker partyMarker, Party party) {
+        partiesShownOnMap.add(party.getId());
         partyMarkerMap.put(partyMarker, party);
     }
 
@@ -244,8 +243,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
 
     @Override
     public void onLocationChanged(Location location) {
-        LatLng latLng = zoomToLocation(location);
-        loadPartiesAndShowOnMap(latLng);
+        zoomToLocation(location);
     }
 
     @Override
@@ -270,5 +268,10 @@ public class BuddiesMapActivity extends AbstractActivity implements
         emailIntent.setType("text/plain");
 
         startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+    }
+
+    @Override
+    public void onCameraChange(CameraPosition cameraPosition) {
+        loadPartiesAndShowOnMap(cameraPosition.target);
     }
 }
