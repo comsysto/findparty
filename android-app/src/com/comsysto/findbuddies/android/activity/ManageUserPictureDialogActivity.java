@@ -26,7 +26,7 @@ import java.io.InputStream;
 public class ManageUserPictureDialogActivity extends AbstractActivity {
 
 
-    public static final int PICTURE_SIZE = 500;
+    public static final int PICTURE_SIZE = 250;
 
     private ImageView userPicture;
 
