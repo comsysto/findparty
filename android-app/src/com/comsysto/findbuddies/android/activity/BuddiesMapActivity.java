@@ -143,12 +143,16 @@ public class BuddiesMapActivity extends AbstractActivity implements
 
                     if(BuddiesMapActivity.this.parties != null){
                         Log.d("FindPartiesMapActivity", BuddiesMapActivity.this.parties.size() + " parties found in " + SEARCH_DISTANCE + " km area: " + BuddiesMapActivity.this.parties.toString());
+                    } else {
+                        Log.e("FindPartiesMapActivity", "Returned parties were null but at least expected empty list!");
                     }
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            displayParties(BuddiesMapActivity.this.parties);
+                            if (BuddiesMapActivity.this.parties != null) {
+                                displayParties(BuddiesMapActivity.this.parties);
+                            }
                         }
                     });
 
