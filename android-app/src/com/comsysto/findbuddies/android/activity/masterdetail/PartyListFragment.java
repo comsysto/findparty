@@ -1,10 +1,27 @@
 package com.comsysto.findbuddies.android.activity.masterdetail;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.comsysto.findbuddies.android.adapter.PartyListAdapter;
+import com.comsysto.findbuddies.android.application.PartyManagerApplication;
+import com.comsysto.findbuddies.android.model.CategoryType;
+import com.comsysto.findbuddies.android.widget.LoadingProgressDialog;
+import com.comsysto.findparty.Party;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * A list fragment representing a list of Parties. This fragment
@@ -15,13 +32,15 @@ import android.widget.ListView;
  * Activities containing this fragment MUST implement the {@link com.comsysto.findbuddies.android.activity.masterdetail.PartyListFragment.Callbacks}
  * interface.
  */
-public class PartyListFragment extends android.support.v4.app.ListFragment {
+public class PartyListFragment extends android.support.v4.app.ListFragment implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 
     /**
      * The serialization (saved instance state) Bundle key representing the
      * activated item position. Only used on tablets.
      */
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
+    private static final Double SEARCH_DISTANCE = 20d;
+
 
     /**
      * The fragment's current callback object, which is notified of list item
@@ -33,6 +52,46 @@ public class PartyListFragment extends android.support.v4.app.ListFragment {
      * The current activated item position. Only used on tablets.
      */
     private int mActivatedPosition = ListView.INVALID_POSITION;
+    private LoadingProgressDialog dialog;
+    private LocationClient locationClient;
+    private Thread partiesLoadingThread;
+    private List<Party> parties;
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Location lastLocation = locationClient.getLastLocation();
+        dialog.dismiss();
+        if (lastLocation != null) {
+            loadParties(lastLocation);
+        }
+        else {
+            dialog = new LoadingProgressDialog(getActivity(), "Last known position not found. Trying to refresh position. Please wait...", true);
+            LocationRequest locationRequest = LocationRequest.create();
+            locationRequest.setNumUpdates(1);
+            locationClient.requestLocationUpdates(locationRequest,this);
+        }
+
+
+
+    }
+
+    @Override
+    public void onDisconnected() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        dialog.dismiss();
+        loadParties(location);
+
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -43,7 +102,7 @@ public class PartyListFragment extends android.support.v4.app.ListFragment {
         /**
          * Callback for when an item has been selected.
          */
-        public void onItemSelected(String id);
+        public void onItemSelected(Party party);
     }
 
     /**
@@ -52,7 +111,8 @@ public class PartyListFragment extends android.support.v4.app.ListFragment {
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onItemSelected(String id) {
+        public void onItemSelected(Party party) {
+
         }
     };
 
@@ -67,13 +127,17 @@ public class PartyListFragment extends android.support.v4.app.ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<String>(
-                getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                new String[]{"1", "2"}));
+        triggerLocationUpdate();
     }
+
+    private void triggerLocationUpdate() {
+        dialog = new LoadingProgressDialog(getActivity(), "Aquiring last known position. Please wait...", true);
+        locationClient = new LocationClient(getActivity(), this, this);
+        locationClient.connect();
+    }
+
+
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -112,7 +176,7 @@ public class PartyListFragment extends android.support.v4.app.ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected("0");
+        mCallbacks.onItemSelected(parties.get(position));
     }
 
     @Override
@@ -144,5 +208,34 @@ public class PartyListFragment extends android.support.v4.app.ListFragment {
         }
 
         mActivatedPosition = position;
+    }
+
+    private void loadParties(final Location location) {
+        dialog = new LoadingProgressDialog(getActivity(), "Loading nearby Parties. Please wait...", true);
+        this.partiesLoadingThread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                synchronized (PartyListFragment.this) {
+                    PartyListFragment.this.parties = getPartyManagerApplication().getPartyService().searchParties(location.getLongitude(), location.getLatitude(), SEARCH_DISTANCE);
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialog.dismiss();
+                            PartyListFragment.this.setListAdapter(new PartyListAdapter(getActivity(), PartyListFragment.this.parties));
+                        }
+                    });
+
+
+                }
+            }
+        });
+
+        partiesLoadingThread.start();
+    }
+
+    private PartyManagerApplication getPartyManagerApplication() {
+        return (PartyManagerApplication)getActivity().getApplication();  //To change body of created methods use File | Settings | File Templates.
     }
 }

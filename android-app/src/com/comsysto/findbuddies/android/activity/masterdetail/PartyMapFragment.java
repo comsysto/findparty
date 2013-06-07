@@ -1,10 +1,16 @@
 package com.comsysto.findbuddies.android.activity.masterdetail;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.comsysto.findbuddies.android.R;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * A fragment representing a single Party detail screen.
@@ -18,6 +24,7 @@ public class PartyMapFragment extends android.support.v4.app.Fragment {
      * represents.
      */
     public static final String ARG_ITEM_ID = "item_id";
+    private GoogleMap map;
 
 
     /**
@@ -41,4 +48,19 @@ public class PartyMapFragment extends android.support.v4.app.Fragment {
 
         return rootView;
     }
+
+    public LatLng zoomToLocation(Location location) {
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 14);
+        map.animateCamera(cameraUpdate);
+        return latLng;
+    }
+
+//    private void initializeMap() {
+//        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
+//                .getMap();
+//        map.setMyLocationEnabled(true);
+//        map.setOnCameraChangeListener(this);
+//        map.setInfoWindowAdapter(this);
+//    }
 }

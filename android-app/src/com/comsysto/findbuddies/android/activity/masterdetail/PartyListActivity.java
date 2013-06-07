@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import com.comsysto.findbuddies.android.R;
+import com.comsysto.findparty.Party;
 
 
 /**
@@ -30,6 +31,7 @@ public class PartyListActivity extends FragmentActivity
      * device.
      */
     private boolean mTwoPane;
+    private PartyMapFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,7 @@ public class PartyListActivity extends FragmentActivity
                     .findFragmentById(R.id.party_list))
                     .setActivateOnItemClick(true);
 
-            PartyMapFragment fragment = new PartyMapFragment();
+            fragment = new PartyMapFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.party_detail_container, fragment)
                     .commit();
@@ -63,18 +65,17 @@ public class PartyListActivity extends FragmentActivity
      * indicating that the item with the given ID was selected.
      */
     @Override
-    public void onItemSelected(String id) {
+    public void onItemSelected(Party party) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
-            //TODO:Zome to location
 
         } else {
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
             Intent detailIntent = new Intent(this, PartyMapActivity.class);
-            detailIntent.putExtra(PartyMapFragment.ARG_ITEM_ID, id);
+            detailIntent.putExtra(PartyMapFragment.ARG_ITEM_ID, party);
             startActivity(detailIntent);
         }
     }
