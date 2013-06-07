@@ -1,6 +1,7 @@
 package com.comsysto.findbuddies.android.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,7 +14,6 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.model.CategoryType;
 import com.comsysto.findparty.Party;
@@ -29,9 +29,7 @@ import com.google.android.gms.maps.model.*;
 import com.google.android.maps.MyLocationOverlay;
 
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -43,18 +41,20 @@ import java.util.Map;
  */
 public class BuddiesMapActivity extends AbstractActivity implements
         GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.OnCameraChangeListener, GoogleMap.InfoWindowAdapter, LocationListener {
+        GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.InfoWindowAdapter, LocationListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnCameraChangeListener {
 
     static final LatLng HAMBURG = new LatLng(53.558, 9.927);
     static final LatLng KIEL = new LatLng(53.551, 9.993);
+    public static final String SEPARATOR = " - ";
     private GoogleMap map;
     private LocationClient locationClient;
     private List<Party> parties;
     private Thread locationUpdateThread;
+    private Set<String> partiesShownOnMap = new HashSet<String>();
     private static final Double SEARCH_DISTANCE = 20d;
     private HashMap<CategoryType, Bitmap> categoryDrawables;
     private MyLocationOverlay myLocOverlay;
-    private Map<Marker, Party> partyMarkerMap;
+    private Map<Marker, Party> partyMarkerMap = new HashMap<Marker, Party>();;
     private LayoutInflater inflater;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
 
@@ -78,6 +78,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
                 .getMap();
         map.setMyLocationEnabled(true);
         map.setOnCameraChangeListener(this);
+        map.setOnInfoWindowClickListener(this);
         map.setInfoWindowAdapter(this);
     }
 
@@ -116,16 +117,14 @@ public class BuddiesMapActivity extends AbstractActivity implements
             request.setNumUpdates(1);
             locationClient.requestLocationUpdates(request, this);
         } else {
-            LatLng latLng = zoomToLocation(location);
-            loadPartiesAndShowOnMap(latLng);
+            zoomToLocation(location);
         }
     }
 
-    private LatLng zoomToLocation(Location location) {
+    private void zoomToLocation(Location location) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 14);
         map.animateCamera(cameraUpdate);
-        return latLng;
     }
 
     private void loadPartiesAndShowOnMap(final LatLng center) {
@@ -162,17 +161,27 @@ public class BuddiesMapActivity extends AbstractActivity implements
     }
 
     private void displayParties(List<Party> parties) {
-        partyMarkerMap = new HashMap<Marker, Party>();
         for (Party party : parties) {
             if (map != null) {
-                Bitmap partyBitmap = categoryDrawables.get(CategoryType.valueOf(party.getCategory()));
-                Marker partyMarker = map.addMarker(getMarker(party, partyBitmap));
-                addToPartyMarkerMap(partyMarker, party);
+                if(!isPartyAlreadyShownOnMap(party)){
+                    Bitmap partyBitmap = categoryDrawables.get(CategoryType.valueOf(party.getCategory()));
+                    Marker partyMarker = map.addMarker(getMarker(party, partyBitmap));
+                    addParty(partyMarker, party);
+                }
             }
         }
     }
 
-    private void addToPartyMarkerMap(Marker partyMarker, Party party) {
+    private boolean isPartyAlreadyShownOnMap(Party party) {
+        if(partiesShownOnMap.contains(party.getId())){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    private void addParty(Marker partyMarker, Party party) {
+        partiesShownOnMap.add(party.getId());
         partyMarkerMap.put(partyMarker, party);
     }
 
@@ -203,11 +212,6 @@ public class BuddiesMapActivity extends AbstractActivity implements
     }
 
     @Override
-    public void onCameraChange(CameraPosition cameraPosition) {
-        loadPartiesAndShowOnMap(cameraPosition.target);
-    }
-
-    @Override
     public View getInfoWindow(Marker marker) {
         View view = inflater.inflate(R.layout.party_overlay_info, null);
         Party party = partyMarkerMap.get(marker);
@@ -228,6 +232,8 @@ public class BuddiesMapActivity extends AbstractActivity implements
         date.setText(simpleDateFormat.format(party.getStartDate()));
         TextView user = (TextView)view.findViewById(R.id.userValue);
         user.setText(party.getOwner());
+        TextView subject = (TextView)view.findViewById(R.id.subjectValue);
+        subject.setText(party.getSubject());
         TextView experience = (TextView)view.findViewById(R.id.experienceValue);
         experience.setText(party.getLevel());
         return view;
@@ -240,8 +246,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
 
     @Override
     public void onLocationChanged(Location location) {
-        LatLng latLng = zoomToLocation(location);
-        loadPartiesAndShowOnMap(latLng);
+        zoomToLocation(location);
     }
 
     @Override
@@ -251,4 +256,35 @@ public class BuddiesMapActivity extends AbstractActivity implements
 
     }
 
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Party party = partyMarkerMap.get(marker);
+
+        Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+
+        String[] recipients = new String[]{party.getOwner()};
+
+        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, recipients);
+
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Your party: " + getSubject(party));
+
+        emailIntent.setType("text/plain");
+
+        startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+    }
+
+    private String getSubject(Party party) {
+        StringBuilder subject = new StringBuilder();
+        subject.append(party.getCategory());
+        if(party.getSubject() != null){
+            subject.append(SEPARATOR);
+            subject.append(party.getSubject());
+        }
+        return subject.toString();
+    }
+
+    @Override
+    public void onCameraChange(CameraPosition cameraPosition) {
+        loadPartiesAndShowOnMap(cameraPosition.target);
+    }
 }

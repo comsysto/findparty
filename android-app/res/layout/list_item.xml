@@ -11,14 +11,15 @@
     <TextView
             android:id="@android:id/text1"
             android:layout_width="fill_parent"
-            android:gravity="center"
             android:layout_height="40dip"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
             android:text="An item"
             android:checkMark="?android:attr/listChoiceIndicatorMultiple"/>
     <View
             android:layout_height="1dp"
             android:layout_width="fill_parent"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-            android:background="@android:color/black"/>
+
+            android:background="@android:color/darker_gray"/>
 </LinearLayout>

@@ -40,6 +40,9 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
 
     ProgressDialog createUserDialog;
 
+    private User existingUser;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,22 +55,36 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
         partyService = ((PartyManagerApplication) getApplication()).getPartyService();
         accountService = ((PartyManagerApplication) getApplication()).getAccountService();
 
-        createUserDialog = new ProgressDialog(this);
-        createUserDialog.setMessage("Creating user account...");
+        existingUser = partyService.getUser(username);
 
         usernameText = (EditText) findViewById(R.id.usernameText);
         passwordText = (EditText) findViewById(R.id.passwordText);
         helpText = (TextView) findViewById(R.id.helptext);
         actionButton = (Button) findViewById(R.id.loginButton);
-
-        usernameText.setText(username);
-        passwordText.setText("");
-        helpText.setText("We create a FindBuddies account for you, using your Google+ username and a password you provide. The password must not necessarily be the same as your Google+ password");
-
-        //cannot be modified, because we want Google+ account name as fixed value
-        usernameText.setEnabled(false);
+        createUserDialog = new ProgressDialog(this);
 
         actionButton.setOnClickListener(this);
+
+        if(existingUser==null) {
+            createUserDialog.setMessage("Creating user account...");
+            usernameText.setText(username);
+            passwordText.setText("");
+            helpText.setText("We create a FindBuddies account for you, using your Google+ username and a password you provide. The password must not necessarily be the same as your Google+ password");
+
+            //cannot be modified, because we want Google+ account name as fixed value
+            usernameText.setEnabled(false);
+
+        } else {
+            usernameText.setText(existingUser.getUsername());
+            passwordText.setText(existingUser.getPassword());
+            createUserDialog.setMessage("Existing user found for username '" + existingUser.getUsername()+"'.\nLogging in...");
+            helpText.setVisibility(View.INVISIBLE);
+            usernameText.setEnabled(false);
+            passwordText.setEnabled(false);
+            actionButton.callOnClick();
+        }
+
+
     }
 
     @Override
@@ -76,14 +93,28 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
             String username = usernameText.getText().toString();
             String password = passwordText.getText().toString();
 
-            if(password == null || password.equals("")) {
-                Toast.makeText(this, "Please specify a valid password!", Toast.LENGTH_LONG).show();
+            if(existingUser!=null) {
+                loginExistingUser();
             } else {
-                Log.i(TAG, "Creating new User Account on server: " + username+"/"+password);
-                createUser(username, password);
+                createNewAccount(username, password);
             }
-
         }
+    }
+
+    private void createNewAccount(String username, String password) {
+        if(password == null || password.equals("")) {
+            Toast.makeText(this, "Please specify a valid password!", Toast.LENGTH_LONG).show();
+        } else {
+            Log.i(TAG, "Creating new User Account on server: " + username + "/" + password);
+            createUser(username, password);
+        }
+    }
+
+    private void loginExistingUser() {
+        accountService.createAccount(existingUser.getUsername(), existingUser.getPassword());
+        Intent start = new Intent(CreateAccountActivity.this, StartActivity.class);
+        createUserDialog.dismiss();
+        startActivity(start);
     }
 
     private void createUser(String username, String password) {
