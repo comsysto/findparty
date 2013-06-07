@@ -261,6 +261,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
         Party party = partyMarkerMap.get(marker);
 
         Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+        //Intent emailIntent = Intent.makeMainSelectorActivity(Intent.ACTION_SEND, Intent.CATEGORY_APP_EMAIL);
 
         String[] recipients = new String[]{party.getOwner()};
 
@@ -268,7 +269,8 @@ public class BuddiesMapActivity extends AbstractActivity implements
 
         emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Your party: " + getSubject(party));
 
-        emailIntent.setType("text/plain");
+        emailIntent.setType("message/rfc822");
+
 
         startActivity(Intent.createChooser(emailIntent, "Send mail..."));
     }

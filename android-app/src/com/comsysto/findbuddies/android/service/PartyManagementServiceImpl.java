@@ -202,7 +202,6 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
 
     @Override
     public Picture getUserPicture(String username) {
-        //String url = urlBuilder.createUri(PICTURES_SERVICE_PATH, username);
         String url = urlBuilder.createUri(PICTURES_SERVICE_PATH, username);
         try {
             return restTemplate.getForObject(url, Picture.class);
