@@ -81,7 +81,7 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
             helpText.setVisibility(View.INVISIBLE);
             usernameText.setEnabled(false);
             passwordText.setEnabled(false);
-            actionButton.callOnClick();
+            actionButton.performClick();
         }
 
 

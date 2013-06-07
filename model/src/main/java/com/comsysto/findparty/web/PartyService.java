@@ -29,9 +29,7 @@ public interface PartyService {
     public void update(Party party);
     
     public List<Party> getAllParties(String username);
-    
-    public void delete(String partyId);
-    
+
     public String echo(String input);
 
     public User createUser(String username, String password);
@@ -43,4 +41,8 @@ public interface PartyService {
     public Boolean login(User user);
 
     void update(User user);
+
+    void deleteParty(String partyId);
+
+    void deleteUser(String userId);
 }

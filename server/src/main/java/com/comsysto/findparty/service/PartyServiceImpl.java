@@ -146,9 +146,15 @@ public class PartyServiceImpl implements PartyService {
     }
 
     @Override
-    public void delete(String partyId) {
+    public void deleteParty(String partyId) {
         Party party = findPartyById(partyId);
         mongoService.getMongoTemplate().remove(party);
+    }
+
+    @Override
+    public void deleteUser(String userId) {
+        User user = findUserById(userId);
+        mongoService.getMongoTemplate().remove(user);
     }
 	
     /**
