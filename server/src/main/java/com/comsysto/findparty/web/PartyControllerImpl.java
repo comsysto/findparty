@@ -103,7 +103,7 @@ public class PartyControllerImpl implements PartyController {
     @RequestMapping(value="/{partyId}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable String partyId) {
-        partyService.delete(partyId);        
+        partyService.deleteParty(partyId);
     }
 
     @RequestMapping(value="/echo/{input}", method = RequestMethod.GET, produces = "application/json")

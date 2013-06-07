@@ -116,7 +116,7 @@ public abstract class AbstractPartyListActivity extends ListActivity {
 
                 @Override
                 protected Void doInBackground(Void... params) {
-                    getPartyManagerApplication().getPartyService().delete(selectedParty.getId());
+                    getPartyManagerApplication().getPartyService().deleteParty(selectedParty.getId());
                     return null;
                 }
 
@@ -167,33 +167,6 @@ public abstract class AbstractPartyListActivity extends ListActivity {
     private void disableTitleInActionBar() {
         ActionBar ab = getActionBar();
         ab.setDisplayShowTitleEnabled(false);
-    }
-
-
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        Log.i(LOG_MY_PARTIES, "onCreatDialog called");
-
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle("Splash Screeen Button clicked");
-        alertDialog
-                .setMessage("inital text - needed or you can't change it later in onprepare.... bug???");
-        return alertDialog;
-    }
-
-    @Override
-    protected void onPrepareDialog(int id, Dialog dialog) {
-        Log.i(LOG_MY_PARTIES, "onPrepareDialog called");
-
-        switch (id) {
-            case 5:
-                ((AlertDialog) dialog).setTitle("Service not ready");
-                ((AlertDialog) dialog).setMessage("Please wait until backend is initialized");
-                break;
-            default:
-                throw new IllegalStateException();
-        }
     }
 
     @Override

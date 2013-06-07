@@ -28,4 +28,6 @@ public interface UserController {
     boolean getUser(User user);
 
     void update(User user, String userId);
+
+    void delete(String id);
 }

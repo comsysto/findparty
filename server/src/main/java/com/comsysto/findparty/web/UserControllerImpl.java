@@ -75,6 +75,13 @@ public class UserControllerImpl implements  UserController {
         partyService.update(user);
     }
 
+    @Override
+    @RequestMapping(value="/users/{userId}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable String userId) {
+        partyService.deleteUser(userId);
+    }
+
     private boolean validateUser(User user) {
         String username = user.getUsername();
         User foundUser = partyService.getUser(username);

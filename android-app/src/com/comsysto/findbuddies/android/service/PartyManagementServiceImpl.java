@@ -130,7 +130,7 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
     }
 
     @Override
-    public void delete(String partyId) {
+    public void deleteParty(String partyId) {
         String url = urlBuilder.createUri(PARTY_SERVICE_PATH, partyId);
         try {
             restTemplate.delete(url);
@@ -197,6 +197,16 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
             restTemplate.put(url, user);
         } catch (Exception e) {
             Log.i("MY_PARTIES", "Fehler beim updaten des Users: " + user);
+        }
+    }
+
+
+    @Override
+    public void deleteUser(String userId) {
+        try {
+            restTemplate.delete(urlBuilder.createUri(USER_SERVICE_PATH, userId));
+        } catch (Exception e) {
+            Log.i(TAG, "Fehler beim Löschen des Users mit ID="+userId);
         }
     }
 
