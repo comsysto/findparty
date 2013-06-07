@@ -45,6 +45,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
 
     static final LatLng HAMBURG = new LatLng(53.558, 9.927);
     static final LatLng KIEL = new LatLng(53.551, 9.993);
+    public static final String SEPARATOR = " - ";
     private GoogleMap map;
     private LocationClient locationClient;
     private List<Party> parties;
@@ -231,6 +232,8 @@ public class BuddiesMapActivity extends AbstractActivity implements
         date.setText(simpleDateFormat.format(party.getStartDate()));
         TextView user = (TextView)view.findViewById(R.id.userValue);
         user.setText(party.getOwner());
+        TextView subject = (TextView)view.findViewById(R.id.subjectValue);
+        subject.setText(party.getSubject());
         TextView experience = (TextView)view.findViewById(R.id.experienceValue);
         experience.setText(party.getLevel());
         return view;
@@ -255,19 +258,29 @@ public class BuddiesMapActivity extends AbstractActivity implements
 
     @Override
     public void onInfoWindowClick(Marker marker) {
+        Party party = partyMarkerMap.get(marker);
+
         Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
 
-        String[] recipients = new String[]{"a@email.com", "",};
+        String[] recipients = new String[]{party.getOwner()};
 
         emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, recipients);
 
-        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Test");
-
-        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "This is email's message");
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Your party: " + getSubject(party));
 
         emailIntent.setType("text/plain");
 
         startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+    }
+
+    private String getSubject(Party party) {
+        StringBuilder subject = new StringBuilder();
+        subject.append(party.getCategory());
+        if(party.getSubject() != null){
+            subject.append(SEPARATOR);
+            subject.append(party.getSubject());
+        }
+        return subject.toString();
     }
 
     @Override
