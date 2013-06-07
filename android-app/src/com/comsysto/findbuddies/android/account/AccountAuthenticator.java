@@ -22,7 +22,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     private final static String TAG = Constants.LOG_AUTH_PREFIX + AccountAuthenticator.class.getSimpleName();
 
-    public static final String AUTH_TYPE = "com.comsysto.account.findbuddies";
+    public static final String AUTH_TYPE = "com.comsysto.account.snuggleme";
     public static final String AUTH_TOKEN_TYPE = "Basic";
 
     private Context context;
