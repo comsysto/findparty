@@ -23,7 +23,7 @@
         <Button
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
-                android:text="@string/ADD_BUTTON" android:id="@+id/addEntryButton"
+                android:text="@string/SAVE_ACTIVITY" android:id="@+id/addEntryButton"
                 android:layout_weight="0.8"/>
 
     </LinearLayout>

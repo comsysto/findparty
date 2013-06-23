@@ -6,9 +6,8 @@
 
 
     <string name="SETTINGS_BUTTON">Settings</string>
-    <string name="CREATE_NEW_PARTY_BUTTON">Create a new activity</string>
-    <string name="FIND_PARTY_BUTTON">Find activities near you</string>
-    <string name="MY_PARTIES_BUTTON">Show my activities</string>
+    <string name="CREATE_NEW_ACTIVITY">Create new activity</string>
+    <string name="FIND_ACTIVITIES_BUTTON">Find activities near you</string>
 
     <string name="EXPERIENCE_LABEL">Experience</string>
     <string name="SUBJECT_LABEL">Description</string>
@@ -21,12 +20,10 @@
     <string name="OK_BUTTON">Ok</string>
     <string name="CANCEL_BUTTON">Cancel</string>
 
-    <string name="ADD_BUTTON">Create Party</string>
-    <string name="ADD_PARTY_BUTTON">Create new activity</string>
-    <string name="ADD_SUBJECT_BUTTON">Describe Party</string>
-    <string name="EDIT_PARTY_MENU_ITEM">Edit Party</string>
-    <string name="DELETE_PARTY_MENU_ITEM">Delete Party</string>
-    <string name="SAVE_PARTY_BUTTON">Save Party</string>
+    <string name="DESCRIBE_ACTIVITY">Describe Activity</string>
+    <string name="EDIT_ACTIVITY_MENU_ITEM">Edit Activity</string>
+    <string name="DELETE_ACTIVITY_MENU_ITEM">Delete Activity</string>
+    <string name="SAVE_ACTIVITY">Save Activity</string>
 
     <string name="LOGIN_BUTTON">Sign In</string>
     <string name="REGISTER_BUTTON">Register</string>
@@ -34,7 +31,6 @@
 
 	<string name="SPACE_LABEL"> </string>
 	<string name="CREDITS_LABEL">Credits</string>
-	<string name="ADD_LABEL">Add Task</string>
 	<string name="PREFERENCES_LABEL">Settings</string>
 	<string name="TASK_STATUS_LABEL">Status</string>
     <string name="LOCATION_INPUT_TITLE">Activity Location</string>
@@ -50,7 +46,7 @@
     <string name="MANAGE_USER_PICTURE_BUTTON">Add Some Photo Spice?</string>
     <string name="LOGOUT_MENU_ITEM_TEXT">Logout</string>
     <string name="REGISTRATION_FAILED">Registration failed</string>
-    <string name="SAVING_PARTY">Saving...</string>
+    <string name="SAVING_ACTIVITY_SPINNER">Saving...</string>
 
 
 </resources>

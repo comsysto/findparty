@@ -34,7 +34,6 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     TextView categoryNameText;
     Spinner levelSpinner;
     Spinner categorySpinner;
-    Button saveButton;
 
     SimpleDateFormat formatter = new SimpleDateFormat();
     private Button partyTime;
@@ -58,7 +57,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     @Override
     public void onResume() {
         super.onResume();
-        this.loadingProgressDialog = new LoadingProgressDialog(this, getString(R.string.SAVING_PARTY), false);
+        this.loadingProgressDialog = new LoadingProgressDialog(this, getString(R.string.SAVING_ACTIVITY_SPINNER), false);
     }
 
     @Override
@@ -74,7 +73,6 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
         initCategory();
         initLevelSpinner();
         initPartyTimeButton();
-        initSaveButton();
         initParticipantsButton();
         initPartyLocationButton();
         initSubjectButton();
@@ -344,10 +342,6 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
     }
 
-    private void initSaveButton() {
-        this.saveButton = (Button) findViewById(R.id.addButton);
-        this.saveButton.setOnClickListener(getOnClickListener());
-    }
 
     private void initLevelSpinner() {
         levelSpinner = (Spinner) findViewById(R.id.levelSpinner);
@@ -402,39 +396,42 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
     public abstract String getCategory();
 
-    public OnClickListener getOnClickListener() {
-        return new View.OnClickListener() {
+
+    public void saveActivitySelected() {
+        loadingProgressDialog.show();
+        new AsyncTask<Void, Void, Void>() {
 
             @Override
-            public void onClick(View v) {
-                loadingProgressDialog.show();
-                new AsyncTask<Void, Void, Void>() {
-
-                    @Override
-                    protected Void doInBackground(Void... params) {
-                        submit();
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void aVoid) {
-                        loadingProgressDialog.dismiss();
-                        goToTop(PartyActivity.this);
-                    }
-                }.execute();
+            protected Void doInBackground(Void... params) {
+                submit();
+                return null;
             }
-        };
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                loadingProgressDialog.dismiss();
+                goToTop(PartyActivity.this);
+            }
+        }.execute();
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return this.optionMenuHandler.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.party_activity_menu, menu);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        this.optionMenuHandler.onOptionsItemSelected(item);
-        return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.SAVE_ACTIVITY) {
+            saveActivitySelected();
+            return true;
+        }
+        else {
+            finish();
+            return true;
+        }
     }
 
     void setTextOnNumberOfParticipantsButton(int numberOfParticipants) {

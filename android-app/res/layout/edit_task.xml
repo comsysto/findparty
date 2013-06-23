@@ -47,18 +47,13 @@
 
         <Button
                 style="@style/CommonPartyButton"
-                android:text="@string/ADD_SUBJECT_BUTTON"
+                android:text="@string/DESCRIBE_ACTIVITY"
                 android:id="@+id/addSubjectButton"/>
 
         <Space
                 android:layout_width="fill_parent"
                 android:layout_height="40px"
                 android:id="@+id/space"/>
-
-        <Button
-                style="@style/AddPartyButton"
-                android:text="@string/ADD_PARTY_BUTTON"
-                android:id="@+id/addButton"/>
 
     </LinearLayout>
 </ScrollView>

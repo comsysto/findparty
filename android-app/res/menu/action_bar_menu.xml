@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/add_party_menu_item"
           android:icon="@drawable/new_party_menu_icon"
-          android:title="@string/ADD_PARTY_BUTTON"
+          android:title="@string/CREATE_NEW_ACTIVITY"
           android:showAsAction="ifRoom|withText" />
     <item android:id="@+id/search_parties_menu_item"
           android:icon="@drawable/search_parties_menu_icon"
-          android:title="@string/FIND_PARTY_BUTTON"
+          android:title="@string/FIND_ACTIVITIES_BUTTON"
           android:showAsAction="ifRoom|withText" />
     <item android:id="@+id/manage_picture_menu_item"
           android:icon="@drawable/manage_picture_menu_item"

@@ -1,10 +1,7 @@
 package com.comsysto.findbuddies.android.activity;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.TextView;
 import com.comsysto.findbuddies.android.R;
 import com.comsysto.findparty.Party;
 
@@ -25,7 +22,6 @@ public class EditPartyActivity extends PartyActivity {
         super.onCreate(savedInstanceState);
 
         findViewById(R.id.create_party).setVisibility(View.INVISIBLE);
-        this.saveButton.setText(R.string.SAVE_PARTY_BUTTON);
     }
 
 	
