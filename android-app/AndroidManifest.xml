@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.comsysto.findbuddies.android"
-          android:versionCode="2"
-          android:versionName="1.1">
+          android:versionCode="3"
+          android:versionName="1.2">
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="14"/>
 
     <permission
@@ -59,13 +59,13 @@
         </service>
 
         <!--development key -->
+        <!--meta-data
+                android:name="com.google.android.maps.v2.API_KEY"
+                android:value="AIzaSyD7KJnImkub4Rg76VYxJnfZuWzJoN-CTMw" /-->
+        <!-- production key -->
         <meta-data
                 android:name="com.google.android.maps.v2.API_KEY"
-                android:value="AIzaSyD7KJnImkub4Rg76VYxJnfZuWzJoN-CTMw" />
-        <!-- production key
-        <meta-data
-                android:name="com.google.android.maps.v2.API_KEY"
-                android:value="AIzaSyBkn_OeCk35RoURMAftscHsV3NHwGrtqIU" />-->
+                android:value="AIzaSyBkn_OeCk35RoURMAftscHsV3NHwGrtqIU" />
 
     </application>
 
