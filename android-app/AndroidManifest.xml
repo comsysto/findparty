@@ -59,14 +59,14 @@
         </service>
 
         <!--development key -->
-        <!--meta-data
+        <meta-data
                 android:name="com.google.android.maps.v2.API_KEY"
-                android:value="AIzaSyD7KJnImkub4Rg76VYxJnfZuWzJoN-CTMw" /-->
-        <!-- production key -->
+                android:value="AIzaSyD7KJnImkub4Rg76VYxJnfZuWzJoN-CTMw" />
+        <!-- production key
         <meta-data
                 android:name="com.google.android.maps.v2.API_KEY"
                 android:value="AIzaSyBkn_OeCk35RoURMAftscHsV3NHwGrtqIU" />
-
+        -->
     </application>
 
 
