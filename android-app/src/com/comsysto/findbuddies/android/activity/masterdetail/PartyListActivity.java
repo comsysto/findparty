@@ -31,7 +31,8 @@ public class PartyListActivity extends FragmentActivity
      * device.
      */
     private boolean mTwoPane;
-    private PartyMapFragment fragment;
+    private PartyMapFragment partyMapFragment;
+    private PartyListFragment partyListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,17 +48,16 @@ public class PartyListActivity extends FragmentActivity
 
             // In two-pane mode, list items should be given the
             // 'activated' state when touched.
-            ((PartyListFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.party_list))
+            partyListFragment = (PartyListFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.party_list);
+            partyListFragment
                     .setActivateOnItemClick(true);
 
-            fragment = new PartyMapFragment();
+            partyMapFragment = new PartyMapFragment();
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.party_detail_container, fragment)
+                    .replace(R.id.party_detail_container, partyMapFragment)
                     .commit();
         }
-
-        // TODO: If exposing deep links into your app, handle intents here.
     }
 
     /**
@@ -67,10 +67,7 @@ public class PartyListActivity extends FragmentActivity
     @Override
     public void onItemSelected(Party party) {
         if (mTwoPane) {
-            // In two-pane mode, show the detail view in this activity by
-            // adding or replacing the detail fragment using a
-            // fragment transaction.
-
+            partyMapFragment.zoomToParty(party);
         } else {
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
@@ -79,4 +76,6 @@ public class PartyListActivity extends FragmentActivity
             startActivity(detailIntent);
         }
     }
+
+
 }

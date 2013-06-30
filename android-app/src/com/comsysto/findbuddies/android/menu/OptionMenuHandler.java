@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.activity.*;
+import com.comsysto.findbuddies.android.activity.masterdetail.PartyListActivity;
 import com.comsysto.findbuddies.android.activity.signin.GoogleSigninActivity;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 
@@ -58,6 +59,9 @@ public class OptionMenuHandler {
             case R.id.credits:
                 goTo(activity, CreditsActivity.class);
                 break;
+            case R.id.masterdetail:
+                goTo(activity, PartyListActivity.class);
+
             default:
                 //do nothing
         }

@@ -18,4 +18,8 @@
     <item android:title="@string/CREDITS_LABEL"
           android:id="@+id/credits"
           android:showAsAction="never" />
+    <item android:title="DEBUG MASTER DETAIL"
+          android:id="@+id/masterdetail"
+          android:showAsAction="never"
+            ></item>
 </menu>

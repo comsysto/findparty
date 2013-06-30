@@ -3,6 +3,7 @@ package com.comsysto.findbuddies.android.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.StrictMode;
+import com.comsysto.findbuddies.android.activity.masterdetail.PartyListActivity;
 import com.comsysto.findbuddies.android.activity.signin.GoogleSigninActivity;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 

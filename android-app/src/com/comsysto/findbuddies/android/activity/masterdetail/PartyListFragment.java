@@ -1,15 +1,12 @@
 package com.comsysto.findbuddies.android.activity.masterdetail;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import com.comsysto.findbuddies.android.adapter.PartyListAdapter;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
-import com.comsysto.findbuddies.android.model.CategoryType;
 import com.comsysto.findbuddies.android.widget.LoadingProgressDialog;
 import com.comsysto.findparty.Party;
 import com.google.android.gms.common.ConnectionResult;
@@ -17,11 +14,10 @@ import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * A list fragment representing a list of Parties. This fragment
@@ -32,7 +28,7 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link com.comsysto.findbuddies.android.activity.masterdetail.PartyListFragment.Callbacks}
  * interface.
  */
-public class PartyListFragment extends android.support.v4.app.ListFragment implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
+public class PartyListFragment extends android.support.v4.app.ListFragment implements Observer, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 
     /**
      * The serialization (saved instance state) Bundle key representing the
@@ -46,7 +42,7 @@ public class PartyListFragment extends android.support.v4.app.ListFragment imple
      * The fragment's current callback object, which is notified of list item
      * clicks.
      */
-    private Callbacks mCallbacks = sDummyCallbacks;
+    private Callbacks mCallbacks;
 
     /**
      * The current activated item position. Only used on tablets.
@@ -93,6 +89,15 @@ public class PartyListFragment extends android.support.v4.app.ListFragment imple
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    public List<Party> getParties() {
+        return parties;
+    }
+
+    @Override
+    public void update(Observable observable, Object data) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
     /**
      * A callback interface that all activities containing this fragment must
      * implement. This mechanism allows activities to be notified of item
@@ -104,17 +109,6 @@ public class PartyListFragment extends android.support.v4.app.ListFragment imple
          */
         public void onItemSelected(Party party);
     }
-
-    /**
-     * A dummy implementation of the {@link com.comsysto.findbuddies.android.activity.masterdetail.PartyListFragment.Callbacks} interface that does
-     * nothing. Used only when this fragment is not attached to an activity.
-     */
-    private static Callbacks sDummyCallbacks = new Callbacks() {
-        @Override
-        public void onItemSelected(Party party) {
-
-        }
-    };
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -167,7 +161,7 @@ public class PartyListFragment extends android.support.v4.app.ListFragment imple
         super.onDetach();
 
         // Reset the active callbacks interface to the dummy implementation.
-        mCallbacks = sDummyCallbacks;
+        mCallbacks = null;
     }
 
     @Override
