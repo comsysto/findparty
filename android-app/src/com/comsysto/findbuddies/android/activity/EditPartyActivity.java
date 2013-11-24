@@ -3,6 +3,7 @@ package com.comsysto.findbuddies.android.activity;
 import android.os.Bundle;
 import android.view.View;
 import com.comsysto.findbuddies.android.R;
+import com.comsysto.findbuddies.android.service.async.UpdateMode;
 import com.comsysto.findparty.Party;
 
 /**
@@ -30,12 +31,13 @@ public class EditPartyActivity extends PartyActivity {
 	}
 
     @Override
-    void submit() {
-        getPartyManagerApplication().getPartyService().update(party);
+    UpdateMode getUpdateMode() {
+        return UpdateMode.UPDATE;
     }
 
     @Override
     protected Party getParty() {
         return getPartyManagerApplication().getSelectedParty();
     }
+
 }

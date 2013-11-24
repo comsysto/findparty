@@ -47,6 +47,7 @@
     <string name="LOGOUT_MENU_ITEM_TEXT">Logout</string>
     <string name="REGISTRATION_FAILED">Registration failed</string>
     <string name="SAVING_ACTIVITY_SPINNER">Saving...</string>
+    <string name="party_save_error">Could not save Party</string>
 
 
 </resources>

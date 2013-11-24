@@ -47,10 +47,17 @@ public class PartyManagerApplication extends Application {
 
 	private boolean ready;
 
-	@Override
+    private static PartyManagerApplication instance;
+
+    public static PartyManagerApplication getInstance() {
+        return instance;
+    }
+
+    @Override
 	public void onCreate() {
 		initializePartyService();
         intializeAccountService();
+        PartyManagerApplication.instance = this;
     }
 
     private void intializeAccountService() {

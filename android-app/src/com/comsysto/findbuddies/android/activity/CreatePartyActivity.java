@@ -1,10 +1,6 @@
 package com.comsysto.findbuddies.android.activity;
 
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import com.comsysto.findbuddies.android.R;
+import com.comsysto.findbuddies.android.service.async.UpdateMode;
 import com.comsysto.findparty.Party;
 
 import java.util.Date;
@@ -16,12 +12,6 @@ import java.util.Date;
  *
  */
 public class CreatePartyActivity extends PartyActivity {
-
-
-    @Override
-    void submit() {
-        getPartyManagerApplication().getPartyService().createParty(party);
-    }
 
     public String getCategory() {
 		return (String) getIntent().getExtras().get("category");
@@ -41,5 +31,9 @@ public class CreatePartyActivity extends PartyActivity {
 
     private String getDefaultCategory() {
         return getAllCategories().get(0);
+    }
+
+    public UpdateMode getUpdateMode() {
+        return UpdateMode.CREATE;
     }
 }

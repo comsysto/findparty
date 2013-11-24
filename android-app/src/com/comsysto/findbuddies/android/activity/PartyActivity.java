@@ -16,6 +16,9 @@ import com.comsysto.findbuddies.android.model.CategoryType;
 import com.comsysto.findbuddies.android.service.LocationInfo;
 import com.comsysto.findbuddies.android.service.LocationRequester;
 import com.comsysto.findbuddies.android.service.LocationService;
+import com.comsysto.findbuddies.android.service.async.PartyAsync;
+import com.comsysto.findbuddies.android.service.async.PartyCallback;
+import com.comsysto.findbuddies.android.service.async.UpdateMode;
 import com.comsysto.findbuddies.android.widget.LoadingProgressDialog;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.Point;
@@ -28,7 +31,7 @@ import java.util.*;
  *
  * @author stefandjurasic
  */
-public abstract class PartyActivity extends AbstractActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, Observer, LocationRequester {
+public abstract class PartyActivity extends AbstractActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, Observer, LocationRequester, PartyCallback {
 
     private OptionMenuHandler optionMenuHandler;
     TextView categoryNameText;
@@ -47,11 +50,16 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
     LoadingProgressDialog loadingProgressDialog;
 
+    void dismissProgressDialog() {
+        if (loadingProgressDialog != null || loadingProgressDialog.isShowing()) {
+            loadingProgressDialog.dismiss();
+        }
+    }
 
     @Override
     protected void onPause() {
         super.onPause();
-        loadingProgressDialog.dismiss();
+        dismissProgressDialog();
     }
 
     @Override
@@ -399,21 +407,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
     public void saveActivitySelected() {
         loadingProgressDialog.show();
-        new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                submit();
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                loadingProgressDialog.dismiss();
-                goToTop(PartyActivity.this);
-            }
-        }.execute();
-
+        submit();
     }
 
     @Override
@@ -467,7 +461,26 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     }
 
 
-    abstract void submit();
+
+    @Override
+    public void success(String partyId) {
+        dismissProgressDialog();
+        goToTop(PartyActivity.this);
+    }
+
+    @Override
+    public void error() {
+        dismissProgressDialog();
+        Toast.makeText(this, getString(R.string.party_save_error),Toast.LENGTH_LONG);
+    }
+
+    private void submit() {
+        new PartyAsync(this, getUpdateMode()).execute(party);
+    }
+
+
+    abstract UpdateMode getUpdateMode();
+
 
 
 
