@@ -7,17 +7,19 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.*;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.adapter.PartyListAdapter;
 import com.comsysto.findbuddies.android.application.Constants;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 import com.comsysto.findbuddies.android.menu.OptionMenuHandler;
+import com.comsysto.findbuddies.android.service.async.party.UpdatePartyMode;
+import com.comsysto.findbuddies.android.service.async.party.UpdatePartyAsync;
+import com.comsysto.findbuddies.android.service.async.party.UpdatePartyCallback;
 import com.comsysto.findbuddies.android.widget.LoadingProgressDialog;
 import com.comsysto.findparty.Party;
-import com.comsysto.findparty.User;
 
 import java.util.List;
 
@@ -28,7 +30,7 @@ import java.util.List;
  * @author stefandjurasic
  *
  */
-public class MyPartiesActivity extends ListActivity {
+public class MyPartiesActivity extends ListActivity implements UpdatePartyCallback {
 
     private ActionMode mActionMode;
 
@@ -170,21 +172,7 @@ public class MyPartiesActivity extends ListActivity {
                 case R.id.delete_party:
                     Log.i(LOG_MY_PARTIES, "deleting party: " +selectedParty);
                     MyPartiesActivity.this.dialog.show();
-                    new AsyncTask<Void, Void, Void>() {
-
-                        @Override
-                        protected Void doInBackground(Void... params) {
-                            getPartyManagerApplication().getPartyService().deleteParty(selectedParty.getId());
-                            return null;
-                        }
-
-                        @Override
-                        protected void onPostExecute(Void aVoid) {
-                            MyPartiesActivity.this.dialog.hide();
-                            parties.remove(selectedParty);
-                            getArrayAdapter().notifyDataSetChanged();
-                        }
-                    }.execute();
+                    new UpdatePartyAsync(MyPartiesActivity.this).execute(selectedParty);
                     mode.finish(); // Action picked, so close the CAB
                     return true;
                 case R.id.edit_party:
@@ -210,4 +198,34 @@ public class MyPartiesActivity extends ListActivity {
         }
     };
 
+    @Override
+    public void successOnPartyUpdate(String partyId) {
+        this.dialog.hide();
+        Party deletedParty = getPartyWithId(this.parties, partyId);
+        parties.remove(deletedParty);
+        getArrayAdapter().notifyDataSetChanged();
+    }
+
+    private Party getPartyWithId(List<Party> parties, String partyId) {
+        if (partyId == null) {
+            throw new IllegalArgumentException("partyId should never be null");
+        }
+        for (Party party : parties) {
+            if (partyId.equals(party.getId())) {
+                return party;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void errorOnPartyUpdate() {
+        this.dialog.hide();
+        Toast.makeText(this, getString(R.string.party_delete_error), Toast.LENGTH_LONG);
+    }
+
+    @Override
+    public UpdatePartyMode getUpdatePartyAsyncMode() {
+        return UpdatePartyMode.DELETE;
+    }
 }

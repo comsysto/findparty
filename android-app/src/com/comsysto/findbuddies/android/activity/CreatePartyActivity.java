@@ -1,6 +1,6 @@
 package com.comsysto.findbuddies.android.activity;
 
-import com.comsysto.findbuddies.android.service.async.UpdateMode;
+import com.comsysto.findbuddies.android.service.async.party.UpdatePartyMode;
 import com.comsysto.findparty.Party;
 
 import java.util.Date;
@@ -33,7 +33,8 @@ public class CreatePartyActivity extends PartyActivity {
         return getAllCategories().get(0);
     }
 
-    public UpdateMode getUpdateMode() {
-        return UpdateMode.CREATE;
+    @Override
+    public UpdatePartyMode getUpdatePartyAsyncMode() {
+        return UpdatePartyMode.CREATE;
     }
 }

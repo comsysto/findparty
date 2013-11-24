@@ -3,7 +3,6 @@ package com.comsysto.findbuddies.android.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -16,8 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.model.CategoryType;
+import com.comsysto.findbuddies.android.service.async.picture.GetUserPictureAsync;
+import com.comsysto.findbuddies.android.service.async.picture.GetUserPictureCallback;
 import com.comsysto.findparty.Party;
-import com.comsysto.findparty.Picture;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -40,6 +40,7 @@ import java.util.*;
  * To change this template use File | Settings | File Templates.
  */
 public class BuddiesMapActivity extends AbstractActivity implements
+        GetUserPictureCallback,
         GooglePlayServicesClient.ConnectionCallbacks,
         GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.InfoWindowAdapter, LocationListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnCameraChangeListener {
 
@@ -54,9 +55,12 @@ public class BuddiesMapActivity extends AbstractActivity implements
     private static final Double SEARCH_DISTANCE = 20d;
     private HashMap<CategoryType, Bitmap> categoryDrawables;
     private MyLocationOverlay myLocOverlay;
-    private Map<Marker, Party> partyMarkerMap = new HashMap<Marker, Party>();;
+    private Map<Marker, Party> partyMarkerMap = new HashMap<Marker, Party>();
+    ;
     private LayoutInflater inflater;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
+    private MarkerAndView lastShownMarkerAndView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +115,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
     @Override
     public void onConnected(Bundle bundle) {
         Location location = locationClient.getLastLocation();
-        if(location == null) {
+        if (location == null) {
             LocationRequest request = LocationRequest.create();
             request.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
             request.setNumUpdates(1);
@@ -141,7 +145,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
 
                     BuddiesMapActivity.this.parties = getPartyManagerApplication().getPartyService().searchParties(mapLongitude, mapLatitude, SEARCH_DISTANCE);
 
-                    if(BuddiesMapActivity.this.parties != null){
+                    if (BuddiesMapActivity.this.parties != null) {
                         Log.d("FindPartiesMapActivity", BuddiesMapActivity.this.parties.size() + " parties found in " + SEARCH_DISTANCE + " km area: " + BuddiesMapActivity.this.parties.toString());
                     } else {
                         Log.e("FindPartiesMapActivity", "Returned parties were null but at least expected empty list!");
@@ -167,7 +171,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
     private void displayParties(List<Party> parties) {
         for (Party party : parties) {
             if (map != null) {
-                if(!isPartyAlreadyShownOnMap(party)){
+                if (!isPartyAlreadyShownOnMap(party)) {
                     Bitmap partyBitmap = categoryDrawables.get(CategoryType.valueOf(party.getCategory()));
                     Marker partyMarker = map.addMarker(getMarker(party, partyBitmap));
                     addParty(partyMarker, party);
@@ -177,9 +181,9 @@ public class BuddiesMapActivity extends AbstractActivity implements
     }
 
     private boolean isPartyAlreadyShownOnMap(Party party) {
-        if(partiesShownOnMap.contains(party.getId())){
+        if (partiesShownOnMap.contains(party.getId())) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -197,13 +201,6 @@ public class BuddiesMapActivity extends AbstractActivity implements
         return markerOptions;
     }
 
-    private Bitmap getUserPictureBitmap(String username) {
-        Picture picture = getPartyManagerApplication().getUserPicture(username);
-        if(picture != null){
-            return BitmapFactory.decodeByteArray(picture.getContent(), 0, picture.getContent().length);
-        }
-        return null;
-    }
 
     @Override
     public void onDisconnected() {
@@ -217,35 +214,48 @@ public class BuddiesMapActivity extends AbstractActivity implements
 
     @Override
     public View getInfoWindow(Marker marker) {
-        View view = inflater.inflate(R.layout.party_overlay_info, null);
         Party party = partyMarkerMap.get(marker);
-
-        ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
-        imageView.setImageResource(CategoryType.valueOf(party.getCategory()).getDrawableId());
-
-        Bitmap userPictureBitmap = getUserPictureBitmap(party.getOwner());
-
-        if(userPictureBitmap != null){
-            ImageView userPicture = (ImageView)view.findViewById(R.id.userPicture);
-            userPicture.setImageBitmap(userPictureBitmap);
+        if (lastShownMarkerAndView != null) {
+            synchronized (lastShownMarkerAndView) {
+                if (party.getOwner().equals(lastShownMarkerAndView.userName)) {
+                    View view = lastShownMarkerAndView.view;
+                    ImageView userPicture = (ImageView)view.findViewById(R.id.userPicture);
+                    userPicture.setImageBitmap(lastShownMarkerAndView.userBitmap);
+                    this.lastShownMarkerAndView = null;
+                    return view;
+                }
+                this.lastShownMarkerAndView = null;
+            }
         }
 
-        TextView size = (TextView)view.findViewById(R.id.sizeValue);
+        View view = inflater.inflate(R.layout.party_overlay_info, null);
+
+        ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
+        imageView.setImageResource(CategoryType.valueOf(party.getCategory()).getDrawableId());
+
+        TextView size = (TextView) view.findViewById(R.id.sizeValue);
         size.setText(party.getSize().toString());
-        TextView date = (TextView)view.findViewById(R.id.dateValue);
+        TextView date = (TextView) view.findViewById(R.id.dateValue);
         date.setText(simpleDateFormat.format(party.getStartDate()));
-        TextView user = (TextView)view.findViewById(R.id.userValue);
+        TextView user = (TextView) view.findViewById(R.id.userValue);
         user.setText(party.getOwner());
-        TextView subject = (TextView)view.findViewById(R.id.subjectValue);
+        TextView subject = (TextView) view.findViewById(R.id.subjectValue);
         subject.setText(party.getSubject());
-        TextView experience = (TextView)view.findViewById(R.id.experienceValue);
+        TextView experience = (TextView) view.findViewById(R.id.experienceValue);
         experience.setText(party.getLevel());
+
+
+
+        new GetUserPictureAsync(this, party.getOwner()).execute();
+
+        this.lastShownMarkerAndView = new MarkerAndView(marker, view);
+
         return view;
     }
 
     @Override
     public View getInfoContents(Marker marker) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     @Override
@@ -282,7 +292,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
     private String getSubject(Party party) {
         StringBuilder subject = new StringBuilder();
         subject.append(party.getCategory());
-        if(party.getSubject() != null){
+        if (party.getSubject() != null) {
             subject.append(SEPARATOR);
             subject.append(party.getSubject());
         }
@@ -292,5 +302,39 @@ public class BuddiesMapActivity extends AbstractActivity implements
     @Override
     public void onCameraChange(CameraPosition cameraPosition) {
         loadPartiesAndShowOnMap(cameraPosition.target);
+    }
+
+    @Override
+    public void successOnGetUserPicture(Bitmap bitmap, String userName) {
+        if (lastShownMarkerAndView != null) {
+            Marker marker = lastShownMarkerAndView.marker;
+
+            if (marker != null && marker.isInfoWindowShown()) {
+                lastShownMarkerAndView.userBitmap = bitmap;
+                lastShownMarkerAndView.userName = userName;
+                marker.hideInfoWindow();
+                marker.showInfoWindow();
+            }
+
+        }
+
+    }
+
+    @Override
+    public void errorOnGetUserPicture() {
+        lastShownMarkerAndView = null;
+        //TODO: Show android and until this show a spinner GIF?
+    }
+
+    private class MarkerAndView {
+        private final Marker marker;
+        private final View view;
+        private String userName;
+        private Bitmap userBitmap;
+
+        public MarkerAndView(Marker marker, View view) {
+            this.marker = marker;
+            this.view = view;
+        }
     }
 }

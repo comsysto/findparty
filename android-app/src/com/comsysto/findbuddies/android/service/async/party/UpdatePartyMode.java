@@ -1,4 +1,4 @@
-package com.comsysto.findbuddies.android.service.async;
+package com.comsysto.findbuddies.android.service.async.party;
 
 /**
  * Created with IntelliJ IDEA.
@@ -7,6 +7,6 @@ package com.comsysto.findbuddies.android.service.async;
  * Time: 13:33
  * To change this template use File | Settings | File Templates.
  */
-public enum UpdateMode {
-    CREATE, UPDATE
+public enum UpdatePartyMode {
+    CREATE, DELETE, UPDATE, GET
 }

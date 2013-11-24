@@ -2,7 +2,6 @@ package com.comsysto.findbuddies.android.activity;
 
 import android.app.*;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,9 +15,8 @@ import com.comsysto.findbuddies.android.model.CategoryType;
 import com.comsysto.findbuddies.android.service.LocationInfo;
 import com.comsysto.findbuddies.android.service.LocationRequester;
 import com.comsysto.findbuddies.android.service.LocationService;
-import com.comsysto.findbuddies.android.service.async.PartyAsync;
-import com.comsysto.findbuddies.android.service.async.PartyCallback;
-import com.comsysto.findbuddies.android.service.async.UpdateMode;
+import com.comsysto.findbuddies.android.service.async.party.UpdatePartyAsync;
+import com.comsysto.findbuddies.android.service.async.party.UpdatePartyCallback;
 import com.comsysto.findbuddies.android.widget.LoadingProgressDialog;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.Point;
@@ -31,7 +29,7 @@ import java.util.*;
  *
  * @author stefandjurasic
  */
-public abstract class PartyActivity extends AbstractActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, Observer, LocationRequester, PartyCallback {
+public abstract class PartyActivity extends AbstractActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, Observer, LocationRequester, UpdatePartyCallback {
 
     private OptionMenuHandler optionMenuHandler;
     TextView categoryNameText;
@@ -463,26 +461,18 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
 
     @Override
-    public void success(String partyId) {
+    public void successOnPartyUpdate(String partyId) {
         dismissProgressDialog();
         goToTop(PartyActivity.this);
     }
 
     @Override
-    public void error() {
+    public void errorOnPartyUpdate() {
         dismissProgressDialog();
         Toast.makeText(this, getString(R.string.party_save_error),Toast.LENGTH_LONG);
     }
 
     private void submit() {
-        new PartyAsync(this, getUpdateMode()).execute(party);
+        new UpdatePartyAsync(this).execute(party);
     }
-
-
-    abstract UpdateMode getUpdateMode();
-
-
-
-
-
 }
