@@ -15,6 +15,8 @@ import com.comsysto.findbuddies.android.adapter.PartyListAdapter;
 import com.comsysto.findbuddies.android.application.Constants;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 import com.comsysto.findbuddies.android.menu.OptionMenuHandler;
+import com.comsysto.findbuddies.android.service.async.party.GetUsersPartiesAsync;
+import com.comsysto.findbuddies.android.service.async.party.GetUsersPartiesCallback;
 import com.comsysto.findbuddies.android.service.async.party.UpdatePartyMode;
 import com.comsysto.findbuddies.android.service.async.party.UpdatePartyAsync;
 import com.comsysto.findbuddies.android.service.async.party.UpdatePartyCallback;
@@ -30,7 +32,7 @@ import java.util.List;
  * @author stefandjurasic
  *
  */
-public class MyPartiesActivity extends ListActivity implements UpdatePartyCallback {
+public class MyPartiesActivity extends ListActivity implements UpdatePartyCallback, GetUsersPartiesCallback {
 
     private ActionMode mActionMode;
 
@@ -62,7 +64,8 @@ public class MyPartiesActivity extends ListActivity implements UpdatePartyCallba
         super.onResume();
         if (getPartyManagerApplication().getAccountService().hasAccount()) {
             dialog = new LoadingProgressDialog(this, "Loading. Please wait...", true);
-            initArrayAdapter();
+
+            new GetUsersPartiesAsync(this, getUsername()).execute();
         }
         else {
             redirectToLoginPage();
@@ -79,24 +82,9 @@ public class MyPartiesActivity extends ListActivity implements UpdatePartyCallba
         return getPartyManagerApplication().getAccountService().getUsername();
     }
 
-    protected void initArrayAdapter() {
-        new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                String userName = getUsername();
-                MyPartiesActivity.this.parties = getPartyManagerApplication().getPartyService().getAllParties(userName);
-                Log.i(LOG_MY_PARTIES, "retrieved my parties from server: " + MyPartiesActivity.this.parties);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                setArrayAdapter(new PartyListAdapter(MyPartiesActivity.this, MyPartiesActivity.this.parties));
-                setListAdapter(getArrayAdapter());
-                dialog.hide();
-            }
-        }.execute();
+    protected void initArrayAdapter(List<Party> parties) {
+        setArrayAdapter(new PartyListAdapter(MyPartiesActivity.this, parties));
+        setListAdapter(getArrayAdapter());
     }
 
     @Override
@@ -227,5 +215,18 @@ public class MyPartiesActivity extends ListActivity implements UpdatePartyCallba
     @Override
     public UpdatePartyMode getUpdatePartyAsyncMode() {
         return UpdatePartyMode.DELETE;
+    }
+
+    @Override
+    public void successOnGetUsersParties(List<Party> parties) {
+        dialog.hide();
+        this.parties = parties;
+        initArrayAdapter(parties);
+    }
+
+    @Override
+    public void failureOnGetUsersParties() {
+        dialog.hide();
+        Toast.makeText(this, "Could not load User's parties", Toast.LENGTH_LONG);
     }
 }

@@ -25,16 +25,16 @@ public class UpdatePartyAsync extends AsyncTask<Party, Void, String> {
         if (params == null || params.length != 1) {
             throw new IllegalArgumentException("You have to pass one Party. Actually passed: " + params);
         }
-        PartyService partyService = PartyManagerApplication.getInstance().getPartyService();
+        PartyManagerApplication partyManagerApplication = PartyManagerApplication.getInstance();
         Party toBeUpdatedParty = params[0];
         switch(this.callback.getUpdatePartyAsyncMode()) {
             case CREATE:
-                return partyService.createParty(toBeUpdatedParty);
+                return partyManagerApplication.createParty(toBeUpdatedParty);
             case UPDATE:
-                partyService.update(toBeUpdatedParty);
+                partyManagerApplication.update(toBeUpdatedParty);
                 return toBeUpdatedParty.getId();
             case DELETE:
-                partyService.deleteParty(toBeUpdatedParty.getId());
+                partyManagerApplication.deleteParty(toBeUpdatedParty.getId());
                 return toBeUpdatedParty.getId();
             default:
                 throw new IllegalArgumentException("UNKNOWN MODE");

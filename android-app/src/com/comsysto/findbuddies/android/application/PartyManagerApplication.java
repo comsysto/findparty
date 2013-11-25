@@ -17,6 +17,7 @@ import com.comsysto.findparty.User;
 import com.comsysto.findparty.web.PartyService;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 /**
  * {@link PartyManagerApplication} holds relevant stuff for the whole app .
@@ -121,6 +122,10 @@ public class PartyManagerApplication extends Application {
         return partyService.getUser(username);
     }
 
+    public User getUser(String userName) {
+        return partyService.getUser(userName);
+    }
+
     public Picture getUserPicture(String username){
         return partyService.getUserPicture(username);
     }
@@ -137,10 +142,6 @@ public class PartyManagerApplication extends Application {
         }
         Log.d(TAG, "account failed!");
         return false;
-    }
-
-    public PartyService getPartyService() {
-        return partyService;
     }
 
     public AccountService getAccountService() {
@@ -182,4 +183,27 @@ public class PartyManagerApplication extends Application {
         activity.finish();
     }
 
+    public String createParty(Party toBeUpdatedParty) {
+        return partyService.createParty(toBeUpdatedParty);
+    }
+
+    public void update(Party toBeUpdatedParty) {
+        partyService.update(toBeUpdatedParty);
+    }
+
+    public void deleteParty(String id) {
+        partyService.deleteParty(id);
+    }
+
+    public User createUser(String username, String password) {
+        return partyService.createUser(username, password);
+    }
+
+    public List<Party> searchParties(double longitude, double latitude, Double searchDistance) {
+        return partyService.searchParties(longitude, latitude, searchDistance);
+    }
+
+    public List<Party> getAllParties(String userName) {
+        return partyService.getAllParties(userName);
+    }
 }

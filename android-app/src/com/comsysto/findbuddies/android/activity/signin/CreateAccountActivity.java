@@ -35,7 +35,7 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
 
     private TextView helpText;
 
-    private PartyService partyService;
+    private PartyManagerApplication partyManagerApplication;
     private AccountService accountService;
 
     ProgressDialog createUserDialog;
@@ -52,10 +52,10 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
         String username = (String) getIntent().getExtras().get("ACCOUNT_NAME");
 
         //get the party service
-        partyService = ((PartyManagerApplication) getApplication()).getPartyService();
+        partyManagerApplication = ((PartyManagerApplication) getApplication());
         accountService = ((PartyManagerApplication) getApplication()).getAccountService();
 
-        existingUser = partyService.getUser(username);
+        existingUser = partyManagerApplication.getUser(username);
 
         usernameText = (EditText) findViewById(R.id.usernameText);
         passwordText = (EditText) findViewById(R.id.passwordText);
@@ -122,7 +122,7 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
         AsyncTask<String, Void, User> createUserTask = new AsyncTask<String, Void, User>() {
             @Override
             protected User doInBackground(String... params) {
-                return partyService.createUser(params[0], params[1]);
+                return partyManagerApplication.createUser(params[0], params[1]);
             }
 
             @Override

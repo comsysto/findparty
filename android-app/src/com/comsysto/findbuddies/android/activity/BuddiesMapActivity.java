@@ -13,8 +13,11 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.model.CategoryType;
+import com.comsysto.findbuddies.android.service.async.party.SearchPartiesAsync;
+import com.comsysto.findbuddies.android.service.async.party.SearchPartiesCallback;
 import com.comsysto.findbuddies.android.service.async.picture.GetUserPictureAsync;
 import com.comsysto.findbuddies.android.service.async.picture.GetUserPictureCallback;
 import com.comsysto.findparty.Party;
@@ -40,6 +43,7 @@ import java.util.*;
  * To change this template use File | Settings | File Templates.
  */
 public class BuddiesMapActivity extends AbstractActivity implements
+        SearchPartiesCallback,
         GetUserPictureCallback,
         GooglePlayServicesClient.ConnectionCallbacks,
         GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.InfoWindowAdapter, LocationListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnCameraChangeListener {
@@ -52,7 +56,6 @@ public class BuddiesMapActivity extends AbstractActivity implements
     private List<Party> parties;
     private Thread locationUpdateThread;
     private Set<String> partiesShownOnMap = new HashSet<String>();
-    private static final Double SEARCH_DISTANCE = 20d;
     private HashMap<CategoryType, Bitmap> categoryDrawables;
     private MyLocationOverlay myLocOverlay;
     private Map<Marker, Party> partyMarkerMap = new HashMap<Marker, Party>();
@@ -132,40 +135,10 @@ public class BuddiesMapActivity extends AbstractActivity implements
     }
 
     private void loadPartiesAndShowOnMap(final LatLng center) {
+        double mapLongitude = center.longitude;
+        double mapLatitude = center.latitude;
 
-        this.locationUpdateThread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                synchronized (BuddiesMapActivity.this) {
-                    double mapLongitude = center.longitude;
-                    double mapLatitude = center.latitude;
-
-                    Log.d("FindPartiesMapActivity", "Current map center lon/lat : " + mapLongitude + " / " + mapLatitude);
-
-                    BuddiesMapActivity.this.parties = getPartyManagerApplication().getPartyService().searchParties(mapLongitude, mapLatitude, SEARCH_DISTANCE);
-
-                    if (BuddiesMapActivity.this.parties != null) {
-                        Log.d("FindPartiesMapActivity", BuddiesMapActivity.this.parties.size() + " parties found in " + SEARCH_DISTANCE + " km area: " + BuddiesMapActivity.this.parties.toString());
-                    } else {
-                        Log.e("FindPartiesMapActivity", "Returned parties were null but at least expected empty list!");
-                    }
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (BuddiesMapActivity.this.parties != null) {
-                                displayParties(BuddiesMapActivity.this.parties);
-                            }
-                        }
-                    });
-
-
-                }
-            }
-        });
-
-        locationUpdateThread.start();
+        new SearchPartiesAsync(this, mapLongitude, mapLatitude).execute();
     }
 
     private void displayParties(List<Party> parties) {
@@ -324,6 +297,21 @@ public class BuddiesMapActivity extends AbstractActivity implements
     public void errorOnGetUserPicture() {
         lastShownMarkerAndView = null;
         //TODO: Show android and until this show a spinner GIF?
+    }
+
+    @Override
+    public void successOnSearchParties(List<Party> parties) {
+        if (parties != null) {
+            BuddiesMapActivity.this.parties = parties;
+            displayParties(parties);
+        }
+
+
+    }
+
+    @Override
+    public void failureOnSearchParties() {
+        Toast.makeText(this, "Could not load Parties", Toast.LENGTH_LONG);
     }
 
     private class MarkerAndView {

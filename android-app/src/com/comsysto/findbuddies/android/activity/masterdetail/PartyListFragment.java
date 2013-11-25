@@ -5,8 +5,11 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 import com.comsysto.findbuddies.android.adapter.PartyListAdapter;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
+import com.comsysto.findbuddies.android.service.async.party.SearchPartiesAsync;
+import com.comsysto.findbuddies.android.service.async.party.SearchPartiesCallback;
 import com.comsysto.findbuddies.android.widget.LoadingProgressDialog;
 import com.comsysto.findparty.Party;
 import com.google.android.gms.common.ConnectionResult;
@@ -24,19 +27,17 @@ import java.util.Observer;
  * also supports tablet devices by allowing list items to be given an
  * 'activated' state upon selection. This helps indicate which item is
  * currently being viewed in a {@link PartyMapFragment}.
- * <p>
+ * <p/>
  * Activities containing this fragment MUST implement the {@link com.comsysto.findbuddies.android.activity.masterdetail.PartyListFragment.Callbacks}
  * interface.
  */
-public class PartyListFragment extends android.support.v4.app.ListFragment implements Observer, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
+public class PartyListFragment extends android.support.v4.app.ListFragment implements Observer, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, LocationListener, SearchPartiesCallback {
 
     /**
      * The serialization (saved instance state) Bundle key representing the
      * activated item position. Only used on tablets.
      */
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
-    private static final Double SEARCH_DISTANCE = 20d;
-
 
     /**
      * The fragment's current callback object, which is notified of list item
@@ -56,17 +57,15 @@ public class PartyListFragment extends android.support.v4.app.ListFragment imple
     @Override
     public void onConnected(Bundle bundle) {
         Location lastLocation = locationClient.getLastLocation();
-        dialog.dismiss();
+        dismissDialog();
         if (lastLocation != null) {
             loadParties(lastLocation);
-        }
-        else {
+        } else {
             dialog = new LoadingProgressDialog(getActivity(), "Last known position not found. Trying to refresh position. Please wait...", true);
             LocationRequest locationRequest = LocationRequest.create();
             locationRequest.setNumUpdates(1);
-            locationClient.requestLocationUpdates(locationRequest,this);
+            locationClient.requestLocationUpdates(locationRequest, this);
         }
-
 
 
     }
@@ -83,10 +82,8 @@ public class PartyListFragment extends android.support.v4.app.ListFragment imple
 
     @Override
     public void onLocationChanged(Location location) {
-        dialog.dismiss();
+        dismissDialog();
         loadParties(location);
-
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public List<Party> getParties() {
@@ -96,6 +93,25 @@ public class PartyListFragment extends android.support.v4.app.ListFragment imple
     @Override
     public void update(Observable observable, Object data) {
         //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void successOnSearchParties(List<Party> parties) {
+        dismissDialog();
+        PartyListFragment.this.setListAdapter(new PartyListAdapter(getActivity(), PartyListFragment.this.parties));
+    }
+
+    private void dismissDialog() {
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+            dialog = null;
+        }
+    }
+
+    @Override
+    public void failureOnSearchParties() {
+        dismissDialog();
+        Toast.makeText(getActivity(), "Could not load Parties", Toast.LENGTH_LONG);
     }
 
     /**
@@ -129,8 +145,6 @@ public class PartyListFragment extends android.support.v4.app.ListFragment imple
         locationClient = new LocationClient(getActivity(), this, this);
         locationClient.connect();
     }
-
-
 
 
     @Override
@@ -206,30 +220,7 @@ public class PartyListFragment extends android.support.v4.app.ListFragment imple
 
     private void loadParties(final Location location) {
         dialog = new LoadingProgressDialog(getActivity(), "Loading nearby Parties. Please wait...", true);
-        this.partiesLoadingThread = new Thread(new Runnable() {
+        new SearchPartiesAsync(this, location.getLongitude(),location.getLatitude()).execute();
 
-            @Override
-            public void run() {
-                synchronized (PartyListFragment.this) {
-                    PartyListFragment.this.parties = getPartyManagerApplication().getPartyService().searchParties(location.getLongitude(), location.getLatitude(), SEARCH_DISTANCE);
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            dialog.dismiss();
-                            PartyListFragment.this.setListAdapter(new PartyListAdapter(getActivity(), PartyListFragment.this.parties));
-                        }
-                    });
-
-
-                }
-            }
-        });
-
-        partiesLoadingThread.start();
-    }
-
-    private PartyManagerApplication getPartyManagerApplication() {
-        return (PartyManagerApplication)getActivity().getApplication();  //To change body of created methods use File | Settings | File Templates.
     }
 }
