@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.comsysto.findbuddies.android.adapter.PartyListAdapter;
-import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 import com.comsysto.findbuddies.android.service.async.party.SearchPartiesAsync;
 import com.comsysto.findbuddies.android.service.async.party.SearchPartiesCallback;
 import com.comsysto.findbuddies.android.widget.LoadingProgressDialog;
@@ -98,7 +97,8 @@ public class PartyListFragment extends android.support.v4.app.ListFragment imple
     @Override
     public void successOnSearchParties(List<Party> parties) {
         dismissDialog();
-        PartyListFragment.this.setListAdapter(new PartyListAdapter(getActivity(), PartyListFragment.this.parties));
+        this.parties = parties;
+        setListAdapter(new PartyListAdapter(getActivity(), parties));
     }
 
     private void dismissDialog() {
