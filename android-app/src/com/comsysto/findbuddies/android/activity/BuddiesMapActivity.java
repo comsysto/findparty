@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -247,17 +248,13 @@ public class BuddiesMapActivity extends AbstractActivity implements
     public void onInfoWindowClick(Marker marker) {
         Party party = partyMarkerMap.get(marker);
 
-        Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-        //Intent emailIntent = Intent.makeMainSelectorActivity(Intent.ACTION_SEND, Intent.CATEGORY_APP_EMAIL);
+        Intent emailIntent = new Intent(android.content.Intent.ACTION_SENDTO);
 
-        String[] recipients = new String[]{party.getOwner()};
+        String uriText =
+                "mailto:" + party.getOwner() +
+                        "?subject=Your party: " + getSubject(party);
 
-        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, recipients);
-
-        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Your party: " + getSubject(party));
-
-        emailIntent.setType("message/rfc822");
-
+        emailIntent.setData(Uri.parse(uriText));
 
         startActivity(Intent.createChooser(emailIntent, "Send mail..."));
     }
