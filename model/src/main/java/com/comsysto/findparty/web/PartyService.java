@@ -20,10 +20,6 @@ public interface PartyService {
 
     public Party showDetails(String partyId);
 
-    public void cancelParty(String partyId, String username);
-
-    public void joinParty(String partyId, String username);
-
     public String createParty(Party party);
 
     public void update(Party party);
@@ -32,19 +28,7 @@ public interface PartyService {
 
     public String echo(String input);
 
-    public User createUser(String username, String password);
-
-    public User getUser(String username);
-
-    public List<User> getAllUsers();
-
-    public Boolean login(User user);
-
-    void update(User user);
-
     void deleteParty(String partyId);
-
-    void deleteUser(String userId);
 
     String createPartyImage(String partyId, byte[] content);
 }

@@ -24,7 +24,7 @@
     </profiles>
     <properties>
         <com.comsysto.findparty.version>0.0.1-SNAPSHOT</com.comsysto.findparty.version>
-        <org.springframework.version>3.2.2.RELEASE</org.springframework.version>
+        <org.springframework.version>3.2.5.RELEASE</org.springframework.version>
         <log4jVersion>1.2.14</log4jVersion>
         <junitVersion>4.8.1</junitVersion>
     </properties>

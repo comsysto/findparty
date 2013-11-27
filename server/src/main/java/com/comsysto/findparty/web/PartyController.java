@@ -13,11 +13,7 @@ public interface PartyController {
 	
 	public String create(Party party);
 
-	public void subscribe(String partyId, String action, String username);
-
 	public Party show(String partyId);
-	
-	public List<Party> findByUsername(String username);
 	
 	public void update(Party party, String partyId);
 

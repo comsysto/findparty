@@ -9,7 +9,6 @@
 
     <debug/>
 
-
     <http use-expressions="true" create-session="stateless" authentication-manager-ref="mongoBackedAuthenticationManager">
         <!-- TODO: authenticated URLs should use 'require-channel="https"' on basic-account -->
         <intercept-url pattern="/services/users/login" method="POST" access="permitAll" />

@@ -1,8 +1,5 @@
 package com.comsysto.findparty.web;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
 /**
  * Created with IntelliJ IDEA.
  * User: tim.hoheisel

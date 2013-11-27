@@ -9,10 +9,10 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
             /META-INF/applicationContext.xml
-            /META-INF/applicationContext-security.xml
         </param-value>
     </context-param>
 
+    <!--
     <filter>
         <filter-name>springSecurityFilterChain</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -22,12 +22,12 @@
         <filter-name>springSecurityFilterChain</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    -->
 
     <!-- needed if u want to use Spring Security "concurrency-control" configuration
 	<listener>
         <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
     </listener>
-<<<<<<< HEAD
     -->
 
 	<listener>

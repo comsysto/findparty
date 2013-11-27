@@ -2,7 +2,6 @@ package org.comsysto.findparty;
 
 import com.comsysto.findparty.LevelType;
 import com.comsysto.findparty.Party;
-import com.comsysto.findparty.Picture;
 import com.comsysto.findparty.Point;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
