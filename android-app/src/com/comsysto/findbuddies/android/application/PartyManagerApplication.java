@@ -14,6 +14,7 @@ import com.comsysto.findbuddies.android.service.PartyManagementServiceImpl;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.Picture;
 import com.comsysto.findparty.User;
+import com.comsysto.findparty.web.PartyService;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -41,8 +42,6 @@ public class PartyManagerApplication extends Application {
 
     private Party selectedParty;
 
-
-
 	private PartyManagementServiceImpl partyService;
 
     private AccountService accountService;
@@ -50,6 +49,7 @@ public class PartyManagerApplication extends Application {
 	private boolean ready;
 
     private static PartyManagerApplication instance;
+    private String userPictureUrl;
 
     public static PartyManagerApplication getInstance() {
         return instance;
@@ -118,32 +118,15 @@ public class PartyManagerApplication extends Application {
 		}
 	}
 
-    public User getUser() {
-        String username = accountService.getUsername();
-        return partyService.getUser(username);
+
+    public String getUsername() {
+        return accountService.getUsername();
     }
 
-    public User getUser(String userName) {
-        return partyService.getUser(userName);
+    public String getUserPicture(String username){
+        return accountService.getUserImageUrl();
     }
 
-    public Picture getUserPicture(String username){
-        return partyService.getUserPicture(username);
-    }
-
-    public boolean authenticate(String username, String password) {
-        Log.d(TAG, "authenticating username/password: " + username + "/" + password);
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(password);
-        if(partyService.login(user)) {
-            Log.d(TAG, "user successfully authenticated: " + user);
-            accountService.createAccount(username, password, null);
-            return true;
-        }
-        Log.d(TAG, "account failed!");
-        return false;
-    }
 
     public AccountService getAccountService() {
         return accountService;
@@ -158,23 +141,11 @@ public class PartyManagerApplication extends Application {
     }
 
     public void saveUserPicture(Bitmap resizedBitmap) {
-        User user = getUser();
-        Picture picture = user.getPicture();
-        if (picture == null) {
-            picture = new Picture();
-            user.setPicture(picture);
-        }
-
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        picture.setContent(stream.toByteArray());
-        partyService.update(user);
+        //TODO
     }
 
     public void deleteUserPicture() {
-        User user = getUser();
-        user.setPicture(null);
-        partyService.update(user);
+        //TODO
     }
 
     public void goToStart(Activity activity) {
@@ -206,5 +177,9 @@ public class PartyManagerApplication extends Application {
 
     public List<Party> getAllParties(String userName) {
         return partyService.getAllParties(userName);
+    }
+
+    public String getUserImageUrl() {
+        return getAccountService().getUserImageUrl();
     }
 }

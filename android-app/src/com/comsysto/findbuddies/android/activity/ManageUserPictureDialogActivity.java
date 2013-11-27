@@ -36,7 +36,7 @@ public class ManageUserPictureDialogActivity extends AbstractActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
-        User user = getPartyManagerApplication().getUser();
+        String username = getPartyManagerApplication().getUsername();
 
         setContentView(R.layout.manage_user_picture_dialog);
 
@@ -46,13 +46,13 @@ public class ManageUserPictureDialogActivity extends AbstractActivity {
         userPicture = (ImageView) findViewById(R.id.userPicture);
 
 
-        if (user.getPicture() == null) {
-            deleteButton.setVisibility(View.GONE);
-        }
-        else {
-            byte[] content = user.getPicture().getContent();
-            userPicture.setImageBitmap(BitmapFactory.decodeByteArray(content, 0, content.length));
-        }
+//        if (user.getPicture() == null) {
+//            deleteButton.setVisibility(View.GONE);
+//        }
+//        else {
+//            byte[] content = user.getPicture().getContent();
+//            userPicture.setImageBitmap(BitmapFactory.decodeByteArray(content, 0, content.length));
+//        }
 
         manageButton.setOnClickListener(new View.OnClickListener() {
             @Override
