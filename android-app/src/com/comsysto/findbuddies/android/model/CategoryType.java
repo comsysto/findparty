@@ -6,15 +6,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
  * User: tim.hoheisel
  * Date: 05.09.12
  * Time: 13:57
- * To change this template use File | Settings | File Templates.
  */
 public enum CategoryType {
 
-    SNUGGLING(R.drawable.snuggling), BIKING(R.drawable.biking), JOGGING(R.drawable.jogging),CLUBBING(R.drawable.clubbing), MUSIC(R.drawable.music), HIKING(R.drawable.hiking), SWIMMING(R.drawable.androidmarker);
+    SNUGGLING(R.drawable.snuggling),
+    BIKING(R.drawable.biking),
+    JOGGING(R.drawable.jogging),
+    CLUBBING(R.drawable.clubbing),
+    MUSIC(R.drawable.music),
+    HIKING(R.drawable.hiking),
+    SWIMMING(R.drawable.androidmarker);
 
 
     int drawableId;
@@ -24,7 +28,7 @@ public enum CategoryType {
     }
 
     public static List<String> names() {
-        ArrayList list = new ArrayList();
+        List<String> list = new ArrayList<String>();
 
         for (CategoryType type : values()) {
             list.add(type.name());

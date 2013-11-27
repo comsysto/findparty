@@ -167,9 +167,6 @@ public class PartyManagerApplication extends Application {
         partyService.deleteParty(id);
     }
 
-    public User createUser(String username, String password) {
-        return partyService.createUser(username, password);
-    }
 
     public List<Party> searchParties(double longitude, double latitude, Double searchDistance) {
         return partyService.searchParties(longitude, latitude, searchDistance);

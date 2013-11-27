@@ -84,6 +84,9 @@ public class AccountService {
         Bundle userBundle = new Bundle();
         userBundle.putLong("timestamp", new Date().getTime());
         userBundle.putString("userImage", userImageUrl);
+
+        Log.i(TAG, "Adding account for username: '"+username+"' with imageUrl: '"+userImageUrl+"'");
+
         accountManager.addAccountExplicitly(account, null, userBundle);
     }
 

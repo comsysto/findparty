@@ -30,7 +30,7 @@ import java.util.*;
  * @author stefandjurasic
  * 
  */
-public class PartyManagementServiceImpl implements PartyService, CategoryService, PictureService {
+public class PartyManagementServiceImpl implements PartyService, PictureService {
 
     private static final String TAG = Constants.LOG_SERVICE_PREFIX + PartyManagementServiceImpl.class.getSimpleName();
     private RestTemplate restTemplate;
@@ -61,14 +61,7 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
         return requestFactory;
     }
 
-    @Override
-    public void cancelParty(String partyId, String username) {
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("action", "cancel");
-        String url = urlBuilder.createUri(params, PARTY_SERVICE_PATH, partyId, SUBSCRIPTIONS);
 
-        restTemplate.put(url, username);
-    }
 
     @Override
     public String createParty(Party party) {
@@ -81,21 +74,10 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
         }
     }
 
-    @Override
-    public void joinParty(String partyId, String username) {
-        String url = urlBuilder.createUri(PARTY_SERVICE_PATH, partyId, SUBSCRIPTIONS);
-
-        restTemplate.put(url, username);
-    }
 
     @Override
     public List<Party> searchParties(Double lon, Double lat, Double maxDistance) {
         String url = urlBuilder.createUri(PARTY_SERVICE_PATH, "search", String.valueOf(lon), String.valueOf(lat), String.valueOf(maxDistance));
-
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.set("Authorization", "Basic cm9iOm51bGw=\n");
-//        ResponseEntity<Party[]> response = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<String>(headers), Party[].class);
-
 
         try {
             Log.d(TAG, "calling url: " + url);
@@ -139,7 +121,13 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
         }
     }
 
-    
+    @Override
+    public String createPartyImage(String partyId, byte[] content) {
+        //TODO: implement it!
+        return null;
+    }
+
+
     @Override
     public List<Party> getAllParties(String username) {
         Map<String, String> params = new HashMap<String, String>();
@@ -148,7 +136,6 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
         String url = urlBuilder.createUri(params, PARTY_SERVICE_PATH);
 
         Party[] response = restTemplate.getForObject(url, Party[].class);
-        //Party[] response = new RestTemplate(true, createHttpRequestFactory()).getForObject(url, Party[].class);
         ArrayList<Party> partyArrayList = new ArrayList<Party>();
         Collections.addAll(partyArrayList, response);
         return partyArrayList;
@@ -164,69 +151,8 @@ public class PartyManagementServiceImpl implements PartyService, CategoryService
     }
 
     @Override
-    public User createUser(String username, String password) {
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(password);
-        ResponseEntity<User> entity = restTemplate.postForEntity(urlBuilder.createFrom(USER_SERVICE_PATH), user, User.class);
-
-        Log.d(TAG, "create user response: " + entity.getStatusCode().value() + "-" + entity.getStatusCode().name() + " -> Body: " + entity.getBody());
-
-        return entity.getBody();
+    public Picture getPicture(String id) {
+        //TODO: implement it!
+        return null;
     }
-
-    @Override
-    public User getUser(String username) {
-        return restTemplate.getForObject(urlBuilder.createUri(USER_SERVICE_PATH, username), User.class);
-    }
-
-    @Override
-    public List<User> getAllUsers() {
-        return Arrays.asList(restTemplate.getForObject(urlBuilder.createUri(USER_SERVICE_PATH), User[].class));
-    }
-
-    @Override
-    public Boolean login(User user) {
-        return restTemplate.postForObject(urlBuilder.createUri(USER_SERVICE_PATH, "login"), user, Boolean.class);
-    }
-
-    @Override
-    public void update(User user) {
-        String url = urlBuilder.createUri(USER_SERVICE_PATH, user.getId());
-        try {
-            restTemplate.put(url, user);
-        } catch (Exception e) {
-            Log.i("MY_PARTIES", "Fehler beim updaten des Users: " + user);
-        }
-    }
-
-
-    @Override
-    public void deleteUser(String userId) {
-        try {
-            restTemplate.delete(urlBuilder.createUri(USER_SERVICE_PATH, userId));
-        } catch (Exception e) {
-            Log.i(TAG, "Fehler beim Löschen des Users mit ID="+userId);
-        }
-    }
-
-    @Override
-    public Picture getUserPicture(String username) {
-        String url = urlBuilder.createUri(PICTURES_SERVICE_PATH, username);
-        try {
-            return restTemplate.getForObject(url, Picture.class);
-        } catch (Exception e) {
-            Log.i("MY_PARTIES", "Fehler beim laden des Bildes für: " + username);
-            return null;
-        }
-    }
-
-    @Override
-    public Set<Category> getAllCategories() {
-        String url = urlBuilder.createUri(CATEGORY_SERVICE_PATH, "getall");
-        ResponseEntity<Set> forEntity = restTemplate.getForEntity(url, Set.class);
-
-        return forEntity.getBody();
-    }
-
 }
