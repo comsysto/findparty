@@ -33,10 +33,10 @@ public class GetUserPictureAsync extends AsyncTask<Void, Void, Bitmap> {
 
     @Override
     protected Bitmap doInBackground(Void... params) {
-        Picture userPicture = PartyManagerApplication.getInstance().getUserPicture(userName);
-        if(userPicture != null){
-            return BitmapFactory.decodeByteArray(userPicture.getContent(), 0, userPicture.getContent().length);
-        }
+//        Picture userPicture = PartyManagerApplication.getInstance().getUserPicture(userName);
+//        if(userPicture != null){
+//            return BitmapFactory.decodeByteArray(userPicture.getContent(), 0, userPicture.getContent().length);
+//        }
         return null;
     }
 

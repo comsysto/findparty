@@ -36,9 +36,8 @@ public class AccountService {
             return null;
         }
 
-        Account account = getAccount();
-        String username = account.name;
-        String password = accountManager.getPassword(account);
+        String username = "pelgero@gmail.com";
+        String password = "test";
         String token = username + ":" + password;
         String encoded = new String(Base64.encode(token.getBytes(), Base64.NO_WRAP));
         return "Basic " + encoded;
@@ -62,15 +61,14 @@ public class AccountService {
     /**
      * Stores new user account on device. Deletes any previously existing accounts
      * @param username
-     * @param password
      * @param userImageUrl
      */
-    public void createAccount(String username, String password, String userImageUrl) {
+    public void createAccount(String username, String userImageUrl) {
         Account[] accounts = accountManager.getAccountsByType(AccountAuthenticator.AUTH_TYPE);
         if(accounts.length > 0) {
             remove(accounts);
         }
-        addAccount(username, password, userImageUrl);
+        addAccount(username, userImageUrl);
     }
 
     /**
@@ -81,12 +79,12 @@ public class AccountService {
         remove(accounts);
     }
 
-    private void addAccount(String username, String password, String userImageUrl) {
+    private void addAccount(String username, String userImageUrl) {
         Account account = new Account(username, AccountAuthenticator.AUTH_TYPE);
-        Bundle userdata = new Bundle();
-        userdata.putLong("timestamp", new Date().getTime());
-        userdata.putString("userImage", userImageUrl);
-        accountManager.addAccountExplicitly(account, password, userdata);
+        Bundle userBundle = new Bundle();
+        userBundle.putLong("timestamp", new Date().getTime());
+        userBundle.putString("userImage", userImageUrl);
+        accountManager.addAccountExplicitly(account, null, userBundle);
     }
 
     public String getUserImageUrl(){

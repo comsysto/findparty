@@ -20,7 +20,7 @@ public class CreatePartyActivity extends PartyActivity {
     @Override
     protected Party getParty() {
         Party party = new Party();
-        party.setOwner(getPartyManagerApplication().getUser().getUsername());
+        party.setOwner(getPartyManagerApplication().getUsername());
         party.setCategory(getDefaultCategory());
         party.setSize(2);
         party.setStartDate(new Date());

@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.activity.StartActivity;
 import com.comsysto.findbuddies.android.application.Constants;
+import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
@@ -117,12 +118,11 @@ public class GoogleSigninActivity extends Activity implements View.OnClickListen
         Log.i(TAG, "PlusClient connected: " + accountName);
         Toast.makeText(this, "User connected with Google+ Signin: " + plusClient.getAccountName(), Toast.LENGTH_SHORT).show();
 
-        Intent createAccount = new Intent(this, CreateAccountActivity.class);
         Person.Image image = plusClient.getCurrentPerson().getImage();
 
-        createAccount.putExtra("ACCOUNT_NAME", accountName);
-        createAccount.putExtra("ACCOUNT_IMAGE_URL", image.getUrl());
-        startActivity(createAccount);
+        Log.i(TAG, "Creating account on device");
+        PartyManagerApplication.getInstance().getAccountService().createAccount(accountName, image.getUrl());
+        startActivity(new Intent(this, StartActivity.class));
     }
 
     @Override

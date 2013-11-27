@@ -21,5 +21,8 @@ import org.springframework.web.bind.annotation.*;
 public class PictureControllerImpl implements PictureService {
 
 
-
+    @Override
+    public Picture getUserPicture(String username) {
+        return null;
+    }
 }
