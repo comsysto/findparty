@@ -91,7 +91,7 @@ public class AccountService {
     }
 
     public String getUserImageUrl(){
-        return accountManager.getUserData(getAccount(), getAccount().name);
+        return accountManager.getUserData(getAccount(), "userImage");
     }
 
     private void remove(Account[] accounts) {
