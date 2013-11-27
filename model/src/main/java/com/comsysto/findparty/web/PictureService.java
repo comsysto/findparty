@@ -11,5 +11,6 @@ import com.comsysto.findparty.Picture;
  */
 public interface PictureService {
 
-    Picture getUserPicture(String username);
+
+    Picture getPicture(String id);
 }

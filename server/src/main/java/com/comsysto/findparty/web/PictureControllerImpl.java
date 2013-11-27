@@ -1,13 +1,17 @@
 package com.comsysto.findparty.web;
 
 import com.comsysto.findparty.Picture;
-import com.comsysto.findparty.User;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,8 +22,28 @@ import org.springframework.web.bind.annotation.*;
  */
 @Controller
 @RequestMapping("/pictures")
-public class PictureControllerImpl implements PictureService {
+public class PictureControllerImpl implements PictureController {
 
+    public static final Logger LOGGER = Logger.getLogger(PictureController.class);
 
+    @Autowired
+    private PictureService pictureService;
+
+    @Override
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "image/jpg")
+    @ResponseStatus(HttpStatus.OK)
+    public
+    @ResponseBody
+    byte[] showPicture(@PathVariable("id") Double id) {
+        return getBytes(id);
+    }
+
+    private byte[] getBytes(Double id) {
+        Picture picture = pictureService.getPicture(String.valueOf(id));
+        if (picture != null) {
+            return picture.getContent();
+        }
+        return null;
+    }
 
 }

@@ -4,6 +4,7 @@ import com.comsysto.findparty.Party;
 import com.comsysto.findparty.Picture;
 import com.comsysto.findparty.User;
 import com.comsysto.findparty.web.PartyService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.geo.Point;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -16,6 +17,8 @@ import java.util.List;
 
 @Component
 public class PartyServiceImpl implements PartyService {
+
+    public static final String SERVER_URL = "http://snuggle.eu01.aws.af.cm/pictures/";
 
     @Autowired
     public MongoService mongoService;
@@ -156,7 +159,41 @@ public class PartyServiceImpl implements PartyService {
         User user = findUserById(userId);
         mongoService.getMongoTemplate().remove(user);
     }
-	
+
+    @Override
+    public String createPartyImage(String partyId, byte[] content) {
+        Party party = findPartyById(partyId);
+        String pictureUrl = party.getPictureUrl();
+        String pictureId = getIdFromPictureUrl(pictureUrl);
+        Picture picture = null;
+        if(pictureId != null){
+             picture = mongoService.getMongoTemplate().findById(pictureId, Picture.class);
+        }
+        if(picture == null){
+            picture = createPicture(content);
+        }else{
+            picture.setContent(content);
+            mongoService.getMongoTemplate().save(picture);
+        }
+        //TODO url aus dem Request holen
+        party.setPictureUrl(SERVER_URL + picture.getId());
+        return party.getPictureUrl();
+    }
+
+    private Picture createPicture(byte[] content) {
+        Picture picture = new Picture();
+        picture.setContent(content);
+        mongoService.getMongoTemplate().insert(picture);
+        return picture;
+    }
+
+    private String getIdFromPictureUrl(String pictureUrl) {
+        if(pictureUrl.contains(SERVER_URL)){
+            return StringUtils.substringAfterLast("/", pictureUrl);
+        }
+        return null;
+    }
+
     /**
      * The current implementation of near assumes an idealized model of a flat earth, meaning that an arcdegree
      * of latitude (y) and longitude (x) represent the same distance everywhere.
@@ -184,6 +221,5 @@ public class PartyServiceImpl implements PartyService {
                 Party.class));
         return parties;
     }
-
 
 }

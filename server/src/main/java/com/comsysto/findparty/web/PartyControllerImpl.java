@@ -78,6 +78,13 @@ public class PartyControllerImpl implements PartyController {
         partyService.update(party);            
     }
 
+    @Override
+    @RequestMapping(value = "/{partyId}", method = RequestMethod.POST, consumes = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    public String createPartyImage(@RequestBody byte[] content, @PathVariable String partyId) {
+        return partyService.createPartyImage(partyId, content);
+    }
+
     @RequestMapping(value = "/{partyId}/subscriptions", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void subscribe(@PathVariable String partyId, @RequestParam(value = "action", required = false) String action, @RequestBody String username) {

@@ -45,4 +45,6 @@ public interface PartyService {
     void deleteParty(String partyId);
 
     void deleteUser(String userId);
+
+    String createPartyImage(String partyId, byte[] content);
 }
