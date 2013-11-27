@@ -14,7 +14,6 @@ import com.comsysto.findbuddies.android.service.PartyManagementServiceImpl;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.Picture;
 import com.comsysto.findparty.User;
-import com.comsysto.findparty.web.PartyService;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -41,6 +40,8 @@ public class PartyManagerApplication extends Application {
     private static final String TAG = Constants.LOG_APP_PREFIX + PartyManagerApplication.class.getSimpleName();
 
     private Party selectedParty;
+
+
 
 	private PartyManagementServiceImpl partyService;
 
@@ -137,7 +138,7 @@ public class PartyManagerApplication extends Application {
         user.setPassword(password);
         if(partyService.login(user)) {
             Log.d(TAG, "user successfully authenticated: " + user);
-            accountService.createAccount(username, password);
+            accountService.createAccount(username, password, null);
             return true;
         }
         Log.d(TAG, "account failed!");

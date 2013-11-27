@@ -63,13 +63,14 @@ public class AccountService {
      * Stores new user account on device. Deletes any previously existing accounts
      * @param username
      * @param password
+     * @param userImageUrl
      */
-    public void createAccount(String username, String password) {
+    public void createAccount(String username, String password, String userImageUrl) {
         Account[] accounts = accountManager.getAccountsByType(AccountAuthenticator.AUTH_TYPE);
         if(accounts.length > 0) {
             remove(accounts);
         }
-        addAccount(username, password);
+        addAccount(username, password, userImageUrl);
     }
 
     /**
@@ -80,11 +81,16 @@ public class AccountService {
         remove(accounts);
     }
 
-    private void addAccount(String username, String password) {
+    private void addAccount(String username, String password, String userImageUrl) {
         Account account = new Account(username, AccountAuthenticator.AUTH_TYPE);
         Bundle userdata = new Bundle();
         userdata.putLong("timestamp", new Date().getTime());
+        userdata.putString("userImage", userImageUrl);
         accountManager.addAccountExplicitly(account, password, userdata);
+    }
+
+    public String getUserImageUrl(){
+        return accountManager.getUserData(getAccount(), getAccount().name);
     }
 
     private void remove(Account[] accounts) {

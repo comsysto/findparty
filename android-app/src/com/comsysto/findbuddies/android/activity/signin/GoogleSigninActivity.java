@@ -16,6 +16,7 @@ import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallback
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.plus.PlusClient;
+import com.google.android.gms.plus.model.people.Person;
 
 public class GoogleSigninActivity extends Activity implements View.OnClickListener, ConnectionCallbacks, OnConnectionFailedListener
 {
@@ -117,8 +118,10 @@ public class GoogleSigninActivity extends Activity implements View.OnClickListen
         Toast.makeText(this, "User connected with Google+ Signin: " + plusClient.getAccountName(), Toast.LENGTH_SHORT).show();
 
         Intent createAccount = new Intent(this, CreateAccountActivity.class);
+        Person.Image image = plusClient.getCurrentPerson().getImage();
 
         createAccount.putExtra("ACCOUNT_NAME", accountName);
+        createAccount.putExtra("ACCOUNT_IMAGE_URL", image.getUrl());
         startActivity(createAccount);
     }
 

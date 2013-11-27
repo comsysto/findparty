@@ -18,7 +18,6 @@ import com.comsysto.findbuddies.android.activity.StartActivity;
 import com.comsysto.findbuddies.android.application.Constants;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 import com.comsysto.findparty.User;
-import com.comsysto.findparty.web.PartyService;
 
 /**
  * User: rpelger
@@ -83,8 +82,6 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
             passwordText.setEnabled(false);
             actionButton.performClick();
         }
-
-
     }
 
     @Override
@@ -111,14 +108,14 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
     }
 
     private void loginExistingUser() {
-        accountService.createAccount(existingUser.getUsername(), existingUser.getPassword());
+        String userImageUrl = (String) getIntent().getExtras().get("ACCOUNT_IMAGE_URL");
+        accountService.createAccount(existingUser.getUsername(), existingUser.getPassword(), userImageUrl);
         Intent start = new Intent(CreateAccountActivity.this, StartActivity.class);
         createUserDialog.dismiss();
         startActivity(start);
     }
 
     private void createUser(String username, String password) {
-
         AsyncTask<String, Void, User> createUserTask = new AsyncTask<String, Void, User>() {
             @Override
             protected User doInBackground(String... params) {
@@ -127,8 +124,9 @@ public class CreateAccountActivity extends Activity implements View.OnClickListe
 
             @Override
             protected void onPostExecute(User user) {
+                String userImageUrl = (String) getIntent().getExtras().get("ACCOUNT_IMAGE_URL");
                 Log.i(TAG, "Creating account on device");
-                accountService.createAccount(user.getUsername(), user.getPassword());
+                accountService.createAccount(user.getUsername(), user.getPassword(), userImageUrl);
                 Intent start = new Intent(CreateAccountActivity.this, StartActivity.class);
                 createUserDialog.dismiss();
                 startActivity(start);
