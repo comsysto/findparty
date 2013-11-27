@@ -19,8 +19,8 @@ import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.model.CategoryType;
 import com.comsysto.findbuddies.android.service.async.party.SearchPartiesAsync;
 import com.comsysto.findbuddies.android.service.async.party.SearchPartiesCallback;
-import com.comsysto.findbuddies.android.service.async.picture.GetUserPictureAsync;
-import com.comsysto.findbuddies.android.service.async.picture.GetUserPictureCallback;
+import com.comsysto.findbuddies.android.service.async.picture.GetPictureAsync;
+import com.comsysto.findbuddies.android.service.async.picture.GetPictureCallback;
 import com.comsysto.findparty.Party;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -45,7 +45,7 @@ import java.util.*;
  */
 public class BuddiesMapActivity extends AbstractActivity implements
         SearchPartiesCallback,
-        GetUserPictureCallback,
+        GetPictureCallback,
         GooglePlayServicesClient.ConnectionCallbacks,
         GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.InfoWindowAdapter, LocationListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnCameraChangeListener {
 
@@ -191,10 +191,11 @@ public class BuddiesMapActivity extends AbstractActivity implements
         Party party = partyMarkerMap.get(marker);
         if (lastShownMarkerAndView != null) {
             synchronized (lastShownMarkerAndView) {
-                if (party.getOwner().equals(lastShownMarkerAndView.userName)) {
+                if (party.getPictureUrl().equals(lastShownMarkerAndView.partyPictureUrl)) {
                     View view = lastShownMarkerAndView.view;
-                    ImageView userPicture = (ImageView)view.findViewById(R.id.userPicture);
-                    userPicture.setImageBitmap(lastShownMarkerAndView.userBitmap);
+                    ImageView userPicture = (ImageView)view.findViewById(R.id.partyPicture);
+                    userPicture.setImageBitmap(lastShownMarkerAndView.partyBitmap);
+                    userPicture.setVisibility(View.VISIBLE);
                     this.lastShownMarkerAndView = null;
                     return view;
                 }
@@ -219,12 +220,17 @@ public class BuddiesMapActivity extends AbstractActivity implements
         experience.setText(party.getLevel());
 
 
-
-        new GetUserPictureAsync(this, party.getOwner()).execute();
+        loadPartyPicture(party.getPictureUrl());
 
         this.lastShownMarkerAndView = new MarkerAndView(marker, view);
 
         return view;
+    }
+
+    private void loadPartyPicture(String pictureUrl) {
+        if (pictureUrl != null) {
+            new GetPictureAsync(this, pictureUrl).execute();
+        }
     }
 
     @Override
@@ -275,13 +281,13 @@ public class BuddiesMapActivity extends AbstractActivity implements
     }
 
     @Override
-    public void successOnGetUserPicture(Bitmap bitmap, String userName) {
+    public void successOnGetPicture(Bitmap bitmap, String pictureUrl) {
         if (lastShownMarkerAndView != null) {
             Marker marker = lastShownMarkerAndView.marker;
 
             if (marker != null && marker.isInfoWindowShown()) {
-                lastShownMarkerAndView.userBitmap = bitmap;
-                lastShownMarkerAndView.userName = userName;
+                lastShownMarkerAndView.partyBitmap = bitmap;
+                lastShownMarkerAndView.partyPictureUrl = pictureUrl;
                 marker.hideInfoWindow();
                 marker.showInfoWindow();
             }
@@ -291,7 +297,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
     }
 
     @Override
-    public void errorOnGetUserPicture() {
+    public void errorOnGetPicture() {
         lastShownMarkerAndView = null;
         //TODO: Show android and until this show a spinner GIF?
     }
@@ -314,8 +320,8 @@ public class BuddiesMapActivity extends AbstractActivity implements
     private class MarkerAndView {
         private final Marker marker;
         private final View view;
-        private String userName;
-        private Bitmap userBitmap;
+        private String partyPictureUrl;
+        private Bitmap partyBitmap;
 
         public MarkerAndView(Marker marker, View view) {
             this.marker = marker;

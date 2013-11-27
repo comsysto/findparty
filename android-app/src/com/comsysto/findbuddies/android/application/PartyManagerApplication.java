@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -17,6 +18,9 @@ import com.comsysto.findparty.User;
 import com.comsysto.findparty.web.PartyService;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -122,11 +126,6 @@ public class PartyManagerApplication extends Application {
     public String getUsername() {
         return accountService.getUsername();
     }
-
-    public String getUserPicture(String username){
-        return accountService.getUserImageUrl();
-    }
-
 
     public AccountService getAccountService() {
         return accountService;

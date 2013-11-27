@@ -10,7 +10,8 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import com.comsysto.findbuddies.android.R;
-import com.comsysto.findparty.User;
+import com.comsysto.findbuddies.android.service.async.picture.GetPictureAsync;
+import com.comsysto.findbuddies.android.service.async.picture.GetPictureCallback;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,7 +24,7 @@ import java.io.InputStream;
  * Time: 17:46
  * To change this template use File | Settings | File Templates.
  */
-public class ManageUserPictureDialogActivity extends AbstractActivity {
+public class ManageUserPictureDialogActivity extends AbstractActivity implements GetPictureCallback {
 
 
     public static final int PICTURE_SIZE = 250;
@@ -36,23 +37,18 @@ public class ManageUserPictureDialogActivity extends AbstractActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
-        String username = getPartyManagerApplication().getUsername();
+
 
         setContentView(R.layout.manage_user_picture_dialog);
 
         Button deleteButton = (Button)findViewById(R.id.DELETE_PICTURE_BUTTON);
         Button manageButton = (Button)findViewById(R.id.SELECT_PICTURE_BUTTON);
 
-        userPicture = (ImageView) findViewById(R.id.userPicture);
+        userPicture = (ImageView) findViewById(R.id.partyPicture);
 
 
-//        if (user.getPicture() == null) {
-//            deleteButton.setVisibility(View.GONE);
-//        }
-//        else {
-//            byte[] content = user.getPicture().getContent();
-//            userPicture.setImageBitmap(BitmapFactory.decodeByteArray(content, 0, content.length));
-//        }
+        new GetPictureAsync(this, getPartyManagerApplication().getUserImageUrl()).execute();
+
 
         manageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,5 +110,15 @@ public class ManageUserPictureDialogActivity extends AbstractActivity {
         }
 
         return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
+    }
+
+    @Override
+    public void successOnGetPicture(Bitmap bitmap, String pictureUrl) {
+        userPicture.setImageBitmap(bitmap);
+    }
+
+    @Override
+    public void errorOnGetPicture() {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

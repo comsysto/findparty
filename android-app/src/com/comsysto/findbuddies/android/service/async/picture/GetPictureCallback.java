@@ -9,8 +9,8 @@ import android.graphics.Bitmap;
  * Time: 14:47
  * To change this template use File | Settings | File Templates.
  */
-public interface GetUserPictureCallback {
+public interface GetPictureCallback {
 
-    void successOnGetUserPicture(Bitmap bitmap, String userName);
-    void errorOnGetUserPicture();
+    void successOnGetPicture(Bitmap bitmap, String pictureUrl);
+    void errorOnGetPicture();
 }

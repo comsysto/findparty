@@ -25,13 +25,12 @@
                 android:rowCount="6"
                 android:columnCount="2"
                 >
-
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/userPicture" android:layout_gravity="center"
-                android:src="@drawable/androidmarker"
+                android:id="@+id/partyPicture" android:layout_gravity="center"
                 android:layout_column="0" android:layout_row="0" android:layout_columnSpan="2"
+                android:visibility="invisible"
                 android:layout_margin="5dp"/>
 
     <TextView
