@@ -33,7 +33,7 @@ public class Party implements Serializable{
 
     private List<String> candidates;
 
-    private Picture picture;
+    private String pictureUrl;
 
     private String owner;
 
@@ -130,6 +130,14 @@ public class Party implements Serializable{
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 
     @Override
