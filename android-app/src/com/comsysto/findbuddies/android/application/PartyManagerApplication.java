@@ -14,6 +14,7 @@ import com.comsysto.findbuddies.android.service.PartyManagementServiceImpl;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.Picture;
 import com.comsysto.findparty.User;
+import com.comsysto.findparty.web.PartyService;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -48,6 +49,7 @@ public class PartyManagerApplication extends Application {
 	private boolean ready;
 
     private static PartyManagerApplication instance;
+    private String userPictureUrl;
 
     public static PartyManagerApplication getInstance() {
         return instance;
@@ -116,6 +118,7 @@ public class PartyManagerApplication extends Application {
 		}
 	}
 
+
     public String getUsername() {
         return accountService.getUsername();
     }
@@ -123,7 +126,6 @@ public class PartyManagerApplication extends Application {
     public String getUserPicture(String username){
         return accountService.getUserImageUrl();
     }
-
 
 
     public AccountService getAccountService() {
@@ -175,5 +177,9 @@ public class PartyManagerApplication extends Application {
 
     public List<Party> getAllParties(String userName) {
         return partyService.getAllParties(userName);
+    }
+
+    public String getUserImageUrl() {
+        return getAccountService().getUserImageUrl();
     }
 }
