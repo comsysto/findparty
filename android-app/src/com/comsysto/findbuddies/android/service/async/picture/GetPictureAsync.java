@@ -62,7 +62,12 @@ public class GetPictureAsync extends AsyncTask<Void, Void, Bitmap> {
 
 
     private Bitmap getPicture(String pictureUrl) throws IOException {
-        URL url = new URL(addSize(pictureUrl));
-        return BitmapFactory.decodeStream(url.openConnection().getInputStream());
+        String pictureUrlWithSize = addSize(pictureUrl);
+        if (PartyManagerApplication.getInstance().isGooglePicture(pictureUrl)) {
+            URL url = new URL(pictureUrlWithSize);
+            return BitmapFactory.decodeStream(url.openConnection().getInputStream());
+        }
+        return PartyManagerApplication.getInstance().loadPicture(pictureUrlWithSize);
     }
+
 }

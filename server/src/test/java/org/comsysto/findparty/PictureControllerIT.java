@@ -52,4 +52,10 @@ public class PictureControllerIT {
         resttemplate.postForObject(PICTURE_SERVICE + "/" + "jubi@test.de", result.toByteArray(), String.class);
     }
 
+
+    @Test
+    public void getPictureTest() {
+        //http://snuggle.eu01.aws.af.cm/services/pictures/52975fcde4b0a67d99b8b7d8?sz=200
+    }
+
 }

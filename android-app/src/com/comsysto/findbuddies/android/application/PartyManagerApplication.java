@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -12,8 +13,10 @@ import com.comsysto.findbuddies.android.account.AccountService;
 import com.comsysto.findbuddies.android.activity.StartActivity;
 import com.comsysto.findbuddies.android.service.PartyManagementServiceImpl;
 import com.comsysto.findparty.Party;
+import com.comsysto.findparty.Picture;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -101,6 +104,14 @@ public class PartyManagerApplication extends Application {
         return this.partyService.createPartyImage(getUsername(), stream.toByteArray());
     }
 
+    public Bitmap loadPicture(String pictureUrl) {
+        Picture picture = partyService.getPicture(pictureUrl);
+        if (picture == null) {
+            return BitmapFactory.decodeByteArray(picture.getContent(), 0, picture.getContent().length);
+        }
+        return null;
+    }
+
     public void deleteUserPicture() {
         //TODO
     }
@@ -139,5 +150,13 @@ public class PartyManagerApplication extends Application {
 
     public float getDeviceDensity() {
         return getResources().getDisplayMetrics().density;
+    }
+
+
+    public boolean isGooglePicture(String pictureUrl) {
+        if (pictureUrl == null) {
+            return false;
+        }
+        return pictureUrl.contains("googleusercontent");
     }
 }

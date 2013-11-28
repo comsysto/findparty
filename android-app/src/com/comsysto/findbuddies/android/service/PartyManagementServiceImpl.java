@@ -160,8 +160,12 @@ public class PartyManagementServiceImpl implements PartyService, PictureService 
     }
 
     @Override
-    public Picture getPicture(String id) {
-        //TODO: implement it!
-        return null;
+    public Picture getPicture(String pictureUrl) {
+        try {
+            return restTemplate.getForObject(pictureUrl, Picture.class);
+        } catch (Exception e) {
+            Log.i("MY_PARTIES", "Fehler beim laden des Bildes mit url : " + pictureUrl, e);
+            return null;
+        }
     }
 }
