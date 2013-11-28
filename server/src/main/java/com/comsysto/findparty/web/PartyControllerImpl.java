@@ -48,13 +48,6 @@ public class PartyControllerImpl implements PartyController {
         partyService.update(party);            
     }
 
-    @Override
-    @RequestMapping(value = "/{partyId}", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
-    public String createPartyImage(@RequestBody byte[] content, @PathVariable String partyId) {
-        return partyService.createPartyImage(partyId, content);
-    }
-
     @RequestMapping(value = "/{partyId}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody Party show(@PathVariable("partyId") String partyId) {

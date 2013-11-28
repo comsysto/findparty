@@ -39,6 +39,13 @@ public class PictureControllerImpl implements PictureController {
         return getBytes(pictureId, size);
     }
 
+    @Override
+    @RequestMapping(value = "/{username}", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public String createPartyImage(@RequestBody byte[] content, @PathVariable String username) {
+        return pictureService.createPartyImage(username, content);
+    }
+
     private byte[] getBytes(String pictureId, String size) {
        Picture picture = pictureService.getPicture(String.valueOf(pictureId));
        if (picture != null) {

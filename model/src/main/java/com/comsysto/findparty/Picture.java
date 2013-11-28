@@ -14,6 +14,7 @@ public class Picture implements Serializable{
     private String id;
 
     private byte[] content;
+    private String username;
 
     public String getId() {
         return id;
@@ -29,5 +30,13 @@ public class Picture implements Serializable{
 
     public void setContent(byte[] content) {
         this.content = content;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }

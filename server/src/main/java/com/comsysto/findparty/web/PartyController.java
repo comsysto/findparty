@@ -19,7 +19,4 @@ public interface PartyController {
 
 	public void delete(String partyId);
 
-    @RequestMapping(value = "/{partyId}", method = RequestMethod.PUT, consumes = "application/json")
-    @ResponseStatus(HttpStatus.OK)
-    String createPartyImage(@RequestBody byte[] content, @PathVariable String partyId);
 }
