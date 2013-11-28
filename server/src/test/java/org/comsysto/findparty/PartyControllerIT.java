@@ -37,8 +37,9 @@ public class PartyControllerIT {
     private RestTemplate resttemplate;
 
     @Test
-    public void createPartytest() throws IOException {
+    public void createPartytest() {
         Party party2 = new Party();
+        party2.setId("4711");
         party2.setSize(3);
         party2.setCategory("BIKING");
         party2.setLevel(LevelType.BEGINNER.name());
@@ -47,7 +48,27 @@ public class PartyControllerIT {
         location.setLat(48.1567);
         party2.setLocation(location);
         party2.setStartDate(new Date());
-        party2.setName("Testparty Jubigrat");
+
+        party2.setName("Jubigrat");
+
+        String partyId = resttemplate.postForObject(PARTY_SERVICE_URL, party2, String.class);
+    }
+
+    @Test
+    public void createPartyImageTest() throws IOException {
+        Party party2 = new Party();
+        party2.setId("4711");
+        party2.setSize(3);
+        party2.setCategory("BIKING");
+        party2.setLevel(LevelType.BEGINNER.name());
+        Point location = new Point();
+        location.setLon(11.53144);
+        location.setLat(48.1567);
+        party2.setLocation(location);
+        party2.setStartDate(new Date());
+        party2.setName("Testparty 2");
+
+        String partyId = resttemplate.postForObject(PARTY_SERVICE_URL, party2, String.class);
 
         URL resource = this.getClass().getResource("/jubi.jpg");
         InputStream inStream = resource.openStream();
@@ -60,10 +81,9 @@ public class PartyControllerIT {
             result.write(buffer);
         }
 
-        party2.setName("Jubigrat");
-
-        String partyId = resttemplate.postForObject(PARTY_SERVICE_URL, party2, String.class);
+        resttemplate.postForObject(PARTY_SERVICE_URL + "/" + partyId, result.toByteArray(), String.class);
     }
+
 
     @Test
     public void searchParties() throws IOException {

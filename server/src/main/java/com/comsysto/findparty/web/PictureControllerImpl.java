@@ -24,16 +24,16 @@ public class PictureControllerImpl implements PictureController {
     private PictureService pictureService;
 
     @Override
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "image/jpg")
+    @RequestMapping(value = "/{pictureId}", method = RequestMethod.GET, produces = "image/jpg")
     @ResponseStatus(HttpStatus.OK)
     public
     @ResponseBody
-    byte[] showPicture(@PathVariable("id") Double id) {
-        return getBytes(id);
+    byte[] showPicture(@PathVariable("pictureId") String pictureId) {
+        return getBytes(pictureId);
     }
 
-    private byte[] getBytes(Double id) {
-        Picture picture = pictureService.getPicture(String.valueOf(id));
+    private byte[] getBytes(String pictureId) {
+        Picture picture = pictureService.getPicture(String.valueOf(pictureId));
         if (picture != null) {
             return picture.getContent();
         }
