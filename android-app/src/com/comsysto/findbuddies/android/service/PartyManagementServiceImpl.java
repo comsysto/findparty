@@ -42,7 +42,7 @@ public class PartyManagementServiceImpl implements PartyService, PictureService 
 
         this.restTemplate = new RestTemplate(true, requestFactory);
         NoCacheClientRequestInterceptor noCacheInterceptor = new NoCacheClientRequestInterceptor();
-        ClientAuthenticationRequestInterceptor authInterceptor = new ClientAuthenticationRequestInterceptor(application);
+        ClientAuthenticationRequestInterceptor authInterceptor = new ClientAuthenticationRequestInterceptor();
 
         this.restTemplate.setInterceptors(Arrays.asList(new ClientHttpRequestInterceptor[]{noCacheInterceptor, authInterceptor}));
         this.urlBuilder = new UrlBuilder(host);
