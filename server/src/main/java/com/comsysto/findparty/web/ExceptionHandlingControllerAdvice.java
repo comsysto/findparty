@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ExceptionHandlingControllerAdvice {
 
     @ExceptionHandler(RuntimeException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public @ResponseBody
     String serverError(RuntimeException ex) {
         return "Server error: " + ex.getMessage();
@@ -29,7 +29,7 @@ public class ExceptionHandlingControllerAdvice {
     }
 
     @ExceptionHandler(InvalidRequestException.class)
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public @ResponseBody String badRequest(InvalidRequestException exception) {
         return "Bad request: " + exception.getMessage();
     }
