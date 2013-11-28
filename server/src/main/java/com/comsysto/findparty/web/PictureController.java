@@ -9,6 +9,6 @@ package com.comsysto.findparty.web;
  */
 public interface PictureController {
 
-    byte[] showPicture(String id);
+    byte[] showPicture(String id, String size);
 
 }
