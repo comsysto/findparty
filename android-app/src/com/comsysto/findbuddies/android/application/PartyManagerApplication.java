@@ -82,7 +82,7 @@ public class PartyManagerApplication extends Application {
         Log.d(TAG, "initializing application");
 		this.ready = false;
 		if (isConnected()) {
-			initializeOnlineService(LOCAL_ROB);
+			initializeOnlineService(CLOUD_HOST);
 		} else {
             //TODO: If no network connection available close the application with a hint!
             Log.i(TAG, "NO BACKEND AVAILABLE");
