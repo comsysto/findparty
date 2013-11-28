@@ -2,14 +2,11 @@ package com.comsysto.findparty.web;
 
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.exceptions.InvalidRequestException;
-import com.comsysto.findparty.exceptions.ResourceNotFoundException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -25,7 +22,7 @@ public class PartyControllerImpl implements PartyController {
     @RequestMapping(value = "/search/{lon}/{lat}/{maxdistance}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    List<Party> search(@PathVariable("lon") Double lon, @PathVariable("lat") Double lat, @PathVariable("maxdistance") Double maxdistance, HttpServletRequest request) {
+    List<Party> search(@PathVariable("lon") Double lon, @PathVariable("lat") Double lat, @PathVariable("maxdistance") Double maxdistance) {
         List<Party> parties = partyService.searchParties(lon, lat, maxdistance);
         return parties;
     }

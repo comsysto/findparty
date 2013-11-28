@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PartyController {
 
-	public List<Party> search(Double lon, Double lat, Double maxdistance, HttpServletRequest request);
+	public List<Party> search(Double lon, Double lat, Double maxdistance);
 	
 	public String create(Party party);
 

@@ -35,9 +35,10 @@ public class GetPictureAsync extends AsyncTask<Void, Void, Bitmap> {
     private String addSize(String pictureUrl) {
         String sizeParameter = "?sz=";
         if (pictureUrl.contains("?sz=")) {
-            sizeParameter = "&sz=" +
-                    (int)(DEFAULT_PICTURE_DENSITIY * PartyManagerApplication.getInstance().getDeviceDensity());
+            sizeParameter = "&sz=";
+
         }
+        sizeParameter = sizeParameter + (int)(DEFAULT_PICTURE_DENSITIY * PartyManagerApplication.getInstance().getDeviceDensity());
         return pictureUrl + sizeParameter;
     }
 

@@ -105,9 +105,9 @@ public class PartyManagerApplication extends Application {
     }
 
     public Bitmap loadPicture(String pictureUrl) {
-        Picture picture = partyService.getPicture(pictureUrl);
-        if (picture == null) {
-            return BitmapFactory.decodeByteArray(picture.getContent(), 0, picture.getContent().length);
+        byte[] picture = partyService.getPicture(pictureUrl);
+        if (picture != null) {
+            return BitmapFactory.decodeByteArray(picture, 0, picture.length);
         }
         return null;
     }
