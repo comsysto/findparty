@@ -160,7 +160,7 @@ public class MyPartiesActivity extends ListActivity implements UpdatePartyCallba
                 case R.id.delete_party:
                     Log.i(LOG_MY_PARTIES, "deleting party: " +selectedParty);
                     MyPartiesActivity.this.dialog.show();
-                    new UpdatePartyAsync(MyPartiesActivity.this).execute(selectedParty);
+                    new UpdatePartyAsync(MyPartiesActivity.this, null).execute(selectedParty);
                     mode.finish(); // Action picked, so close the CAB
                     return true;
                 case R.id.edit_party:
@@ -209,7 +209,7 @@ public class MyPartiesActivity extends ListActivity implements UpdatePartyCallba
     @Override
     public void errorOnPartyUpdate() {
         this.dialog.hide();
-        Toast.makeText(this, getString(R.string.party_delete_error), Toast.LENGTH_LONG);
+        Toast.makeText(this, getString(R.string.party_delete_error), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -227,6 +227,6 @@ public class MyPartiesActivity extends ListActivity implements UpdatePartyCallba
     @Override
     public void failureOnGetUsersParties() {
         dialog.hide();
-        Toast.makeText(this, "Could not load User's parties", Toast.LENGTH_LONG);
+        Toast.makeText(this, "Could not load User's parties", Toast.LENGTH_LONG).show();
     }
 }

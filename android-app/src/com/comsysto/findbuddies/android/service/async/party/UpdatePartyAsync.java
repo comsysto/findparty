@@ -1,9 +1,9 @@
 package com.comsysto.findbuddies.android.service.async.party;
 
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 import com.comsysto.findparty.Party;
-import com.comsysto.findparty.web.PartyService;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,9 +15,11 @@ import com.comsysto.findparty.web.PartyService;
 public class UpdatePartyAsync extends AsyncTask<Party, Void, String> {
 
     private final UpdatePartyCallback callback;
+    private final Bitmap bitmap;
 
-    public UpdatePartyAsync(UpdatePartyCallback callback) {
+    public UpdatePartyAsync(UpdatePartyCallback callback, Bitmap bitmap) {
         this.callback = callback;
+        this.bitmap = bitmap;
     }
 
     @Override
@@ -27,6 +29,13 @@ public class UpdatePartyAsync extends AsyncTask<Party, Void, String> {
         }
         PartyManagerApplication partyManagerApplication = PartyManagerApplication.getInstance();
         Party toBeUpdatedParty = params[0];
+        if (bitmap != null) {
+            String pictureUrl = uploadBitmapFirst(bitmap);
+            if (pictureUrl == null) {
+                return null;
+            }
+            toBeUpdatedParty.setPictureUrl(pictureUrl);
+        }
         switch(this.callback.getUpdatePartyAsyncMode()) {
             case CREATE:
                 return partyManagerApplication.createParty(toBeUpdatedParty);
@@ -39,6 +48,10 @@ public class UpdatePartyAsync extends AsyncTask<Party, Void, String> {
             default:
                 throw new IllegalArgumentException("UNKNOWN MODE");
         }
+    }
+
+    private String uploadBitmapFirst(Bitmap bitmap) {
+        return PartyManagerApplication.getInstance().uploadPicture(bitmap);
     }
 
     @Override

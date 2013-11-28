@@ -49,6 +49,9 @@
     <string name="SAVING_ACTIVITY_SPINNER">Saving...</string>
     <string name="party_save_error">Could not save Party</string>
     <string name="party_delete_error">Could not delete Party</string>
+    <string name="YOUR_PICTURE">Use your Google+ Picture</string>
+    <string name="OTHER_PICTURE">Upload a picture by yourself</string>
+    <string name="picture_get_error">Could not load picture</string>
 
 
 </resources>

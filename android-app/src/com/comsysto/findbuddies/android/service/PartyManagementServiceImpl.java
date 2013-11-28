@@ -114,9 +114,24 @@ public class PartyManagementServiceImpl implements PartyService, PictureService 
     }
 
     @Override
-    public String createPartyImage(String partyId, byte[] content) {
-        //TODO: implement it!
+    public String createPartyImage(String username, byte[] content) {
+        String url = urlBuilder.createUri(PICTURES_SERVICE_PATH, username);
+        try {
+            return restTemplate.postForObject(url, content, String.class);
+        } catch(Exception e) {
+            Log.i("MY_PARTIES", "Fehler beim Löschen des Bildes mit ID="+username);
+        }
         return null;
+    }
+
+    @Override
+    public void removePicture(String pictureId) {
+        String url = urlBuilder.createUri(PICTURES_SERVICE_PATH, pictureId);
+        try {
+            restTemplate.delete(url);
+        } catch(Exception e) {
+            Log.i("MY_PARTIES", "Fehler beim Löschen des Bildes mit ID="+pictureId);
+        }
     }
 
 

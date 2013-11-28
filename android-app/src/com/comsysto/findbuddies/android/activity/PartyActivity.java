@@ -2,7 +2,9 @@ package com.comsysto.findbuddies.android.activity;
 
 import android.app.*;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +13,7 @@ import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import com.comsysto.findbuddies.android.R;
+import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 import com.comsysto.findbuddies.android.menu.OptionMenuHandler;
 import com.comsysto.findbuddies.android.model.CategoryType;
 import com.comsysto.findbuddies.android.service.LocationInfo;
@@ -24,6 +27,9 @@ import com.comsysto.findbuddies.android.widget.LoadingProgressDialog;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.Point;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -51,6 +57,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
     LoadingProgressDialog loadingProgressDialog;
     private ImageView partyPicture;
+    private Bitmap partyPictureBitmap;
     private ViewSwitcher viewSwitcher;
 
     void dismissProgressDialog() {
@@ -91,9 +98,64 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     }
 
     private void initPartyPicture() {
-        this.partyPicture = (ImageView)findViewById(R.id.partyPicture);
+        final String pictureUrl = party.getPictureUrl();
         this.viewSwitcher = (ViewSwitcher)findViewById(R.id.viewSwitcher);
-        new GetPictureAsync(this, this.party.getPictureUrl()).execute();
+        this.partyPicture = (ImageView)findViewById(R.id.partyPicture);
+
+        final String textForOwnerPicture = getString(R.string.YOUR_PICTURE);
+        final String textForOtherPicture = getString(R.string.OTHER_PICTURE);
+
+        this.viewSwitcher.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(PartyActivity.this);
+                PartyPictureSelector listener = new PartyPictureSelector();
+                builder.setSingleChoiceItems(new String[]{textForOwnerPicture, textForOtherPicture},
+                        isGooglePicture(pictureUrl) ? 0 : 1, listener);
+                builder.setPositiveButton(R.string.OK_BUTTON, listener);
+                builder.show();
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+        });
+
+        if (pictureUrl != null) {
+            new GetPictureAsync(this, this.party.getPictureUrl()).execute();
+        }
+    }
+
+    private class PartyPictureSelector implements DialogInterface.OnClickListener {
+
+            private int selectedOption = -1;
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == -1) {
+                    if (selectedOption == -1) {
+                        //do nothing, user didn't change selection
+                    } else if (selectedOption == 1) {
+                        Intent intent = new Intent();
+                        intent.setType("image/*");
+                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        PartyActivity.this.startActivityForResult(intent, 0);
+                    } else {
+                        showProgressBar();
+                        new GetPictureAsync(PartyActivity.this, PartyManagerApplication.getInstance().getUserImageUrl()).execute();
+                    }
+                } else {
+                    if (party.getPictureUrl() == null ||
+                            which == 0 && !isGooglePicture(party.getPictureUrl())
+                            || which == 1 && isGooglePicture(party.getPictureUrl()))
+                    selectedOption = which;
+                }
+        }
+    }
+
+    public boolean isGooglePicture(String pictureUrl) {
+        if (pictureUrl == null) {
+            return false;
+        }
+        return pictureUrl.contains("googleusercontent");
     }
 
     protected abstract Party getParty();
@@ -481,21 +543,62 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     @Override
     public void errorOnPartyUpdate() {
         dismissProgressDialog();
-        Toast.makeText(this, getString(R.string.party_save_error),Toast.LENGTH_LONG);
+        Toast.makeText(this, getString(R.string.party_save_error), Toast.LENGTH_LONG).show();
     }
 
     private void submit() {
-        new UpdatePartyAsync(this).execute(party);
+        new UpdatePartyAsync(this, partyPictureBitmap).execute(party);
     }
 
     @Override
     public void errorOnGetPicture() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        Toast.makeText(this, getText(R.string.picture_get_error), Toast.LENGTH_LONG).show();
+        showProgressBar();
     }
 
     @Override
     public void successOnGetPicture(Bitmap bitmap, String pictureUrl) {
         this.partyPicture.setImageBitmap(bitmap);
-        this.viewSwitcher.showNext();
+        party.setPictureUrl(pictureUrl);
+        this.partyPictureBitmap = null;
+        showPicture();
+    }
+
+    private void showPicture() {
+        if (this.viewSwitcher.getCurrentView() != this.partyPicture) {
+            this.viewSwitcher.showNext();
+        }
+    }
+
+    private void showProgressBar() {
+        if (this.viewSwitcher.getCurrentView() == this.partyPicture) {
+            this.viewSwitcher.showNext();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK)
+            try {
+                InputStream stream = getContentResolver().openInputStream(
+                        data.getData());
+                BitmapFactory.Options opts = new BitmapFactory.Options();
+                opts.inDensity = 100;
+                Bitmap bitmap = BitmapFactory.decodeStream(stream, null, opts);
+                if (bitmap != null) {
+                    if (partyPictureBitmap != null) {
+                        partyPictureBitmap.recycle();
+                    }
+                    partyPictureBitmap = bitmap;
+                    partyPicture.setImageBitmap(bitmap);
+                    party.setPictureUrl(null);
+                    showPicture();
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
