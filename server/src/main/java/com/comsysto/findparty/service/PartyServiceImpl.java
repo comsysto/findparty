@@ -1,10 +1,9 @@
 package com.comsysto.findparty.service;
 
 import com.comsysto.findparty.Party;
-import com.comsysto.findparty.Picture;
 import com.comsysto.findparty.exceptions.ResourceNotFoundException;
 import com.comsysto.findparty.web.PartyService;
-import org.apache.commons.lang3.StringUtils;
+import com.comsysto.findparty.web.PictureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.geo.Point;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -17,10 +16,11 @@ import java.util.List;
 @Component
 public class PartyServiceImpl implements PartyService {
 
-    public static final String SERVER_URL = "http://snuggle.eu01.aws.af.cm/services/pictures/";
-
     @Autowired
     public MongoService mongoService;
+
+    @Autowired
+    public PictureService pictureService;
     
     public static final Double KILOMETER = 111.0d;
 
@@ -46,9 +46,8 @@ public class PartyServiceImpl implements PartyService {
 
 	@Override
 	public void update(Party party) {
-	    //checks if party with same id exists
-	    findPartyById(party.getId());
-	    	    
+        //checks if party with same id exists
+        findPartyById(party.getId());
 	    mongoService.getMongoTemplate().save(party);
 	}
 	
@@ -69,41 +68,6 @@ public class PartyServiceImpl implements PartyService {
     public void deleteParty(String partyId) {
         Party party = findPartyById(partyId);
         mongoService.getMongoTemplate().remove(party);
-    }
-
-    @Override
-    public String createPartyImage(String partyId, byte[] content) {
-        Party party = findPartyById(partyId);
-        String pictureUrl = party.getPictureUrl();
-        String pictureId = getIdFromPictureUrl(pictureUrl);
-        Picture picture = null;
-        if(pictureId != null){
-             picture = mongoService.getMongoTemplate().findById(pictureId, Picture.class);
-        }
-        if(picture == null){
-            picture = createPicture(content);
-        }else{
-            picture.setContent(content);
-            mongoService.getMongoTemplate().save(picture);
-        }
-        //TODO url aus dem Request holen
-        party.setPictureUrl(SERVER_URL + picture.getId());
-        mongoService.getMongoTemplate().save(party);
-        return party.getPictureUrl();
-    }
-
-    private Picture createPicture(byte[] content) {
-        Picture picture = new Picture();
-        picture.setContent(content);
-        mongoService.getMongoTemplate().insert(picture);
-        return picture;
-    }
-
-    private String getIdFromPictureUrl(String pictureUrl) {
-        if(pictureUrl != null && pictureUrl.contains(SERVER_URL)){
-            return StringUtils.substringAfterLast(pictureUrl, "/");
-        }
-        return null;
     }
 
     /**

@@ -42,6 +42,10 @@ public class PartyManagerApplication extends Application {
     private static final String LOCAL_EMULATOR = "10.0.2.2:8080";
     private static final String LOCAL_STEFAN = "192.168.178.52:8080";
     private static final String LOCAL_ROB = "192.168.178.65:8080";
+
+    private static final String API_KEY = "U251Z2dsZU1lIGlzIGF3ZXNvbWUh";
+
+
     private static final String TAG = Constants.LOG_APP_PREFIX + PartyManagerApplication.class.getSimpleName();
 
     private Party selectedParty;
@@ -57,6 +61,10 @@ public class PartyManagerApplication extends Application {
 
     public static PartyManagerApplication getInstance() {
         return instance;
+    }
+
+    public static String getApiKey() {
+        return API_KEY;
     }
 
     @Override

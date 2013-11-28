@@ -13,4 +13,8 @@ public interface PictureService {
 
 
     Picture getPicture(String id);
+
+    String createPartyImage(String username, byte[] content);
+
+    void removePicture(String pictureId);
 }

@@ -1,5 +1,8 @@
 package com.comsysto.findparty.web;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
 /**
  * Created with IntelliJ IDEA.
  * User: tim.hoheisel
@@ -9,6 +12,7 @@ package com.comsysto.findparty.web;
  */
 public interface PictureController {
 
-    byte[] showPicture(String id);
+    byte[] showPicture(String id, String size);
 
+    String createPartyImage(byte[] content, String username);
 }
