@@ -42,7 +42,7 @@ public class PictureControllerImpl implements PictureController {
     @Override
     @RequestMapping(value = "/{username}", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public String createPartyImage(@RequestBody byte[] content, @PathVariable String username) {
+    public @ResponseBody String createPartyImage(@RequestBody byte[] content, @PathVariable String username) {
         return pictureService.createPartyImage(username, content);
     }
 
