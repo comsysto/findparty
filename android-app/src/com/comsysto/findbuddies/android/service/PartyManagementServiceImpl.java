@@ -1,19 +1,13 @@
 package com.comsysto.findbuddies.android.service;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.util.Log;
 import com.comsysto.findbuddies.android.application.Constants;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
-import com.comsysto.findbuddies.android.account.AccountAuthenticator;
 import com.comsysto.findbuddies.android.service.interceptor.ClientAuthenticationRequestInterceptor;
 import com.comsysto.findbuddies.android.service.interceptor.NoCacheClientRequestInterceptor;
 import com.comsysto.findbuddies.android.service.util.UrlBuilder;
-import com.comsysto.findparty.Category;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.Picture;
-import com.comsysto.findparty.User;
-import com.comsysto.findparty.web.CategoryService;
 import com.comsysto.findparty.web.PartyService;
 import com.comsysto.findparty.web.PictureService;
 import org.springframework.http.ResponseEntity;
@@ -85,7 +79,7 @@ public class PartyManagementServiceImpl implements PartyService, PictureService 
             Log.d(TAG, "received parties: " + parties);
             return Arrays.asList(parties);
         } catch(Exception e) {
-            Log.d(TAG, "Exception: " +e.getMessage(), e);
+            Log.d(TAG, "Exception: " + e.getMessage(), e);
         }
         return null;
     }

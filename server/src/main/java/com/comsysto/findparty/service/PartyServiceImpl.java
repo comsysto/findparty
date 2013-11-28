@@ -17,7 +17,7 @@ import java.util.List;
 @Component
 public class PartyServiceImpl implements PartyService {
 
-    public static final String SERVER_URL = "http://snuggle.eu01.aws.af.cm/pictures/";
+    public static final String SERVER_URL = "http://snuggle.eu01.aws.af.cm/services/pictures/";
 
     @Autowired
     public MongoService mongoService;
@@ -88,6 +88,7 @@ public class PartyServiceImpl implements PartyService {
         }
         //TODO url aus dem Request holen
         party.setPictureUrl(SERVER_URL + picture.getId());
+        mongoService.getMongoTemplate().save(party);
         return party.getPictureUrl();
     }
 
@@ -99,8 +100,8 @@ public class PartyServiceImpl implements PartyService {
     }
 
     private String getIdFromPictureUrl(String pictureUrl) {
-        if(pictureUrl.contains(SERVER_URL)){
-            return StringUtils.substringAfterLast("/", pictureUrl);
+        if(pictureUrl != null && pictureUrl.contains(SERVER_URL)){
+            return StringUtils.substringAfterLast(pictureUrl, "/");
         }
         return null;
     }

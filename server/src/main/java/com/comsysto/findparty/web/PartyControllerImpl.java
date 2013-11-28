@@ -49,7 +49,7 @@ public class PartyControllerImpl implements PartyController {
     }
 
     @Override
-    @RequestMapping(value = "/{partyId}", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "/{partyId}", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public String createPartyImage(@RequestBody byte[] content, @PathVariable String partyId) {
         return partyService.createPartyImage(partyId, content);
