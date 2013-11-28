@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -13,14 +12,7 @@ import com.comsysto.findbuddies.android.account.AccountService;
 import com.comsysto.findbuddies.android.activity.StartActivity;
 import com.comsysto.findbuddies.android.service.PartyManagementServiceImpl;
 import com.comsysto.findparty.Party;
-import com.comsysto.findparty.Picture;
-import com.comsysto.findparty.User;
-import com.comsysto.findparty.web.PartyService;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 /**
@@ -54,10 +46,8 @@ public class PartyManagerApplication extends Application {
 
     private AccountService accountService;
 
-	private boolean ready;
 
     private static PartyManagerApplication instance;
-    private String userPictureUrl;
 
     public static PartyManagerApplication getInstance() {
         return instance;
@@ -69,55 +59,12 @@ public class PartyManagerApplication extends Application {
 
     @Override
 	public void onCreate() {
-		initializePartyService();
-        intializeAccountService();
+        accountService = new AccountService(this.getApplicationContext());
+        partyService = new PartyManagementServiceImpl(CLOUD_HOST);
         PartyManagerApplication.instance = this;
     }
 
-    private void intializeAccountService() {
-        accountService = new AccountService(this.getApplicationContext());
-    }
-
-    public void initializePartyService() {
-        Log.d(TAG, "initializing application");
-		this.ready = false;
-		if (isConnected()) {
-			initializeOnlineService(CLOUD_HOST);
-		} else {
-            //TODO: If no network connection available close the application with a hint!
-            Log.i(TAG, "NO BACKEND AVAILABLE");
-		}
-	}
-
-	private void initializeOnlineService(final String host) {
-		AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-
-			@Override
-			protected Void doInBackground(Void... params) {
-				PartyManagerApplication.this.partyService = new PartyManagementServiceImpl(host, PartyManagerApplication.this);
-				try {
-					String echo = PartyManagerApplication.this.partyService.echo("echo");
-					if (echo.equals("echo")) {
-						Log.i(TAG, "Server-Check ["+host+"]: Server is online");
-					} else {
-						Log.e(TAG, "Server-Check ["+host+"]: Server returned wrong echo ("+ echo + "), going offline.");
-					}
-				} catch (Exception e) {
-					Log.e(TAG, "Server-Check ["+host+"]: Server not reachable", e);
-
-				}
-				PartyManagerApplication.this.ready = true;
-				return null;
-			}
-		};
-		task.execute();
-	}
-
-    public boolean isReady() {
-        return ready;
-    }
-
-	boolean isConnected() {
+	public boolean isConnected() {
 		ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetworkInfo = cm.getActiveNetworkInfo();
 		if (activeNetworkInfo != null && activeNetworkInfo.isAvailable()
