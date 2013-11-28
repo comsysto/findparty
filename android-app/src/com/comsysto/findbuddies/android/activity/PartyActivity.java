@@ -98,7 +98,6 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     }
 
     private void initPartyPicture() {
-        final String pictureUrl = party.getPictureUrl();
         this.viewSwitcher = (ViewSwitcher)findViewById(R.id.viewSwitcher);
         this.partyPicture = (ImageView)findViewById(R.id.partyPicture);
 
@@ -111,15 +110,15 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
                 AlertDialog.Builder builder = new AlertDialog.Builder(PartyActivity.this);
                 PartyPictureSelector listener = new PartyPictureSelector();
                 builder.setSingleChoiceItems(new String[]{textForOwnerPicture, textForOtherPicture},
-                        isGooglePicture(pictureUrl) ? 0 : 1, listener);
+                        isGooglePicture(getParty().getPictureUrl()) ? 0 : 1, listener);
                 builder.setPositiveButton(R.string.OK_BUTTON, listener);
                 builder.show();
                 //To change body of implemented methods use File | Settings | File Templates.
             }
         });
 
-        if (pictureUrl != null) {
-            new GetPictureAsync(this, this.party.getPictureUrl()).execute();
+        if (getParty().getPictureUrl() != null) {
+            new GetPictureAsync(this, getParty().getPictureUrl()).execute();
         }
     }
 
