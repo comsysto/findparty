@@ -26,7 +26,7 @@ import java.util.*;
  * @author stefandjurasic
  * 
  */
-public class PartyManagementServiceImpl implements PartyService, PictureService {
+public class PartyManagementServiceImpl implements PartyService {
 
     private static final String TAG = Constants.LOG_SERVICE_PREFIX + PartyManagementServiceImpl.class.getSimpleName();
     private RestTemplate restTemplate;
@@ -113,7 +113,6 @@ public class PartyManagementServiceImpl implements PartyService, PictureService 
         }
     }
 
-    @Override
     public String createPartyImage(String username, byte[] content) {
         String url = urlBuilder.createUri(PICTURES_SERVICE_PATH, username);
         try {
@@ -123,17 +122,6 @@ public class PartyManagementServiceImpl implements PartyService, PictureService 
         }
         return null;
     }
-
-    @Override
-    public void removePicture(String pictureId) {
-        String url = urlBuilder.createUri(PICTURES_SERVICE_PATH, pictureId);
-        try {
-            restTemplate.delete(url);
-        } catch(Exception e) {
-            Log.i("MY_PARTIES", "Fehler beim Löschen des Bildes mit ID="+pictureId);
-        }
-    }
-
 
     @Override
     public List<Party> getAllParties(String username) {
@@ -159,10 +147,9 @@ public class PartyManagementServiceImpl implements PartyService, PictureService 
         return forEntity.getBody();
     }
 
-    @Override
-    public Picture getPicture(String pictureUrl) {
+    public byte[] getPicture(String pictureUrl) {
         try {
-            return restTemplate.getForObject(pictureUrl, Picture.class);
+            return restTemplate.getForObject(pictureUrl, byte[].class);
         } catch (Exception e) {
             Log.i("MY_PARTIES", "Fehler beim laden des Bildes mit url : " + pictureUrl, e);
             return null;
