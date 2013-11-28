@@ -3,8 +3,7 @@ package org.comsysto.findparty;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
@@ -13,9 +12,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.HashMap;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -53,7 +55,20 @@ public class PictureControllerIT {
 
     @Test
     public void getPictureTest() {
-        //http://snuggle.eu01.aws.af.cm/services/pictures/52975fcde4b0a67d99b8b7d8?sz=200
+
+        String url = "http://snuggle.eu01.aws.af.cm/services/pictures/52975fcde4b0a67d99b8b7d8?sz=200";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.IMAGE_JPEG));
+
+        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+
+        ResponseEntity<Byte[]> exchange = restTemplate.exchange(url, HttpMethod.GET, entity, Byte[].class, new HashMap<String, String>());
+
+        HttpStatus statusCode = exchange.getStatusCode();
+        Byte[] body = exchange.getBody();
+        assertThat(statusCode.value(), is(200));
+        assertThat(body, notNullValue());
     }
 
 }
