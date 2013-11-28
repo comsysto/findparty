@@ -26,9 +26,6 @@
     </bean>
 
 
-    <bean id="restBasicAuthEntryPoint" class="com.comsysto.findparty.security.RestServiceBasicAuthEntryPoint"/>
 
-    <bean id="mongoBackedUserDetailsService" class="com.comsysto.findparty.security.MongoUserDetailsService">
-            <constructor-arg ref="mongoOperations"/>
-    </bean>
+
 </beans>

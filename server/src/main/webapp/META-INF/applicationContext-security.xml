@@ -1,42 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns="http://www.springframework.org/schema/security"
-             xmlns:beans="http://www.springframework.org/schema/beans"
+<beans xmlns="http://www.springframework.org/schema/beans"
+             xmlns:sec="http://www.springframework.org/schema/security"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-           http://www.springframework.org/schema/security
-           http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+             xsi:schemaLocation="
+                http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
-    <debug/>
+    <sec:http auto-config="false" entry-point-ref="restServiceAccessDeniedEntryPoint" create-session="never">
+        <sec:custom-filter after="EXCEPTION_TRANSLATION_FILTER" ref="apiKeyAuthenticationFilter" />
+    </sec:http>
 
-    <http use-expressions="true" create-session="stateless" authentication-manager-ref="mongoBackedAuthenticationManager">
-        <!-- TODO: authenticated URLs should use 'require-channel="https"' on basic-account -->
-        <intercept-url pattern="/services/users/login" method="POST" access="permitAll" />
-        <intercept-url pattern="/services/users" method="POST" access="permitAll" />
-        <intercept-url pattern="/services/users/**" method="GET" access="permitAll" />
-        <intercept-url pattern="/services/parties/echo/**" access="permitAll" />
-        <intercept-url pattern="/**" access="isAuthenticated()" />
-        <http-basic entry-point-ref="restBasicAuthEntryPoint" />
-    </http>
+    <sec:authentication-manager alias="authenticationManager">
+        <sec:authentication-provider ref="apiKeyAuthProvider" />
+    </sec:authentication-manager>
 
-    <global-method-security pre-post-annotations="enabled"/>
+    <bean id="apiKeyAuthenticationFilter" class="com.comsysto.findparty.security.ApiKeyAuthenticationFilter">
+        <property name="authenticationManager" ref="authenticationManager" />
+    </bean>
 
-    <!-- this account-manager is based on static user-details (key-value in <user-service>) -->
+    <bean id="apiKeyAuthProvider" class="com.comsysto.findparty.security.ApiKeyAuthenticationProvider">
+        <property name="apiKeys">
+            <map>
+                <entry key="dev" value="SnuggleMe Development" />
+                <entry key="U251Z2dsZU1lIGlzIGF3ZXNvbWUh" value="SnuggleMe Android Applcation" />
+            </map>
+        </property>
+    </bean>
 
-    <authentication-manager  alias="staticAuthenticationManager">
-        <authentication-provider>
-            <user-service>
-                <user name="rob" password="test" authorities="ROLE_USER" />
-                <user name="tim" password="test" authorities="ROLE_USER" />
-                <user name="stefan" password="test" authorities="ROLE_USER" />
-                <user name="not" password="test" authorities="ROLE_GUEST" />
-            </user-service>
-        </authentication-provider>
-    </authentication-manager>
+    <bean id="restServiceAccessDeniedEntryPoint" class="com.comsysto.findparty.security.RestServiceAccessDeniedEntryPoint"/>
 
-    <!-- this account-manager is based on users in mongodb backend, which are loaded via the 'mongoBackedUserDetailsService' -->
-    <authentication-manager  alias="mongoBackedAuthenticationManager">
-        <authentication-provider user-service-ref="mongoBackedUserDetailsService" />
-    </authentication-manager>
 
-</beans:beans>
+</beans>
