@@ -4,6 +4,13 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean id="resttemplate" class="org.springframework.web.client.RestTemplate" />
+    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+        <property name="interceptors">
+            <list>
+                <ref bean="apiKeySecurityRequestInterceptor" />
+            </list>
+        </property>
+    </bean>
+    <bean id="apiKeySecurityRequestInterceptor" class="org.comsysto.findparty.ApiKeySecurityRequestInterceptor"/>
 
 </beans>

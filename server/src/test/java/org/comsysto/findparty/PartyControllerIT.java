@@ -32,7 +32,7 @@ import static org.junit.Assert.assertNotNull;
 public class PartyControllerIT {
 
     private static final String PARTY_SERVICE_URL = "http://localhost:8080/services/parties";
-//    private static final String PARTY_SERVICE_URL = "http://snuggle.eu01.aws.af.cm/services/parties";
+
     @Autowired
     private RestTemplate resttemplate;
 
