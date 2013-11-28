@@ -25,7 +25,7 @@ public class PartyControllerImpl implements PartyController {
     @RequestMapping(value = "/search/{lon}/{lat}/{maxdistance}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    List<Party> search(@PathVariable("lon") Double lon, @PathVariable("lat") Double lat, @PathVariable("maxdistance") Double maxdistance, HttpServletRequest request) {
+    List<Party> search(@PathVariable("lon") Double lon, @PathVariable("lat") Double lat, @PathVariable("maxdistance") Double maxdistance) {
         List<Party> parties = partyService.searchParties(lon, lat, maxdistance);
         return parties;
     }
