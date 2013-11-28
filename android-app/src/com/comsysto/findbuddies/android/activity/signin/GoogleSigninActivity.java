@@ -24,12 +24,9 @@ public class GoogleSigninActivity extends Activity implements View.OnClickListen
     private static final int OUR_REQUEST_CODE = 666;
     private static final String TAG = Constants.LOG_PREFIX + "Google+";
 
-    private ProgressDialog connectionProgressDialog;
-
     private PlusClient plusClient;
     private ConnectionResult lastResult;
 
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -41,18 +38,16 @@ public class GoogleSigninActivity extends Activity implements View.OnClickListen
         signInButton.setOnClickListener(this);
 
         plusClient = new PlusClient.Builder(this.getApplicationContext(), this, this).build();
-
-        Log.i(TAG, "PlusClient and View created");
-
-        connectionProgressDialog = new ProgressDialog(this);
-        connectionProgressDialog.setMessage("Connecting with Google+...");
-
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        plusClient.connect();
+        if(PartyManagerApplication.getInstance().isConnected()) {
+            plusClient.connect();
+        } else {
+            Toast.makeText(this, "No internet connection! Please check your connection settings", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -85,13 +80,7 @@ public class GoogleSigninActivity extends Activity implements View.OnClickListen
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(!connectionProgressDialog.isShowing()) {
-            connectionProgressDialog.show();
-        }
-
-        Log.i(TAG, "activityResult called with reqCode: " + requestCode + " resCode: " + resultCode);
         if(requestCode == OUR_REQUEST_CODE) {
-            Log.i(TAG, "received callback with our code: " + requestCode);
             if(!plusClient.isConnected()) {
                 plusClient.connect();
             }
@@ -110,40 +99,23 @@ public class GoogleSigninActivity extends Activity implements View.OnClickListen
             return;
         }
 
-
-        if(connectionProgressDialog.isShowing()) {
-            connectionProgressDialog.dismiss();
-        }
         String accountName = plusClient.getAccountName();
-        Log.i(TAG, "PlusClient connected: " + accountName);
         Toast.makeText(this, "User connected with Google+ Signin: " + plusClient.getAccountName(), Toast.LENGTH_SHORT).show();
 
         Person.Image image = plusClient.getCurrentPerson().getImage();
 
-        Log.i(TAG, "Creating account on device");
         PartyManagerApplication.getInstance().getAccountService().createAccount(accountName, image.getUrl());
         startActivity(new Intent(this, StartActivity.class));
     }
 
     @Override
     public void onDisconnected() {
-        Log.i(TAG, "PlusClient disconnected");
+        Log.i(TAG, "Google PlusClient disconnected!");
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        if(connectionProgressDialog.isShowing()) {
-            connectionProgressDialog.dismiss();
-        }
-
-        Log.i(TAG, "onConnectionFailed listener triggered");
         lastResult = connectionResult;
     }
 
-    @Override
-    protected void onStop() {
-        Log.i(TAG, "Stopping activitiy");
-        super.onStop();
-
-    }
 }

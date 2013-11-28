@@ -15,6 +15,8 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.*;
 
 /**
@@ -30,14 +32,10 @@ public class PartyManagementServiceImpl implements PartyService, PictureService 
     private RestTemplate restTemplate;
     private UrlBuilder urlBuilder;
 
-    private final static String USER_SERVICE_PATH = "/services/users";
     private final static String PICTURES_SERVICE_PATH = "/services/pictures";
     private final static String PARTY_SERVICE_PATH = "/services/parties";
-    private final static String CATEGORY_SERVICE_PATH = "/services/category";
 
-    private final static String SUBSCRIPTIONS = "subscriptions";
-
-    public PartyManagementServiceImpl(String host, PartyManagerApplication application) {
+    public PartyManagementServiceImpl(String host) {
         HttpComponentsClientHttpRequestFactory requestFactory = createHttpRequestFactory();
 
         this.restTemplate = new RestTemplate(true, requestFactory);
@@ -124,14 +122,16 @@ public class PartyManagementServiceImpl implements PartyService, PictureService 
 
     @Override
     public List<Party> getAllParties(String username) {
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("user", username);
-        
-        String url = urlBuilder.createUri(params, PARTY_SERVICE_PATH);
-
-        Party[] response = restTemplate.getForObject(url, Party[].class);
         ArrayList<Party> partyArrayList = new ArrayList<Party>();
-        Collections.addAll(partyArrayList, response);
+        try {
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("user", username);
+            String url = urlBuilder.createUri(params, PARTY_SERVICE_PATH);
+            Party[] response = restTemplate.getForObject(url, Party[].class);
+            Collections.addAll(partyArrayList, response);
+        } catch (Exception e) {
+            Log.e(TAG, "unhandled exception : " + e.getMessage(), e);
+        }
         return partyArrayList;
     }
 

@@ -20,14 +20,8 @@ public class Preferences extends PreferenceActivity {
 		addPreferencesFromResource(R.xml.preferences);
 	}
 
-
-	
 	@Override
-	/**
-	 * when the settings are left, we go back to main screen
-	 */
 	public void onBackPressed() {
-		((PartyManagerApplication)getApplication()).initializePartyService();
 		Intent intent = new Intent(this, MyPartiesActivity.class);
 	    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	    startActivity(intent);
