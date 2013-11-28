@@ -189,7 +189,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
     @Override
     public View getInfoWindow(Marker marker) {
         Party party = partyMarkerMap.get(marker);
-        if (lastShownMarkerAndView != null) {
+        if (lastShownMarkerAndView != null && party.getPictureUrl() != null) {
             synchronized (lastShownMarkerAndView) {
                 if (party.getPictureUrl().equals(lastShownMarkerAndView.partyPictureUrl)) {
                     View view = lastShownMarkerAndView.view;
@@ -220,17 +220,12 @@ public class BuddiesMapActivity extends AbstractActivity implements
         experience.setText(party.getLevel());
 
 
-        loadPartyPicture(party.getPictureUrl());
-
-        this.lastShownMarkerAndView = new MarkerAndView(marker, view);
+        if (party.getPictureUrl() != null) {
+            new GetPictureAsync(this, party.getPictureUrl()).execute();
+            this.lastShownMarkerAndView = new MarkerAndView(marker, view);
+        }
 
         return view;
-    }
-
-    private void loadPartyPicture(String pictureUrl) {
-        if (pictureUrl != null) {
-            new GetPictureAsync(this, pictureUrl).execute();
-        }
     }
 
     @Override

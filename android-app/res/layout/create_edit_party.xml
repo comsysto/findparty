@@ -50,6 +50,25 @@
                 android:text="@string/DESCRIBE_ACTIVITY"
                 android:id="@+id/addSubjectButton"/>
 
+        <ViewSwitcher
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/viewSwitcher"
+                android:layout_gravity="center_vertical|center_horizontal">
+
+            <ProgressBar android:indeterminate="true"
+                         android:layout_width="50dp" android:layout_height="50dp"
+                         android:id="@+id/partyPictureProgressBar" style="?android:attr/progressBarStyle"
+                         android:layout_gravity="center_vertical|center_horizontal"/>
+
+            <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:id="@+id/partyPicture"
+                    android:layout_gravity="center"
+                    android:src="@android:drawable/progress_indeterminate_horizontal"/>
+            </ViewSwitcher>
+
         <Space
                 android:layout_width="fill_parent"
                 android:layout_height="40px"
