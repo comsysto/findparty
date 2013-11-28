@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
@@ -55,20 +56,17 @@ public class PictureControllerIT {
 
     @Test
     public void getPictureTest() {
-
         String url = "http://snuggle.eu01.aws.af.cm/services/pictures/52975fcde4b0a67d99b8b7d8?sz=200";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.IMAGE_JPEG));
-
         HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 
-        ResponseEntity<Byte[]> exchange = restTemplate.exchange(url, HttpMethod.GET, entity, Byte[].class, new HashMap<String, String>());
+        restTemplate.getMessageConverters().add(new ByteArrayHttpMessageConverter());
+        ResponseEntity<byte[]> exchange = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class, new HashMap<String, String>());
 
-        HttpStatus statusCode = exchange.getStatusCode();
-        Byte[] body = exchange.getBody();
-        assertThat(statusCode.value(), is(200));
-        assertThat(body, notNullValue());
+        assertThat(exchange.getStatusCode().value(), is(200));
+        assertThat(exchange.getBody(), notNullValue());
     }
 
 }
