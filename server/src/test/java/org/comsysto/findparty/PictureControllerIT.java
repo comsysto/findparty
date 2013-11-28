@@ -31,7 +31,7 @@ import static org.junit.Assert.assertNotNull;
 @ContextConfiguration("/org/comsysto/findparty/spring-test.xml")
 public class PictureControllerIT {
 
-    private static final String PICTURE_SERVICE = "http://localhost:8080/services/pictures";
+    private static final String PICTURE_SERVICE = "http://snuggle.eu01.aws.af.cm/services/pictures";
 //    private static final String PICTURE_SERVICE = "http://snuggle.eu01.aws.af.cm/services/pictures";
     @Autowired
     private RestTemplate resttemplate;

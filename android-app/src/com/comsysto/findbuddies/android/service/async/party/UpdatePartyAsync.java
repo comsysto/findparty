@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 import com.comsysto.findparty.Party;
-import com.comsysto.findparty.web.PartyService;
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,6 +31,9 @@ public class UpdatePartyAsync extends AsyncTask<Party, Void, String> {
         Party toBeUpdatedParty = params[0];
         if (bitmap != null) {
             String pictureUrl = uploadBitmapFirst(bitmap);
+            if (pictureUrl == null) {
+                return null;
+            }
             toBeUpdatedParty.setPictureUrl(pictureUrl);
         }
         switch(this.callback.getUpdatePartyAsyncMode()) {
@@ -49,8 +51,7 @@ public class UpdatePartyAsync extends AsyncTask<Party, Void, String> {
     }
 
     private String uploadBitmapFirst(Bitmap bitmap) {
-        return null;
-        //return PartyManagerApplication.getInstance().savePartyPicture(bitmap);
+        return PartyManagerApplication.getInstance().uploadPicture(bitmap);
     }
 
     @Override

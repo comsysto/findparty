@@ -111,7 +111,7 @@ public class PartyListFragment extends android.support.v4.app.ListFragment imple
     @Override
     public void failureOnSearchParties() {
         dismissDialog();
-        Toast.makeText(getActivity(), "Could not load Parties", Toast.LENGTH_LONG);
+        Toast.makeText(getActivity(), "Could not load Parties", Toast.LENGTH_LONG).show();
     }
 
     /**

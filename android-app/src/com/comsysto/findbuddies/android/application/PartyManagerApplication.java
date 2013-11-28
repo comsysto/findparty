@@ -13,6 +13,7 @@ import com.comsysto.findbuddies.android.activity.StartActivity;
 import com.comsysto.findbuddies.android.service.PartyManagementServiceImpl;
 import com.comsysto.findparty.Party;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 /**
@@ -94,8 +95,10 @@ public class PartyManagerApplication extends Application {
         this.selectedParty = selectedParty;
     }
 
-    public void savePartyPicture(Bitmap resizedBitmap) {
-        //TODO
+    public String uploadPicture(Bitmap resizedBitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return this.partyService.createPartyImage(getUsername(), stream.toByteArray());
     }
 
     public void deleteUserPicture() {

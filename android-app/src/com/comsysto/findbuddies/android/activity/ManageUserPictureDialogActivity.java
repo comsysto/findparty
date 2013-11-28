@@ -81,7 +81,7 @@ public class ManageUserPictureDialogActivity extends AbstractActivity implements
                 stream.close();
 
                 bitmap.recycle();
-                getPartyManagerApplication().savePartyPicture(resizedBitmap);
+                getPartyManagerApplication().uploadPicture(resizedBitmap);
                 resizedBitmap.recycle();
                 finish();
             } catch (FileNotFoundException e) {

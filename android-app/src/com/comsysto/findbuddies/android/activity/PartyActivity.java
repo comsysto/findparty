@@ -99,25 +99,26 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
     private void initPartyPicture() {
         final String pictureUrl = party.getPictureUrl();
+        this.viewSwitcher = (ViewSwitcher)findViewById(R.id.viewSwitcher);
+        this.partyPicture = (ImageView)findViewById(R.id.partyPicture);
+
+        final String textForOwnerPicture = getString(R.string.YOUR_PICTURE);
+        final String textForOtherPicture = getString(R.string.OTHER_PICTURE);
+
+        this.viewSwitcher.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(PartyActivity.this);
+                PartyPictureSelector listener = new PartyPictureSelector();
+                builder.setSingleChoiceItems(new String[]{textForOwnerPicture, textForOtherPicture},
+                        isGooglePicture(pictureUrl) ? 0 : 1, listener);
+                builder.setPositiveButton(R.string.OK_BUTTON, listener);
+                builder.show();
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+        });
+
         if (pictureUrl != null) {
-            final String textForOwnerPicture = getString(R.string.YOUR_PICTURE);
-            final String textForOtherPicture = getString(R.string.OTHER_PICTURE);
-
-            this.partyPicture = (ImageView)findViewById(R.id.partyPicture);
-            this.partyPicture.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(PartyActivity.this);
-                    PartyPictureSelector listener = new PartyPictureSelector();
-                    builder.setSingleChoiceItems(new String[]{textForOwnerPicture, textForOtherPicture},
-                            isGooglePicture(pictureUrl) ? 0 : 1, listener);
-                            builder.setPositiveButton(R.string.OK_BUTTON, listener);
-                    builder.show();
-                    //To change body of implemented methods use File | Settings | File Templates.
-                }
-            });
-
-            this.viewSwitcher = (ViewSwitcher)findViewById(R.id.viewSwitcher);
             new GetPictureAsync(this, this.party.getPictureUrl()).execute();
         }
     }
@@ -138,11 +139,12 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
                         intent.addCategory(Intent.CATEGORY_OPENABLE);
                         PartyActivity.this.startActivityForResult(intent, 0);
                     } else {
-                        viewSwitcher.showNext();
-                        new GetPictureAsync(PartyActivity.this, party.getPictureUrl()).execute();
+                        showProgressBar();
+                        new GetPictureAsync(PartyActivity.this, PartyManagerApplication.getInstance().getUserImageUrl()).execute();
                     }
                 } else {
-                    if (which == 0 && !isGooglePicture(party.getPictureUrl())
+                    if (party.getPictureUrl() == null ||
+                            which == 0 && !isGooglePicture(party.getPictureUrl())
                             || which == 1 && isGooglePicture(party.getPictureUrl()))
                     selectedOption = which;
                 }
@@ -150,6 +152,9 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     }
 
     public boolean isGooglePicture(String pictureUrl) {
+        if (pictureUrl == null) {
+            return false;
+        }
         return pictureUrl.contains("googleusercontent");
     }
 
@@ -538,7 +543,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     @Override
     public void errorOnPartyUpdate() {
         dismissProgressDialog();
-        Toast.makeText(this, getString(R.string.party_save_error), Toast.LENGTH_LONG);
+        Toast.makeText(this, getString(R.string.party_save_error), Toast.LENGTH_LONG).show();
     }
 
     private void submit() {
@@ -547,15 +552,28 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
     @Override
     public void errorOnGetPicture() {
-        this.viewSwitcher.showNext();
+        Toast.makeText(this, getText(R.string.picture_get_error), Toast.LENGTH_LONG).show();
+        showProgressBar();
     }
 
     @Override
     public void successOnGetPicture(Bitmap bitmap, String pictureUrl) {
         this.partyPicture.setImageBitmap(bitmap);
-        party.setPictureUrl(PartyManagerApplication.getInstance().getUserImageUrl());
-        this.partyPictureBitmap = null; //we show the google picture, the url here is enough
-        this.viewSwitcher.showNext();
+        party.setPictureUrl(pictureUrl);
+        this.partyPictureBitmap = null;
+        showPicture();
+    }
+
+    private void showPicture() {
+        if (this.viewSwitcher.getCurrentView() != this.partyPicture) {
+            this.viewSwitcher.showNext();
+        }
+    }
+
+    private void showProgressBar() {
+        if (this.viewSwitcher.getCurrentView() == this.partyPicture) {
+            this.viewSwitcher.showNext();
+        }
     }
 
     @Override
@@ -567,11 +585,14 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
                 BitmapFactory.Options opts = new BitmapFactory.Options();
                 opts.inDensity = 100;
                 Bitmap bitmap = BitmapFactory.decodeStream(stream, null, opts);
-                if (partyPictureBitmap != null) {
-                    partyPictureBitmap.recycle();
+                if (bitmap != null) {
+                    if (partyPictureBitmap != null) {
+                        partyPictureBitmap.recycle();
+                    }
                     partyPictureBitmap = bitmap;
                     partyPicture.setImageBitmap(bitmap);
                     party.setPictureUrl(null);
+                    showPicture();
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

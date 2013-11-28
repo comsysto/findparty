@@ -309,7 +309,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
 
     @Override
     public void failureOnSearchParties() {
-        Toast.makeText(this, "Could not load Parties", Toast.LENGTH_LONG);
+        Toast.makeText(this, "Could not load Parties", Toast.LENGTH_LONG).show();
     }
 
     private class MarkerAndView {
