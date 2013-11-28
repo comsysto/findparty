@@ -139,7 +139,7 @@ public class PartyManagerApplication extends Application {
         this.selectedParty = selectedParty;
     }
 
-    public void saveUserPicture(Bitmap resizedBitmap) {
+    public void savePartyPicture(Bitmap resizedBitmap) {
         //TODO
     }
 

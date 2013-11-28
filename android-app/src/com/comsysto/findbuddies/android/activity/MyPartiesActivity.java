@@ -160,7 +160,7 @@ public class MyPartiesActivity extends ListActivity implements UpdatePartyCallba
                 case R.id.delete_party:
                     Log.i(LOG_MY_PARTIES, "deleting party: " +selectedParty);
                     MyPartiesActivity.this.dialog.show();
-                    new UpdatePartyAsync(MyPartiesActivity.this).execute(selectedParty);
+                    new UpdatePartyAsync(MyPartiesActivity.this, null).execute(selectedParty);
                     mode.finish(); // Action picked, so close the CAB
                     return true;
                 case R.id.edit_party:
