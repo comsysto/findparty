@@ -178,4 +178,8 @@ public class PartyManagerApplication extends Application {
     public String getUserImageUrl() {
         return getAccountService().getUserImageUrl();
     }
+
+    public float getDeviceDensity() {
+        return getResources().getDisplayMetrics().density;
+    }
 }

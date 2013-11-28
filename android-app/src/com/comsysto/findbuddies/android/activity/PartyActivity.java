@@ -2,6 +2,7 @@ package com.comsysto.findbuddies.android.activity;
 
 import android.app.*;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,6 +18,8 @@ import com.comsysto.findbuddies.android.service.LocationRequester;
 import com.comsysto.findbuddies.android.service.LocationService;
 import com.comsysto.findbuddies.android.service.async.party.UpdatePartyAsync;
 import com.comsysto.findbuddies.android.service.async.party.UpdatePartyCallback;
+import com.comsysto.findbuddies.android.service.async.picture.GetPictureAsync;
+import com.comsysto.findbuddies.android.service.async.picture.GetPictureCallback;
 import com.comsysto.findbuddies.android.widget.LoadingProgressDialog;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.Point;
@@ -29,7 +32,7 @@ import java.util.*;
  *
  * @author stefandjurasic
  */
-public abstract class PartyActivity extends AbstractActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, Observer, LocationRequester, UpdatePartyCallback {
+public abstract class PartyActivity extends AbstractActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, Observer, LocationRequester, UpdatePartyCallback, GetPictureCallback {
 
     private OptionMenuHandler optionMenuHandler;
     TextView categoryNameText;
@@ -47,6 +50,8 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     private boolean alreadyCalled;
 
     LoadingProgressDialog loadingProgressDialog;
+    private ImageView partyPicture;
+    private ViewSwitcher viewSwitcher;
 
     void dismissProgressDialog() {
         if (loadingProgressDialog != null || loadingProgressDialog.isShowing()) {
@@ -72,7 +77,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
         this.optionMenuHandler = new OptionMenuHandler(this);
 
-        setContentView(R.layout.edit_task);
+        setContentView(R.layout.create_edit_party);
 
         this.party = getParty();
 
@@ -82,6 +87,13 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
         initParticipantsButton();
         initPartyLocationButton();
         initSubjectButton();
+        initPartyPicture();
+    }
+
+    private void initPartyPicture() {
+        this.partyPicture = (ImageView)findViewById(R.id.partyPicture);
+        this.viewSwitcher = (ViewSwitcher)findViewById(R.id.viewSwitcher);
+        new GetPictureAsync(this, this.party.getPictureUrl()).execute();
     }
 
     protected abstract Party getParty();
@@ -474,5 +486,16 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
     private void submit() {
         new UpdatePartyAsync(this).execute(party);
+    }
+
+    @Override
+    public void errorOnGetPicture() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void successOnGetPicture(Bitmap bitmap, String pictureUrl) {
+        this.partyPicture.setImageBitmap(bitmap);
+        this.viewSwitcher.showNext();
     }
 }

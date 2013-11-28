@@ -20,6 +20,7 @@ public class GetPictureAsync extends AsyncTask<Void, Void, Bitmap> {
 
     private final GetPictureCallback callback;
     private final String pictureUrl;
+    private final static int DEFAULT_PICTURE_DENSITIY = 100;
 
     public GetPictureAsync(GetPictureCallback callback, String pictureUrl) {
         if (pictureUrl == null) {
@@ -29,6 +30,15 @@ public class GetPictureAsync extends AsyncTask<Void, Void, Bitmap> {
         this.callback = callback;
         this.pictureUrl = pictureUrl;
 
+    }
+
+    private String addSize(String pictureUrl) {
+        String sizeParameter = "?sz=";
+        if (pictureUrl.contains("?sz=")) {
+            sizeParameter = "&sz=" +
+                    (int)(DEFAULT_PICTURE_DENSITIY * PartyManagerApplication.getInstance().getDeviceDensity());
+        }
+        return pictureUrl + sizeParameter;
     }
 
     @Override
@@ -52,7 +62,7 @@ public class GetPictureAsync extends AsyncTask<Void, Void, Bitmap> {
 
 
     private Bitmap getPicture(String pictureUrl) throws IOException {
-        URL url = new URL(pictureUrl);
+        URL url = new URL(addSize(pictureUrl));
         return BitmapFactory.decodeStream(url.openConnection().getInputStream());
     }
 }
