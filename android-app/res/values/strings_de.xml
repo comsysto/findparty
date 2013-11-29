@@ -67,5 +67,7 @@
     <string name="USER_CONNECTED_WITH_GOOGLE">Benutzer mit Google+ eingeloggt: </string>
     <string name="YOUR_ACTIVITY_SUBJECT">Ihre Aktivität: </string>
     <string name="SEND_MAIL_CHOOSER_TEXT">Sende Mail...</string>
+    <string name="YOUR_ACTIVITIES">Ihre Aktivitäten</string>
+
 
 </resources>

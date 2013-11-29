@@ -73,5 +73,6 @@
     <string name="YOUR_ACTIVITY_SUBJECT">Your activity: </string>
     <string name="SEND_MAIL_CHOOSER_TEXT">Send mail...</string>
     <string name="PARTICIPANTS">Participants</string>
+    <string name="YOUR_ACTIVITIES">Your activities</string>
 
 </resources>
