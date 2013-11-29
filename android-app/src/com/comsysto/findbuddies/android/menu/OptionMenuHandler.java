@@ -44,9 +44,6 @@ public class OptionMenuHandler {
             case R.id.search_parties_menu_item:
                 goTo(activity, BuddiesMapActivity.class);
                 break;
-            case R.id.manage_picture_menu_item:
-                goTo(activity, ManageUserPictureDialogActivity.class);
-                break;
             case R.id.logout:
                 PartyManagerApplication.getInstance().getAccountService().removeAll();
                 Intent googlePlusLogout = new Intent(activity, GoogleSigninActivity.class);
