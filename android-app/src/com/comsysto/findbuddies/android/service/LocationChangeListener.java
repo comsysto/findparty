@@ -67,14 +67,23 @@ public class LocationChangeListener extends Observable implements LocationListen
      * @param location
      */
     private void extractRelevantLocationAndInformObserver(final Location location) {
-            final LocationInfo locationInfo = new LocationInfo();
 
-            new AsyncTask<Void, Void, Void>() {
+            new AsyncTask<Void, Void, LocationInfo>() {
 
+                @Override
+                protected void onPostExecute(LocationInfo locationInfo) {
+                    if (locationInfo != null && locationInfo.getLocationInEnglish() != null
+                            && locationInfo.getLocationInSystemLanguage() != null) {
+                        notifyObservers(locationInfo);
+                    }
 
-                    @Override
-                    protected Void doInBackground(Void... params) {
+                }
+
+                @Override
+                    protected LocationInfo doInBackground(Void... params) {
                         try {
+                            final LocationInfo locationInfo = new LocationInfo();
+
                             List<Address> result = geocoderEnglish.getFromLocation(location.getLatitude(), location
                                     .getLongitude(), 1);
 
@@ -101,15 +110,11 @@ public class LocationChangeListener extends Observable implements LocationListen
                                 locationInfo.setLongitude(result.get(0).getLongitude());
                                 locationInfo.setLatitude(result.get(0).getLatitude());
                             }
-
-                            if (locationInfo != null && locationInfo.getLocationInEnglish() != null
-                                    && locationInfo.getLocationInSystemLanguage() != null) {
-                                notifyObservers(locationInfo);
-                            }
+                            return locationInfo;
                         } catch (IOException e) {
                             Log.e("LocListener", "error", e);
+                            return null;
                         }
-                        return null;
                     }
             }.execute();
     }
