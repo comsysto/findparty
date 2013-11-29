@@ -210,7 +210,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
         size.setText(party.getSize().toString());
         TextView date = (TextView) view.findViewById(R.id.dateValue);
 
-        SimpleDateFormat simpleDateFormat = ((PartyManagerApplication) getPartyManagerApplication()).getSimpleDateFormat();
+        SimpleDateFormat simpleDateFormat = PartyManagerApplication.getInstance().getSimpleDateFormat();
 
         date.setText(simpleDateFormat.format(party.getStartDate()));
         TextView user = (TextView) view.findViewById(R.id.userValue);
