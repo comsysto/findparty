@@ -116,6 +116,7 @@ public class PartyManagementServiceImpl {
         try {
             Map<String, String> params = new HashMap<String, String>();
             params.put("user", username);
+            params.put("cache", String.valueOf(System.currentTimeMillis()));
             String url = urlBuilder.createUri(params, PARTY_SERVICE_PATH);
             Party[] response = restTemplate.getForObject(url, Party[].class);
             Collections.addAll(partyArrayList, response);

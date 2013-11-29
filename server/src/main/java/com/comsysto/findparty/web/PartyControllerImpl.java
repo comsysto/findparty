@@ -52,8 +52,9 @@ public class PartyControllerImpl implements PartyController {
     }
     
     @RequestMapping(method = RequestMethod.GET)
-    public @ResponseBody List<Party> findByUsername(@RequestParam(value = "user", required = true) String username) {
-        return partyService.getAllParties(username);        
+    public @ResponseBody List<Party> findByUsername(@RequestParam(value = "user", required = true) String username, @RequestParam(value="cache", required = true) String cache) {
+        LOGGER.debug("Cache-param: " + cache);
+        return partyService.getAllParties(username);
     }
     
 
