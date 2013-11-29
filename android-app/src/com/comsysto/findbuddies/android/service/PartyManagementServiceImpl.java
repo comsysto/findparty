@@ -26,7 +26,7 @@ import java.util.*;
  * @author stefandjurasic
  * 
  */
-public class PartyManagementServiceImpl implements PartyService {
+public class PartyManagementServiceImpl {
 
     private static final String TAG = Constants.LOG_SERVICE_PREFIX + PartyManagementServiceImpl.class.getSimpleName();
     private RestTemplate restTemplate;
@@ -55,7 +55,6 @@ public class PartyManagementServiceImpl implements PartyService {
 
 
 
-    @Override
     public String createParty(Party party) {
         String url = urlBuilder.createFrom(PARTY_SERVICE_PATH);
         try {
@@ -66,8 +65,6 @@ public class PartyManagementServiceImpl implements PartyService {
         }
     }
 
-
-    @Override
     public List<Party> searchParties(Double lon, Double lat, Double maxDistance) {
         String url = urlBuilder.createUri(PARTY_SERVICE_PATH, "search", String.valueOf(lon), String.valueOf(lat), String.valueOf(maxDistance));
 
@@ -82,34 +79,25 @@ public class PartyManagementServiceImpl implements PartyService {
         return null;
     }
 
-    @Override
-    public Party showDetails(String partyId) {
-        String url = urlBuilder.createUri(PARTY_SERVICE_PATH, partyId);
-        try {
-            return restTemplate.getForObject(url, Party.class);
-        } catch (Exception e) {
-            Log.i("MY_PARTIES", "Fehler beim Löschen der Party mit ID="+partyId);
-            return null;
-        }
-    }
-
-    @Override
-    public void update(Party party) {
+    public boolean update(Party party) {
         String url = urlBuilder.createUri(PARTY_SERVICE_PATH, party.getId());
         try {
             restTemplate.put(url, party);
+            return true;
         } catch (Exception e) {
             Log.i("MY_PARTIES", "Fehler beim updaten der Party: " +party);
+            return false;
         }
     }
 
-    @Override
-    public void deleteParty(String partyId) {
+    public boolean deleteParty(String partyId) {
         String url = urlBuilder.createUri(PARTY_SERVICE_PATH, partyId);
         try {
             restTemplate.delete(url);
+            return true;
         } catch(Exception e) {
             Log.i("MY_PARTIES", "Fehler beim Löschen der Party mit ID="+partyId);
+            return false;
         }
     }
 
@@ -123,7 +111,6 @@ public class PartyManagementServiceImpl implements PartyService {
         return null;
     }
 
-    @Override
     public List<Party> getAllParties(String username) {
         ArrayList<Party> partyArrayList = new ArrayList<Party>();
         try {
@@ -132,19 +119,11 @@ public class PartyManagementServiceImpl implements PartyService {
             String url = urlBuilder.createUri(params, PARTY_SERVICE_PATH);
             Party[] response = restTemplate.getForObject(url, Party[].class);
             Collections.addAll(partyArrayList, response);
+            return partyArrayList;
         } catch (Exception e) {
             Log.e(TAG, "unhandled exception : " + e.getMessage(), e);
+            return null;
         }
-        return partyArrayList;
-    }
-
-    @Override
-    public String echo(String arg0) {
-        String url = urlBuilder.createUri(PARTY_SERVICE_PATH, "echo", arg0);
-        Log.d(TAG, "echoing server: " + url);
-        ResponseEntity<String> forEntity = restTemplate.getForEntity(url, String.class);
-        
-        return forEntity.getBody();
     }
 
     public byte[] getPicture(String pictureUrl) {
