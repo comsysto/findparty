@@ -16,7 +16,7 @@
 
     <application android:debuggable="true" android:name="com.comsysto.findbuddies.android.application.PartyManagerApplication"
                  android:theme="@android:style/Theme.Holo.Light"
-                 android:icon="@drawable/comsysto1" android:label="@string/APP_NAME">
+                 android:icon="@drawable/logo" android:label="@string/APP_NAME">
         <uses-library android:name="com.google.android.maps"/>
 
 

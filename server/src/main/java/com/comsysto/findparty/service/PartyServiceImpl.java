@@ -4,6 +4,8 @@ import com.comsysto.findparty.Party;
 import com.comsysto.findparty.exceptions.ResourceNotFoundException;
 import com.comsysto.findparty.web.PartyService;
 import com.comsysto.findparty.web.PictureService;
+import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.geo.Point;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -18,19 +20,18 @@ import java.util.List;
 @Component
 public class PartyServiceImpl implements PartyService {
 
+    private static final Logger LOG = Logger.getLogger(PartyServiceImpl.class);
+
     @Autowired
     public MongoService mongoService;
 
     @Autowired
     public PictureService pictureService;
-    
+
     public static final Double KILOMETER = 111.0d;
 
-    /**
-     * The Attribute that is used for the search for the location position
-     */
     public static final String LOCATION = "location";
-
+    public static final String START_DATE = "startDate";
 
 	@Override
 	public Party showDetails(String partyId) {
@@ -92,13 +93,26 @@ public class PartyServiceImpl implements PartyService {
 
     @Override
     public List<Party> searchParties(Double lon, Double lat, Double maxdistance) {
-        // Nur aktuelle Parties die am selben Tag oder in der Zukunft stattfinden zurückgeben.
+        List <Party> parties = new ArrayList<Party>();
+
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
-        Criteria criteria = new Criteria(LOCATION).near(new Point(lon, lat)).maxDistance(getInKilometer(maxdistance));
-        criteria.andOperator(Criteria.where("startDate").gte(calendar.getTime()));
-        List < Party > parties = new ArrayList<Party>();
-        parties.addAll(mongoService.getMongoTemplate().find(new Query(criteria), Party.class));
+        Date startDate = calendar.getTime();
+
+        DateTime dt = new DateTime().withTimeAtStartOfDay();
+        LOG.info("Joda_date: " + dt);
+        LOG.info("Query for startDate >= " + startDate);
+
+
+        Criteria locationCriteria = new Criteria()
+                .where(LOCATION)
+                    .near(new Point(lon, lat))
+                    .maxDistance(getInKilometer(maxdistance))
+                .and(START_DATE)
+                    .gte(startDate);
+        Query query = new Query(locationCriteria);
+
+        parties.addAll(mongoService.getMongoTemplate().find(query, Party.class));
         return parties;
     }
 

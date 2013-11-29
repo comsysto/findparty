@@ -71,7 +71,7 @@ public class PartyManagementServiceImpl {
         try {
             Log.d(TAG, "calling url: " + url);
             Party[] parties = restTemplate.getForObject(url, Party[].class);
-            Log.d(TAG, "received parties: " + parties);
+            Log.d(TAG, "received "+ parties.length+ "parties: " + Arrays.asList(parties));
             return Arrays.asList(parties);
         } catch(Exception e) {
             Log.d(TAG, "Exception: " + e.getMessage(), e);
