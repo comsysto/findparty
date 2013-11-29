@@ -1,6 +1,7 @@
 package com.comsysto.findbuddies.android.activity;
 
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
+import com.comsysto.findbuddies.android.model.CategoryType;
 import com.comsysto.findbuddies.android.model.LevelType;
 import com.comsysto.findbuddies.android.service.async.party.UpdatePartyMode;
 import com.comsysto.findparty.Party;
@@ -24,7 +25,7 @@ public class CreatePartyActivity extends PartyActivity {
         Party party = new Party();
         party.setOwner(PartyManagerApplication.getInstance().getUsername());
         party.setPictureUrl(PartyManagerApplication.getInstance().getUserImageUrl());
-        party.setCategory(getDefaultCategory());
+        party.setCategory(CategoryType.values()[0].name());
         party.setSize(2);
         party.setStartDate(new Date());
 

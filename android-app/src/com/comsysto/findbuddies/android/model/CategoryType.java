@@ -17,9 +17,7 @@ public enum CategoryType {
     HIKING(R.drawable.hiking, R.string.CATEGORY_HIKING),
     SWIMMING(R.drawable.swimming, R.string.CATEGORY_SWIMMING),
     SOCCER(R.drawable.soccer, R.string.CATEGORY_SOCCER),
-    DANCING(R.drawable.dancing, R.string.CATEGORY_DANCING),
-    @Deprecated // use DANCING
-    MUSIC(R.drawable.dancing, R.string.CATEGORY_DANCING);
+    DANCING(R.drawable.dancing, R.string.CATEGORY_DANCING);
 
     private String displayName;
     private int drawableId;
@@ -43,7 +41,7 @@ public enum CategoryType {
                 return type;
             }
         }
-        return CategoryType.valueOf(name);
+        throw new IllegalArgumentException("no CategoryType for displayName: " +name);
     }
 
 

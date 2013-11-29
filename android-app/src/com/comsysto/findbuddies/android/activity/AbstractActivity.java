@@ -48,6 +48,7 @@ public abstract class AbstractActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         disableTitleInActionBar();
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         this.optionMenuHandler = new OptionMenuHandler(this);
 
 
@@ -89,6 +90,7 @@ public abstract class AbstractActivity extends Activity {
 
         if (ab != null) {
             ab.setDisplayShowTitleEnabled(false);
+
         }
 
     }

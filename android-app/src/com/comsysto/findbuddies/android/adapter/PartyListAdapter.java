@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
+import com.comsysto.findbuddies.android.model.CategoryType;
 import com.comsysto.findparty.Party;
 
 import java.text.SimpleDateFormat;
@@ -25,8 +26,8 @@ public class PartyListAdapter extends ArrayAdapter<Party> {
 
 	private Context context;
 
-	public PartyListAdapter(Context context, List<Party> objects) {
-		super(context, R.layout.list_item, objects);
+	public PartyListAdapter(Context context, List<Party> parties) {
+		super(context, R.layout.list_item, parties);
 		this.context = context;
 	}
 
@@ -34,12 +35,13 @@ public class PartyListAdapter extends ArrayAdapter<Party> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final Party party = getItem(position);
 		if (convertView == null) {
-			convertView = (LinearLayout) View.inflate(context,
-					R.layout.list_item, null);
+			convertView = (LinearLayout) View.inflate(context,R.layout.list_item, null);
 		}
-		final TextView textView = (TextView) convertView
-				.findViewById(android.R.id.text1);
-		textView.setText(party.getCategory() + ", " + PartyManagerApplication.getInstance().getSimpleDateFormat().format(party.getStartDate()));
+		final TextView textView = (TextView) convertView.findViewById(android.R.id.text1);
+
+        String displayName = CategoryType.valueOf(party.getCategory()).getDisplayName();
+        String date = PartyManagerApplication.getInstance().getSimpleDateFormat().format(party.getStartDate());
+        textView.setText(displayName + ", " + date);
 
 		return convertView;
 	}

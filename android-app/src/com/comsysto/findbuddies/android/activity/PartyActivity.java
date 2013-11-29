@@ -440,13 +440,19 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     private void initCategory() {
         this.categorySpinner = (Spinner) findViewById(R.id.categorySpinner);
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.findbuddies_spinner, getAllCategories());
+        List<String> categories = getAllCategories();
+
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.findbuddies_spinner, categories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(adapter);
+
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                party.setCategory(adapter.getItem(position));
+                String categoryDisplayName = adapter.getItem(position);
+
+                CategoryType category = CategoryType.getForDisplayName(categoryDisplayName);
+                party.setCategory(category.name());
             }
 
             @Override
@@ -454,7 +460,8 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
             }
         });
-        categorySpinner.setSelection(getPositionFromList(getAllCategories(), party.getCategory()));
+        CategoryType category = CategoryType.valueOf(party.getCategory());
+        categorySpinner.setSelection(getPositionFromList(categories, category.getDisplayName()));
     }
 
     private int getPositionFromList(List<String> list, String item) {
@@ -511,9 +518,6 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     protected List<String> getAllCategories() {
         List<String> categoryNames = new ArrayList<String>();
         for(CategoryType category : CategoryType.values()){
-            if(category.name().equals("MUSIC")) {
-                continue;
-            }
             categoryNames.add(category.getDisplayName());
         }
         return categoryNames;
