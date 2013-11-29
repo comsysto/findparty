@@ -261,13 +261,15 @@ public class BuddiesMapActivity extends AbstractActivity implements
     }
 
     private String getSubject(Party party) {
-        StringBuilder subject = new StringBuilder();
-        subject.append(party.getCategory());
+        StringBuilder builder = new StringBuilder();
+        builder.append(CategoryType.valueOf(party.getCategory()).getDisplayName());
+
         if (party.getSubject() != null) {
-            subject.append(SEPARATOR);
-            subject.append(party.getSubject());
+            builder.append(SEPARATOR);
+            builder.append(party.getSubject());
         }
-        return subject.toString();
+
+        return builder.toString();
     }
 
     @Override
