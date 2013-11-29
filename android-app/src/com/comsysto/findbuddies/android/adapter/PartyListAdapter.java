@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.comsysto.findbuddies.android.R;
+import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 import com.comsysto.findparty.Party;
 
 import java.text.SimpleDateFormat;
@@ -38,7 +39,7 @@ public class PartyListAdapter extends ArrayAdapter<Party> {
 		}
 		final TextView textView = (TextView) convertView
 				.findViewById(android.R.id.text1);
-		textView.setText(party.getCategory() + ", " + new SimpleDateFormat("MM/dd/yyyy").format(party.getStartDate()));
+		textView.setText(party.getCategory() + ", " + PartyManagerApplication.getInstance().getSimpleDateFormat().format(party.getStartDate()));
 
 		return convertView;
 	}

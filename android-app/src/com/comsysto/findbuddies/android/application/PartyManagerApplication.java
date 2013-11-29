@@ -7,30 +7,27 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.util.Log;
 import com.comsysto.findbuddies.android.account.AccountService;
 import com.comsysto.findbuddies.android.activity.StartActivity;
 import com.comsysto.findbuddies.android.service.PartyManagementServiceImpl;
 import com.comsysto.findparty.Party;
-import com.comsysto.findparty.Picture;
 
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
 /**
  * {@link PartyManagerApplication} holds relevant stuff for the whole app .
- * 
+ *
  * Currently:
  * <ul>
  * 	<li>caches the Tasks</li>
  * 	<li>holds the currently selectedParty (e.g. when editing a Task)</li>
  *  <li>delegates update,get,create,delete calls to the {@link com.comsysto.findbuddies.android.service.PartyManagementServiceImpl}</li>
  *  <li>whether online/offline selects a corresponding {@link com.comsysto.findbuddies.android.service.PartyManagementServiceImpl}</li>
- * 
+ *
  * @author stefandjurasic
  *
  */
