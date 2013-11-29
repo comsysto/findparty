@@ -4,6 +4,8 @@ import com.comsysto.findparty.LevelType;
 import com.comsysto.findparty.Party;
 import com.comsysto.findparty.Point;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -225,5 +228,16 @@ public class PartyControllerIT {
     }
 
 
+    @Test
+    public void dateFormat() {
+        String format = "yyyy-MM-dd HH:mm:ss.SSS";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        Date date = new Date();
+        String format1 = sdf.format(date);
+        System.out.println(format1);
+
+    }
 
 }

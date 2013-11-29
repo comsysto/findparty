@@ -68,6 +68,7 @@
     <string name="CATEGORY_DANCING">Dancing</string>
     <string name="CATEGORY_SOCCER">Playing Soccer</string>
     <string name="CATEGORY_CLUBBING">Clubbing</string>
+
     <string name="parties_load_error">Could not load Parties</string>
     <string name="loading_toast">Loading. Please wait...</string>
     <string name="parties_load_toast">Loading nearby Parties. Please wait...</string>
