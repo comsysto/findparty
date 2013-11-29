@@ -23,8 +23,7 @@ public class NoCacheClientRequestInterceptor implements ClientHttpRequestInterce
 
         Log.d(TAG, "Setting no-cache headers for request: " + httpRequest.getMethod() + " " + httpRequest.getURI());
         httpRequest.getHeaders().add("Pragma","No-cache");
-        httpRequest.getHeaders().add("Cache-Control","max-age=0, no-cache, no-store");
-        httpRequest.getHeaders().add("Expires",  "0");
+        httpRequest.getHeaders().add("Cache-Control","s-maxage=0, max-age=0, must-revalidate, no-cache, no-store, private");
 
         return clientHttpRequestExecution.execute(httpRequest, bytes);
     }
