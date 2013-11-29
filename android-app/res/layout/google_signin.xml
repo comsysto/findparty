@@ -10,7 +10,7 @@
         >
 
     <ImageView
-            android:background="@drawable/comsysto1"
+            android:background="@drawable/logo"
             android:layout_height="128dp"
             android:layout_width="128dp"
 
