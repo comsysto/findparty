@@ -16,6 +16,7 @@ import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 import com.comsysto.findbuddies.android.menu.OptionMenuHandler;
 import com.comsysto.findbuddies.android.model.CategoryType;
+import com.comsysto.findbuddies.android.model.LevelType;
 import com.comsysto.findbuddies.android.service.LocationInfo;
 import com.comsysto.findbuddies.android.service.LocationRequester;
 import com.comsysto.findbuddies.android.service.LocationService;
@@ -40,14 +41,11 @@ import java.util.*;
  */
 public abstract class PartyActivity extends AbstractActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, Observer, LocationRequester, UpdatePartyCallback, GetPictureCallback {
 
-    private OptionMenuHandler optionMenuHandler;
-    TextView categoryNameText;
     Spinner levelSpinner;
     Spinner categorySpinner;
 
     SimpleDateFormat formatter = new SimpleDateFormat();
     private Button partyTime;
-    static final String[] LEVELS = new String[]{"Beginner", "Amateur", "Professional"};
     Button numberOfParticipantsButton;
     private Button partyLocationButton;
     private Button subjectButton;
@@ -82,7 +80,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.optionMenuHandler = new OptionMenuHandler(this);
+        new OptionMenuHandler(this);
 
         setContentView(R.layout.create_edit_party);
 
@@ -390,7 +388,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     }
 
     void setTimeOnView() {
-        partyTime.setText("On " + formatter.format(party.getStartDate()));
+        partyTime.setText(getString(R.string.ON_DATE) + formatter.format(party.getStartDate()));
     }
 
 
@@ -425,14 +423,14 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     private void initLevelSpinner() {
         levelSpinner = (Spinner) findViewById(R.id.levelSpinner);
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.findbuddies_spinner, LEVELS);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.findbuddies_spinner, LevelType.getAllLevelsDisplayString(this));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         levelSpinner.setAdapter(adapter);
         levelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                party.setLevel(adapter.getItem(position));
+                party.setLevel(LevelType.valueOf(adapter.getItem(position).toUpperCase()).name());
 
             }
 
@@ -441,7 +439,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
             }
         });
 
-        levelSpinner.setSelection(getPositionFromList(Arrays.asList(LEVELS), party.getLevel()));
+        levelSpinner.setSelection(getPositionFromList(LevelType.getAllLevelsDisplayString(this), LevelType.getDisplayString(this, party.getLevel())));
 
     }
 
@@ -500,7 +498,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     }
 
     void setTextOnNumberOfParticipantsButton(int numberOfParticipants) {
-        this.numberOfParticipantsButton.setText("Desired participants : " + numberOfParticipants);
+        this.numberOfParticipantsButton.setText(getText(R.string.GROUP_SIZE)+ ": " + numberOfParticipants);
     }
 
 
@@ -517,7 +515,14 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
 
     protected List<String> getAllCategories() {
-        return CategoryType.names();
+        List<String> categoryNames = new ArrayList<String>();
+        for(CategoryType category : CategoryType.values()){
+            if(category.name().equals("MUSIC")) {
+                continue;
+            }
+            categoryNames.add(category.getDisplayName());
+        }
+        return categoryNames;
     }
 
     @Override

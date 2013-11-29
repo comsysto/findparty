@@ -127,7 +127,7 @@ public class PartyMapFragment extends android.support.v4.app.Fragment
         categoryDrawables.put(CategoryType.CLUBBING, getDrawable(R.drawable.clubbing));
         categoryDrawables.put(CategoryType.HIKING, getDrawable(R.drawable.hiking));
         categoryDrawables.put(CategoryType.JOGGING, getDrawable(R.drawable.jogging));
-        categoryDrawables.put(CategoryType.MUSIC, getDrawable(R.drawable.music));
+        categoryDrawables.put(CategoryType.DANCING, getDrawable(R.drawable.dancing));
         categoryDrawables.put(CategoryType.SNUGGLING, getDrawable(R.drawable.snuggling));
         categoryDrawables.put(CategoryType.SWIMMING, getDrawable(R.drawable.androidmarker));
     }
