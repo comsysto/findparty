@@ -388,7 +388,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     }
 
     void setTimeOnView() {
-        partyTime.setText("On " + formatter.format(party.getStartDate()));
+        partyTime.setText(getString(R.string.ON_DATE) + formatter.format(party.getStartDate()));
     }
 
 
