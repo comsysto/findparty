@@ -63,7 +63,7 @@ public class MyPartiesActivity extends ListActivity implements UpdatePartyCallba
     protected void onResume() {
         super.onResume();
         if (getPartyManagerApplication().getAccountService().hasAccount()) {
-            dialog = new LoadingProgressDialog(this, "Loading. Please wait...", true);
+            dialog = new LoadingProgressDialog(this, getString(R.string.loading_toast), true);
 
             new GetUsersPartiesAsync(this, getUsername()).execute();
         }
@@ -227,6 +227,6 @@ public class MyPartiesActivity extends ListActivity implements UpdatePartyCallba
     @Override
     public void failureOnGetUsersParties() {
         dialog.hide();
-        Toast.makeText(this, "Could not load User's parties", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.parties_load_error), Toast.LENGTH_LONG).show();
     }
 }

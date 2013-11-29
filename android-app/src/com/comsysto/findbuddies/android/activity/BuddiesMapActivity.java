@@ -254,11 +254,11 @@ public class BuddiesMapActivity extends AbstractActivity implements
 
         String uriText =
                 "mailto:" + party.getOwner() +
-                        "?subject=Your party: " + getSubject(party);
+                        "?subject=" + getString(R.string.YOUR_ACTIVITY_SUBJECT) + getSubject(party);
 
         emailIntent.setData(Uri.parse(uriText));
 
-        startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+        startActivity(Intent.createChooser(emailIntent, getString(R.string.SEND_MAIL_CHOOSER_TEXT)));
     }
 
     private String getSubject(Party party) {
@@ -308,7 +308,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
 
     @Override
     public void failureOnSearchParties() {
-        Toast.makeText(this, "Could not load Parties", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.parties_load_error), Toast.LENGTH_LONG).show();
     }
 
     private class MarkerAndView {

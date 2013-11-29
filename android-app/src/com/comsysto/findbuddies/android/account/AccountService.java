@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
+import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.application.Constants;
 
 import java.util.Date;
@@ -99,7 +100,7 @@ public class AccountService {
             accountManager.removeAccount(account, new AccountManagerCallback<Boolean>() {
                 @Override
                 public void run(AccountManagerFuture<Boolean> future) {
-                    Toast toast = Toast.makeText(context, "removed account: " + account.name, Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(context, context.getString(R.string.REMOVED_ACCOUNT) + account.name, Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }, new Handler());

@@ -46,7 +46,7 @@ public class GoogleSigninActivity extends Activity implements View.OnClickListen
         if(PartyManagerApplication.getInstance().isConnected()) {
             plusClient.connect();
         } else {
-            Toast.makeText(this, "No internet connection! Please check your connection settings", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.NO_INTERNET_CONNECTION), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -60,7 +60,7 @@ public class GoogleSigninActivity extends Activity implements View.OnClickListen
 
     private void handleGoogleSigninClick(SignInButton v) {
         if(plusClient.isConnected()) {
-            Toast.makeText(this, "User already connected with Google+ Signin: " + plusClient.getAccountName(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.USER_ALREADY_CONNECTED) + plusClient.getAccountName(), Toast.LENGTH_LONG).show();
         } else {
             if(lastResult!=null) {
                 if(lastResult.hasResolution()) {
@@ -69,7 +69,7 @@ public class GoogleSigninActivity extends Activity implements View.OnClickListen
                     } catch (IntentSender.SendIntentException e) {
                         lastResult = null;
                         plusClient.connect();
-                        Toast.makeText(this, "Fehler beim Verbindend zu Google+. Bitte erneut versuchen", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, getString(R.string.ERROR_CONNECTING_TO_GOOGLE), Toast.LENGTH_LONG).show();
                     }
                 }
             } else {
@@ -100,7 +100,7 @@ public class GoogleSigninActivity extends Activity implements View.OnClickListen
         }
 
         String accountName = plusClient.getAccountName();
-        Toast.makeText(this, "User connected with Google+ Signin: " + plusClient.getAccountName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.USER_CONNECTED_WITH_GOOGLE) + plusClient.getAccountName(), Toast.LENGTH_SHORT).show();
 
         Person.Image image = plusClient.getCurrentPerson().getImage();
 

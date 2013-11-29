@@ -68,5 +68,17 @@
     <string name="CATEGORY_DANCING">Dancing</string>
     <string name="CATEGORY_SOCCER">Playing Soccer</string>
     <string name="CATEGORY_CLUBBING">Clubbing</string>
+    <string name="parties_load_error">Could not load Parties</string>
+    <string name="loading_toast">Loading. Please wait...</string>
+    <string name="parties_load_toast">Loading nearby Parties. Please wait...</string>
+    <string name="GET_LOCATION">Trying to refresh position. Please wait...</string>
+    <string name="GET__LAST_LOCATION">Aquiring last known position. Please wait...</string>
+    <string name="USER_ALREADY_CONNECTED">User already connected with Google+ Signin: </string>
+    <string name="ERROR_CONNECTING_TO_GOOGLE">Error connecting to Google+. Please try again</string>
+    <string name="NO_INTERNET_CONNECTION">No internet connection! Please check your connection settings</string>
+    <string name="REMOVED_ACCOUNT">removed account: </string>
+    <string name="USER_CONNECTED_WITH_GOOGLE">User connected with Google+ Signin: </string>
+    <string name="YOUR_ACTIVITY_SUBJECT">Your activity: </string>
+    <string name="SEND_MAIL_CHOOSER_TEXT">Send mail...</string>
 
 </resources>

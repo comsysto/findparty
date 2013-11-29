@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
+import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.adapter.PartyListAdapter;
 import com.comsysto.findbuddies.android.service.async.party.SearchPartiesAsync;
 import com.comsysto.findbuddies.android.service.async.party.SearchPartiesCallback;
@@ -60,7 +61,8 @@ public class PartyListFragment extends android.support.v4.app.ListFragment imple
         if (lastLocation != null) {
             loadParties(lastLocation);
         } else {
-            dialog = new LoadingProgressDialog(getActivity(), "Last known position not found. Trying to refresh position. Please wait...", true);
+            dialog = new LoadingProgressDialog(getActivity(), getString(R.string.GET_LOCATION), true);
+            dialog.show();
             LocationRequest locationRequest = LocationRequest.create();
             locationRequest.setNumUpdates(1);
             locationClient.requestLocationUpdates(locationRequest, this);
@@ -111,7 +113,7 @@ public class PartyListFragment extends android.support.v4.app.ListFragment imple
     @Override
     public void failureOnSearchParties() {
         dismissDialog();
-        Toast.makeText(getActivity(), "Could not load Parties", Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), getString(R.string.parties_load_error), Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -141,7 +143,7 @@ public class PartyListFragment extends android.support.v4.app.ListFragment imple
     }
 
     private void triggerLocationUpdate() {
-        dialog = new LoadingProgressDialog(getActivity(), "Aquiring last known position. Please wait...", true);
+        dialog = new LoadingProgressDialog(getActivity(), getString(R.string.GET__LAST_LOCATION), true);
         locationClient = new LocationClient(getActivity(), this, this);
         locationClient.connect();
     }
@@ -219,7 +221,7 @@ public class PartyListFragment extends android.support.v4.app.ListFragment imple
     }
 
     private void loadParties(final Location location) {
-        dialog = new LoadingProgressDialog(getActivity(), "Loading nearby Parties. Please wait...", true);
+        dialog = new LoadingProgressDialog(getActivity(), getString(R.string.parties_load_toast), true);
         new SearchPartiesAsync(this, location.getLongitude(),location.getLatitude()).execute();
 
     }
