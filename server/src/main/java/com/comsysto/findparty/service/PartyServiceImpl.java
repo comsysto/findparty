@@ -11,6 +11,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -90,11 +92,13 @@ public class PartyServiceImpl implements PartyService {
 
     @Override
     public List<Party> searchParties(Double lon, Double lat, Double maxdistance) {
+        // Nur aktuelle Parties die am selben Tag oder in der Zukunft stattfinden zurückgeben.
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
         Criteria criteria = new Criteria(LOCATION).near(new Point(lon, lat)).maxDistance(getInKilometer(maxdistance));
-        List<Party> parties = new ArrayList<Party>();
-
-        parties.addAll(mongoService.getMongoTemplate().find(new Query(criteria),
-                Party.class));
+        criteria.andOperator(Criteria.where("startDate").gte(calendar.getTime()));
+        List < Party > parties = new ArrayList<Party>();
+        parties.addAll(mongoService.getMongoTemplate().find(new Query(criteria), Party.class));
         return parties;
     }
 
