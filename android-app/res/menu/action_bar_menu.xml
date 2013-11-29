@@ -8,10 +8,6 @@
           android:icon="@drawable/search_parties_menu_icon"
           android:title="@string/FIND_ACTIVITIES_BUTTON"
           android:showAsAction="ifRoom|withText" />
-    <item android:id="@+id/manage_picture_menu_item"
-          android:icon="@drawable/manage_picture_menu_item"
-          android:title="@string/MANAGE_USER_PICTURE_BUTTON"
-          android:showAsAction="ifRoom|withText" />
     <item android:title="@string/LOGOUT_MENU_ITEM_TEXT"
           android:id="@+id/logout"
           android:showAsAction="never" />
@@ -21,5 +17,6 @@
     <item android:title="DEBUG MASTER DETAIL"
           android:id="@+id/masterdetail"
           android:showAsAction="never"
+          android:visible="false"
             ></item>
 </menu>

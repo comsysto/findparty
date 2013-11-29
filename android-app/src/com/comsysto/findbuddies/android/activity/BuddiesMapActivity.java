@@ -49,18 +49,12 @@ public class BuddiesMapActivity extends AbstractActivity implements
         GooglePlayServicesClient.ConnectionCallbacks,
         GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.InfoWindowAdapter, LocationListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnCameraChangeListener {
 
-    static final LatLng HAMBURG = new LatLng(53.558, 9.927);
-    static final LatLng KIEL = new LatLng(53.551, 9.993);
     public static final String SEPARATOR = " - ";
     private GoogleMap map;
     private LocationClient locationClient;
-    private List<Party> parties;
-    private Thread locationUpdateThread;
     private Set<String> partiesShownOnMap = new HashSet<String>();
     private HashMap<CategoryType, Bitmap> categoryDrawables;
-    private MyLocationOverlay myLocOverlay;
     private Map<Marker, Party> partyMarkerMap = new HashMap<Marker, Party>();
-    ;
     private LayoutInflater inflater;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
     private MarkerAndView lastShownMarkerAndView;
@@ -294,13 +288,11 @@ public class BuddiesMapActivity extends AbstractActivity implements
     @Override
     public void errorOnGetPicture() {
         lastShownMarkerAndView = null;
-        //TODO: Show android and until this show a spinner GIF?
     }
 
     @Override
     public void successOnSearchParties(List<Party> parties) {
         if (parties != null) {
-            BuddiesMapActivity.this.parties = parties;
             displayParties(parties);
         }
 
