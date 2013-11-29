@@ -103,15 +103,12 @@ public class BuddiesMapActivity extends AbstractActivity implements
         categoryDrawables.put(CategoryType.SNUGGLING, getDrawable(CategoryType.SNUGGLING.getDrawableId()));
         categoryDrawables.put(CategoryType.SWIMMING, getDrawable(CategoryType.SWIMMING.getDrawableId()));
         categoryDrawables.put(CategoryType.SOCCER, getDrawable(CategoryType.SOCCER.getDrawableId()));
-        categoryDrawables.put(CategoryType.MUSIC, getDrawable(CategoryType.MUSIC.getDrawableId()));
 
     }
 
     private Bitmap getDrawable(int id) {
         BitmapDrawable drawable = (BitmapDrawable) this.getResources().getDrawable(id);
-        Bitmap bitmap = drawable.getBitmap();
-        //bitmap.setDensity(50 * PartyManagerApplication.getInstance().getDeviceDensity());
-        return bitmap;
+        return drawable.getBitmap();
     }
 
     @Override
@@ -144,7 +141,8 @@ public class BuddiesMapActivity extends AbstractActivity implements
         for (Party party : parties) {
             if (map != null) {
                 if (!isPartyAlreadyShownOnMap(party)) {
-                    Bitmap partyBitmap = categoryDrawables.get(CategoryType.getForDisplayName(party.getCategory()));
+                    CategoryType category = CategoryType.valueOf(party.getCategory());
+                    Bitmap partyBitmap = categoryDrawables.get(category);
                     Marker partyMarker = map.addMarker(getMarker(party, partyBitmap));
                     addParty(partyMarker, party);
                 }

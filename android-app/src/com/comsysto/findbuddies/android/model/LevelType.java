@@ -14,7 +14,12 @@ import java.util.ArrayList;
  * To change this template use File | Settings | File Templates.
  */
 public enum LevelType {
-    BEGINNER(R.string.BEGINNER), AMATEUR(R.string.AMATEUR), PROFESSIONAL(R.string.PROFESSIONAL), EVERYBODY(R.string.EVERYBODY);
+
+    BEGINNER(R.string.BEGINNER),
+    AMATEUR(R.string.AMATEUR),
+    PROFESSIONAL(R.string.PROFESSIONAL),
+    EVERYBODY(R.string.EVERYBODY);
+
     private int displayStringId;
 
     LevelType(int displayStringId) {
