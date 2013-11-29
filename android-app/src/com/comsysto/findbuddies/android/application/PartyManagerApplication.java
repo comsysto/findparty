@@ -126,12 +126,12 @@ public class PartyManagerApplication extends Application {
         return partyService.createParty(toBeUpdatedParty);
     }
 
-    public void update(Party toBeUpdatedParty) {
-        partyService.update(toBeUpdatedParty);
+    public boolean update(Party toBeUpdatedParty) {
+        return partyService.update(toBeUpdatedParty);
     }
 
-    public void deleteParty(String id) {
-        partyService.deleteParty(id);
+    public boolean deleteParty(String id) {
+        return partyService.deleteParty(id);
     }
 
 

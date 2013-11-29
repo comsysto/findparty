@@ -50,11 +50,17 @@ public class UpdatePartyAsync extends AsyncTask<Party, Void, String> {
             case CREATE:
                 return partyManagerApplication.createParty(toBeUpdatedParty);
             case UPDATE:
-                partyManagerApplication.update(toBeUpdatedParty);
-                return toBeUpdatedParty.getId();
+                if (partyManagerApplication.update(toBeUpdatedParty)) {
+                    return toBeUpdatedParty.getId();
+                } else {
+                    return null;
+                }
             case DELETE:
-                partyManagerApplication.deleteParty(toBeUpdatedParty.getId());
-                return toBeUpdatedParty.getId();
+                if (partyManagerApplication.deleteParty(toBeUpdatedParty.getId())){
+                    return toBeUpdatedParty.getId();
+                } else {
+                    return null;
+                }
             default:
                 throw new IllegalArgumentException("UNKNOWN MODE");
         }

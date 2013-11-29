@@ -2,6 +2,7 @@ package com.comsysto.findbuddies.android.service;
 
 import android.content.Context;
 import android.location.*;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -65,45 +66,57 @@ public class LocationChangeListener extends Observable implements LocationListen
     /**
      * @param location
      */
-    private void extractRelevantLocationAndInformObserver(Location location) {
-        try {
+    private void extractRelevantLocationAndInformObserver(final Location location) {
 
-            LocationInfo locationInfo = new LocationInfo();
+            new AsyncTask<Void, Void, LocationInfo>() {
 
-            List<Address> result = geocoderEnglish.getFromLocation(location.getLatitude(), location
-                    .getLongitude(), 1);
+                @Override
+                protected void onPostExecute(LocationInfo locationInfo) {
+                    if (locationInfo != null && locationInfo.getLocationInEnglish() != null
+                            && locationInfo.getLocationInSystemLanguage() != null) {
+                        notifyObservers(locationInfo);
+                    }
 
-            if (result.size() > 0) {
-                locationInfo.setLocationInEnglish(result.get(0));
-
-                String country = result.get(0).getCountryName();
-                String postalCode = result.get(0).getPostalCode();
-                String loString = postalCode + "-" + country;
-
-                if (loString.length() > 0) {
-                    // Log.d("LocationChangeListener: ",
-                    // "Notifiying observers about " + loString);
-                    setChanged();
                 }
-            }
 
-            result = geocoderSystemLanguage.getFromLocation(location.getLatitude(), location.getLongitude(),
-                    1);
+                @Override
+                    protected LocationInfo doInBackground(Void... params) {
+                        try {
+                            final LocationInfo locationInfo = new LocationInfo();
 
-            if (result.size() > 0) {
-                locationInfo.setLocationInSystemLanguage(result.get(0));
-                locationInfo.setLocationStringForParty(result.get(0).getAddressLine(0));
-                locationInfo.setLongitude(result.get(0).getLongitude());
-                locationInfo.setLatitude(result.get(0).getLatitude());
-            }
+                            List<Address> result = geocoderEnglish.getFromLocation(location.getLatitude(), location
+                                    .getLongitude(), 1);
 
-            if (locationInfo != null && locationInfo.getLocationInEnglish() != null
-                    && locationInfo.getLocationInSystemLanguage() != null) {
-                notifyObservers(locationInfo);
-            }
-        } catch (IOException e) {
-            Log.e("LocListener", "error", e);
-        }
+                            if (result.size() > 0) {
+                                locationInfo.setLocationInEnglish(result.get(0));
+
+                                String country = result.get(0).getCountryName();
+                                String postalCode = result.get(0).getPostalCode();
+                                String loString = postalCode + "-" + country;
+
+                                if (loString.length() > 0) {
+                                    // Log.d("LocationChangeListener: ",
+                                    // "Notifiying observers about " + loString);
+                                    setChanged();
+                                }
+                            }
+
+                            result = geocoderSystemLanguage.getFromLocation(location.getLatitude(), location.getLongitude(),
+                                    1);
+
+                            if (result.size() > 0) {
+                                locationInfo.setLocationInSystemLanguage(result.get(0));
+                                locationInfo.setLocationStringForParty(result.get(0).getAddressLine(0));
+                                locationInfo.setLongitude(result.get(0).getLongitude());
+                                locationInfo.setLatitude(result.get(0).getLatitude());
+                            }
+                            return locationInfo;
+                        } catch (IOException e) {
+                            Log.e("LocListener", "error", e);
+                            return null;
+                        }
+                    }
+            }.execute();
     }
 
     /**

@@ -219,12 +219,6 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
                 dialog.show(getFragmentManager(), "subjectInputFragment");
             }
         });
-
-        if (party.getLocation() != null) {
-            locationService.requestLocationFromPoint(party.getLocation(), this);
-        } else {
-            locationService.activate();
-        }
     }
 
     private void initPartyLocationButton() {
