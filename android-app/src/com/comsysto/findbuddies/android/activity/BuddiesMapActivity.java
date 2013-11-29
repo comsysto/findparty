@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.model.CategoryType;
+import com.comsysto.findbuddies.android.model.LevelType;
 import com.comsysto.findbuddies.android.service.async.party.SearchPartiesAsync;
 import com.comsysto.findbuddies.android.service.async.party.SearchPartiesCallback;
 import com.comsysto.findbuddies.android.service.async.picture.GetPictureAsync;
@@ -211,7 +212,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
         TextView subject = (TextView) view.findViewById(R.id.subjectValue);
         subject.setText(party.getSubject());
         TextView experience = (TextView) view.findViewById(R.id.experienceValue);
-        experience.setText(party.getLevel());
+        experience.setText(LevelType.getDisplayString(this, party.getLevel()));
 
 
         if (party.getPictureUrl() != null) {

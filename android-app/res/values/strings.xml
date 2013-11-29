@@ -52,6 +52,10 @@
     <string name="OTHER_PICTURE">Upload a picture by yourself</string>
     <string name="picture_get_error">Could not load picture</string>
     <string name="GROUP_SIZE">Group Size</string>
+    <string name="BEGINNER">Beginner</string>
+    <string name="PROFESSIONAL">Professional</string>
+    <string name="AMATEUR">Amateur</string>
+    <string name="EVERYBODY">Everybody</string>
 
 
 </resources>
