@@ -1,10 +1,7 @@
 package com.comsysto.findbuddies.android.model;
 
-import android.content.Context;
 import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
-
-import java.util.ArrayList;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,34 +17,25 @@ public enum LevelType {
     PROFESSIONAL(R.string.PROFESSIONAL),
     EVERYBODY(R.string.EVERYBODY);
 
-    private int displayStringId;
+    private String displayName;
 
     LevelType(int displayStringId) {
-
-        this.displayStringId = displayStringId;
+        this.displayName = PartyManagerApplication.getInstance().getString(displayStringId);
     }
 
-
-    public static String getDisplayString(Context context, String enumString) {
-        LevelType levelType = LevelType.valueOf(enumString.toUpperCase());
-        if (levelType != null) {
-            return levelType.getDisplayString(context);
-        }
-        else
-            return enumString;
-    }
-
-    public String getDisplayString(Context context) {
-        return context.getString(this.displayStringId);
+    public String getDisplayName() {
+        return this.displayName;
     };
 
 
-    public static ArrayList getAllLevelsDisplayString(Context context){
-        ArrayList<String> arrayList = new ArrayList<String>();
-        for (LevelType levelType : LevelType.values()) {
-            arrayList.add(levelType.getDisplayString(context));
+
+    public static LevelType getForDisplayName(String name) {
+        for(LevelType type : values()) {
+            if(type.getDisplayName().equals(name)) {
+                return type;
+            }
         }
-        return arrayList;
+        throw new IllegalArgumentException("No LevelType for displayName: " + name);
     }
 
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -215,8 +214,10 @@ public class BuddiesMapActivity extends AbstractActivity implements
         user.setText(party.getOwner());
         TextView subject = (TextView) view.findViewById(R.id.subjectValue);
         subject.setText(party.getSubject());
+
         TextView experience = (TextView) view.findViewById(R.id.experienceValue);
-        experience.setText(LevelType.getDisplayString(this, party.getLevel()));
+
+        experience.setText(LevelType.valueOf(party.getLevel()).getDisplayName());
 
 
         if (party.getPictureUrl() != null) {

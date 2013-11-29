@@ -417,15 +417,17 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     private void initLevelSpinner() {
         levelSpinner = (Spinner) findViewById(R.id.levelSpinner);
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.findbuddies_spinner, LevelType.getAllLevelsDisplayString(this));
+        List<String> levelNames = getAllLevelNames();
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.findbuddies_spinner, levelNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         levelSpinner.setAdapter(adapter);
         levelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                party.setLevel(LevelType.valueOf(adapter.getItem(position).toUpperCase()).name());
-
+                LevelType levelType = LevelType.getForDisplayName(adapter.getItem(position));
+                party.setLevel(levelType.name());
             }
 
             @Override
@@ -433,14 +435,15 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
             }
         });
 
-        levelSpinner.setSelection(getPositionFromList(LevelType.getAllLevelsDisplayString(this), LevelType.getDisplayString(this, party.getLevel())));
+        LevelType levelType = LevelType.valueOf(party.getLevel());
+        levelSpinner.setSelection(getPositionFromList(levelNames, levelType.getDisplayName()));
 
     }
 
     private void initCategory() {
         this.categorySpinner = (Spinner) findViewById(R.id.categorySpinner);
 
-        List<String> categories = getAllCategories();
+        List<String> categories = getAllCategoryNames();
 
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.findbuddies_spinner, categories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -515,12 +518,20 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     }
 
 
-    protected List<String> getAllCategories() {
+    protected List<String> getAllCategoryNames() {
         List<String> categoryNames = new ArrayList<String>();
         for(CategoryType category : CategoryType.values()){
             categoryNames.add(category.getDisplayName());
         }
         return categoryNames;
+    }
+
+    protected List<String> getAllLevelNames() {
+        List<String> levelNames = new ArrayList<String>();
+        for(LevelType level : LevelType.values()) {
+            levelNames.add(level.getDisplayName());
+        }
+        return levelNames;
     }
 
     @Override

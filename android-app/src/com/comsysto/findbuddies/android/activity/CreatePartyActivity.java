@@ -34,7 +34,7 @@ public class CreatePartyActivity extends PartyActivity {
     }
 
     private String getDefaultCategory() {
-        return getAllCategories().get(0);
+        return getAllCategoryNames().get(0);
     }
 
     @Override
