@@ -59,4 +59,14 @@
     <string name="ON_DATE">On</string>
 
 
+    <!-- CATEGORIES -->
+    <string name="CATEGORY_HIKING">Hiking</string>
+    <string name="CATEGORY_BIKING">Biking</string>
+    <string name="CATEGORY_JOGGING">Jogging</string>
+    <string name="CATEGORY_SWIMMING">Swimming</string>
+    <string name="CATEGORY_SNUGGLING">Snuggling</string>
+    <string name="CATEGORY_DANCING">Dancing</string>
+    <string name="CATEGORY_SOCCER">Playing Soccer</string>
+    <string name="CATEGORY_CLUBBING">Clubbing</string>
+
 </resources>
