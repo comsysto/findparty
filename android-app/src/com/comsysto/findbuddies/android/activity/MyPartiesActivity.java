@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.*;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.comsysto.findbuddies.android.R;
 import com.comsysto.findbuddies.android.adapter.PartyListAdapter;
@@ -222,11 +223,15 @@ public class MyPartiesActivity extends ListActivity implements UpdatePartyCallba
         dialog.hide();
         this.parties = parties;
         initArrayAdapter(parties);
+        if(parties.isEmpty()) {
+            ((TextView)getListView().getEmptyView()).setText(getString(R.string.NO_ACTIVITIES_YET));
+        }
     }
 
     @Override
     public void failureOnGetUsersParties() {
         dialog.hide();
         Toast.makeText(this, getString(R.string.parties_load_error), Toast.LENGTH_LONG).show();
+        ((TextView)getListView().getEmptyView()).setText(getString(R.string.parties_load_error));
     }
 }
