@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="SETTINGS_BUTTON">Settings</string>
+    <string name="CREATE_NEW_ACTIVITY">Aktivität hinzufügen</string>
+    <string name="FIND_ACTIVITIES_BUTTON">Suche Aktivitäten in deiner Umgebung</string>
+
+    <string name="EXPERIENCE_LABEL">Erfahrung</string>
+    <string name="SUBJECT_LABEL">Beschreibung</string>
+    <string name="LOGIN_LABEL">Login</string>
+
+    <string name="NUMBER_OF_PARTICIPANTS_DIALOG_TITLE">Wieviele Teilnehmer?</string>
+
+    <string name="OK_BUTTON">Ok</string>
+    <string name="CANCEL_BUTTON">Abrechen</string>
+
+    <string name="DESCRIBE_ACTIVITY">Beschreibung</string>
+    <string name="EDIT_ACTIVITY_MENU_ITEM">Editieren</string>
+    <string name="DELETE_ACTIVITY_MENU_ITEM">Löschen</string>
+    <string name="SAVE_ACTIVITY">Speichern</string>
+
+    <string name="REGISTER_BUTTON">Register</string>
+
+	<string name="SPACE_LABEL"> </string>
+	<string name="CREDITS_LABEL">Impressum</string>
+	<string name="TASK_STATUS_LABEL">Status</string>
+    <string name="LOCATION_INPUT_TITLE">Ort der Aktivität</string>
+    <string name="SUBJECT_INPUT_TITLE">Beschreibung</string>
+    <string name="LOCATION_GPS_BUTTON">GPS</string>
+    <string name="STREET_LABEL">Adresse</string>
+    <string name="LOCATION_BUTTON_WAITING_TEXT">Warten auf Positionsbestimmung</string>
+    <string name="DATE_TIME_LABEL"><![CDATA[Tag & Zeit]]></string>
+    <string name="USER_LABEL">Initiator</string>
+    <string name="LOGOUT_MENU_ITEM_TEXT">Abmelden</string>
+    <string name="REGISTRATION_FAILED">Registrierung fehlgeschlagen</string>
+    <string name="SAVING_ACTIVITY_SPINNER">Speichern...</string>
+    <string name="party_save_error">Aktivität konnte nicht gespeichert werden</string>
+    <string name="party_delete_error">Aktivität konnte nicht gelöscht werden</string>
+    <string name="YOUR_PICTURE">Mein Google+ Bild</string>
+    <string name="OTHER_PICTURE">Bild hochladen</string>
+    <string name="picture_get_error">Bild konnte nicht geladen werden</string>
+    <string name="GROUP_SIZE">Teilnehmeranzahl: </string>
+    <string name="BEGINNER">Anfänger</string>
+    <string name="PROFESSIONAL">Profi</string>
+    <string name="AMATEUR">Amateur</string>
+    <string name="EVERYBODY">Egal</string>
+    <string name="ON_DATE">Am </string>
+
+
+    <!-- CATEGORIES -->
+    <string name="CATEGORY_HIKING">Wandern</string>
+    <string name="CATEGORY_BIKING">Radln</string>
+    <string name="CATEGORY_JOGGING">Joggen</string>
+    <string name="CATEGORY_SWIMMING">Schwimmen</string>
+    <string name="CATEGORY_SNUGGLING">Snuggling</string>
+    <string name="CATEGORY_DANCING">Tanzen</string>
+    <string name="CATEGORY_SOCCER">Fußball</string>
+    <string name="CATEGORY_CLUBBING">Clubbing</string>
+    <string name="parties_load_error">Aktivitäten konnten nicht geladen werden</string>
+    <string name="loading_toast">Die Daten werden geladen. Bitte warten...</string>
+    <string name="parties_load_toast">Lade Aktivitäten in der Umgebung. Bitte warten...</string>
+    <string name="GET_LOCATION">Position wird ermittelt. Bitte warten...</string>
+    <string name="GET__LAST_LOCATION">Letzte bekannte Position wird ermittelt. Bitte warten...</string>
+    <string name="USER_ALREADY_CONNECTED">Benutzer mit Google+ bereits eingeloggt: </string>
+    <string name="ERROR_CONNECTING_TO_GOOGLE">Fehler beim verbinden mit Google+</string>
+    <string name="NO_INTERNET_CONNECTION">Keine Internetverbindung! Bitte überprüfen Sie ihre Netzwerkeinstellungen</string>
+    <string name="REMOVED_ACCOUNT">Benutzer Konto gelöscht: </string>
+    <string name="USER_CONNECTED_WITH_GOOGLE">Benutzer mit Google+ eingeloggt: </string>
+    <string name="YOUR_ACTIVITY_SUBJECT">Ihre Aktivität: </string>
+    <string name="SEND_MAIL_CHOOSER_TEXT">Sende Mail...</string>
+
+</resources>
