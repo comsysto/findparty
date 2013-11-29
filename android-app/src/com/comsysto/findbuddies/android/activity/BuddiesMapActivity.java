@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.comsysto.findbuddies.android.R;
+import com.comsysto.findbuddies.android.application.PartyManagerApplication;
 import com.comsysto.findbuddies.android.model.CategoryType;
 import com.comsysto.findbuddies.android.service.async.party.SearchPartiesAsync;
 import com.comsysto.findbuddies.android.service.async.party.SearchPartiesCallback;
@@ -30,18 +31,15 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
-import com.google.android.maps.MyLocationOverlay;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 
 /**
- * Created with IntelliJ IDEA.
  * User: stefandjurasic
  * Date: 14.03.13
  * Time: 15:42
- * To change this template use File | Settings | File Templates.
  */
 public class BuddiesMapActivity extends AbstractActivity implements
         SearchPartiesCallback,
@@ -49,18 +47,13 @@ public class BuddiesMapActivity extends AbstractActivity implements
         GooglePlayServicesClient.ConnectionCallbacks,
         GooglePlayServicesClient.OnConnectionFailedListener, GoogleMap.InfoWindowAdapter, LocationListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnCameraChangeListener {
 
-    static final LatLng HAMBURG = new LatLng(53.558, 9.927);
-    static final LatLng KIEL = new LatLng(53.551, 9.993);
     public static final String SEPARATOR = " - ";
     private GoogleMap map;
     private LocationClient locationClient;
     private List<Party> parties;
-    private Thread locationUpdateThread;
     private Set<String> partiesShownOnMap = new HashSet<String>();
     private HashMap<CategoryType, Bitmap> categoryDrawables;
-    private MyLocationOverlay myLocOverlay;
     private Map<Marker, Party> partyMarkerMap = new HashMap<Marker, Party>();
-    ;
     private LayoutInflater inflater;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
     private MarkerAndView lastShownMarkerAndView;
@@ -82,8 +75,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
     }
 
     private void initializeMap() {
-        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
-                .getMap();
+        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         map.setMyLocationEnabled(true);
         map.setOnCameraChangeListener(this);
         map.setOnInfoWindowClickListener(this);
@@ -102,18 +94,23 @@ public class BuddiesMapActivity extends AbstractActivity implements
 
     private void initCategoryDrawables() {
         categoryDrawables = new HashMap<CategoryType, Bitmap>();
-        categoryDrawables.put(CategoryType.BIKING, getDrawable(R.drawable.biking));
-        categoryDrawables.put(CategoryType.CLUBBING, getDrawable(R.drawable.clubbing));
-        categoryDrawables.put(CategoryType.HIKING, getDrawable(R.drawable.hiking));
-        categoryDrawables.put(CategoryType.JOGGING, getDrawable(R.drawable.jogging));
-        categoryDrawables.put(CategoryType.MUSIC, getDrawable(R.drawable.music));
-        categoryDrawables.put(CategoryType.SNUGGLING, getDrawable(R.drawable.snuggling));
-        categoryDrawables.put(CategoryType.SWIMMING, getDrawable(R.drawable.androidmarker));
+        categoryDrawables.put(CategoryType.BIKING, getDrawable(CategoryType.BIKING.getDrawableId()));
+        categoryDrawables.put(CategoryType.CLUBBING, getDrawable(CategoryType.CLUBBING.getDrawableId()));
+        categoryDrawables.put(CategoryType.HIKING, getDrawable(CategoryType.HIKING.getDrawableId()));
+        categoryDrawables.put(CategoryType.JOGGING, getDrawable(CategoryType.JOGGING.getDrawableId()));
+        categoryDrawables.put(CategoryType.DANCING, getDrawable(CategoryType.DANCING.getDrawableId()));
+        categoryDrawables.put(CategoryType.SNUGGLING, getDrawable(CategoryType.SNUGGLING.getDrawableId()));
+        categoryDrawables.put(CategoryType.SWIMMING, getDrawable(CategoryType.SWIMMING.getDrawableId()));
+        categoryDrawables.put(CategoryType.SOCCER, getDrawable(CategoryType.SOCCER.getDrawableId()));
+        categoryDrawables.put(CategoryType.MUSIC, getDrawable(CategoryType.MUSIC.getDrawableId()));
+
     }
 
     private Bitmap getDrawable(int id) {
-        Drawable drawable = this.getResources().getDrawable(id);
-        return ((BitmapDrawable) drawable).getBitmap();
+        BitmapDrawable drawable = (BitmapDrawable) this.getResources().getDrawable(id);
+        Bitmap bitmap = drawable.getBitmap();
+        //bitmap.setDensity(50 * PartyManagerApplication.getInstance().getDeviceDensity());
+        return bitmap;
     }
 
     @Override
@@ -146,7 +143,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
         for (Party party : parties) {
             if (map != null) {
                 if (!isPartyAlreadyShownOnMap(party)) {
-                    Bitmap partyBitmap = categoryDrawables.get(CategoryType.valueOf(party.getCategory()));
+                    Bitmap partyBitmap = categoryDrawables.get(CategoryType.getForDisplayName(party.getCategory()));
                     Marker partyMarker = map.addMarker(getMarker(party, partyBitmap));
                     addParty(partyMarker, party);
                 }

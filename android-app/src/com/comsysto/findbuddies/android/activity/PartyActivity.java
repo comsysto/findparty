@@ -517,7 +517,14 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
 
 
     protected List<String> getAllCategories() {
-        return CategoryType.names();
+        List<String> categoryNames = new ArrayList<String>();
+        for(CategoryType category : CategoryType.values()){
+            if(category.name().equals("MUSIC")) {
+                continue;
+            }
+            categoryNames.add(category.getDisplayName());
+        }
+        return categoryNames;
     }
 
     @Override
