@@ -500,7 +500,7 @@ public abstract class PartyActivity extends AbstractActivity implements TimePick
     }
 
     void setTextOnNumberOfParticipantsButton(int numberOfParticipants) {
-        this.numberOfParticipantsButton.setText("Desired participants : " + numberOfParticipants);
+        this.numberOfParticipantsButton.setText(getText(R.string.GROUP_SIZE)+ ": " + numberOfParticipants);
     }
 
 

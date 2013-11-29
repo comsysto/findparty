@@ -39,7 +39,6 @@
     <string name="STREET_LABEL">Adresse</string>
     <string name="LOCATION_BUTTON_WAITING_TEXT">Waiting For Location</string>
     <string name="DATE_TIME_LABEL"><![CDATA[Date & Time]]></string>
-    <string name="PARTY_SIZE">Size</string>
     <string name="USER_LABEL">User</string>
     <string name="SELECT_PICTURE">Select Picture</string>
     <string name="DELETE_PICTURE">Delete Picture</string>
@@ -52,6 +51,7 @@
     <string name="YOUR_PICTURE">Use your Google+ Picture</string>
     <string name="OTHER_PICTURE">Upload a picture by yourself</string>
     <string name="picture_get_error">Could not load picture</string>
+    <string name="GROUP_SIZE">Group Size</string>
 
 
 </resources>
