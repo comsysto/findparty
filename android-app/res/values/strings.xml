@@ -74,5 +74,6 @@
     <string name="SEND_MAIL_CHOOSER_TEXT">Send mail...</string>
     <string name="PARTICIPANTS">Participants</string>
     <string name="YOUR_ACTIVITIES">Your activities</string>
+    <string name="NO_ACTIVITIES_YET">You have no activities yet. Please add one from the menu.</string>
 
 </resources>

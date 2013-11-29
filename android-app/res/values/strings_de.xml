@@ -68,6 +68,8 @@
     <string name="YOUR_ACTIVITY_SUBJECT">Ihre Aktivität: </string>
     <string name="SEND_MAIL_CHOOSER_TEXT">Sende Mail...</string>
     <string name="YOUR_ACTIVITIES">Ihre Aktivitäten</string>
+    <string name="NO_ACTIVITIES_YET">Sie haben noch keine Aktivitäten</string>
+
 
 
 </resources>
