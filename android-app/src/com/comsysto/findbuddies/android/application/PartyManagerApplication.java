@@ -17,7 +17,9 @@ import com.comsysto.findparty.Picture;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * {@link PartyManagerApplication} holds relevant stuff for the whole app .
@@ -159,4 +161,22 @@ public class PartyManagerApplication extends Application {
         }
         return pictureUrl.contains("googleusercontent");
     }
+
+    public boolean isLocaleGerman() {
+        Locale current = getResources().getConfiguration().locale;
+        if(current == Locale.GERMAN){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public SimpleDateFormat getSimpleDateFormat(){
+        if(isLocaleGerman()){
+            return new SimpleDateFormat("dd.MM.yyyy");
+        }else{
+            return new SimpleDateFormat();
+        }
+    }
+
 }

@@ -56,7 +56,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
     private HashMap<CategoryType, Bitmap> categoryDrawables;
     private Map<Marker, Party> partyMarkerMap = new HashMap<Marker, Party>();
     private LayoutInflater inflater;
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
+
     private MarkerAndView lastShownMarkerAndView;
 
 
@@ -209,6 +209,9 @@ public class BuddiesMapActivity extends AbstractActivity implements
         TextView size = (TextView) view.findViewById(R.id.sizeValue);
         size.setText(party.getSize().toString());
         TextView date = (TextView) view.findViewById(R.id.dateValue);
+
+        SimpleDateFormat simpleDateFormat = ((PartyManagerApplication) getPartyManagerApplication()).getSimpleDateFormat();
+
         date.setText(simpleDateFormat.format(party.getStartDate()));
         TextView user = (TextView) view.findViewById(R.id.userValue);
         user.setText(party.getOwner());
