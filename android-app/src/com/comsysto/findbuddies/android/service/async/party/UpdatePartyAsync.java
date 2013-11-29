@@ -36,6 +36,16 @@ public class UpdatePartyAsync extends AsyncTask<Party, Void, String> {
             }
             toBeUpdatedParty.setPictureUrl(pictureUrl);
         }
+        String partyId = submit(partyManagerApplication, toBeUpdatedParty);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            //////WAHHHHHHHH
+        }
+        return partyId;
+    }
+
+    private String submit(PartyManagerApplication partyManagerApplication, Party toBeUpdatedParty) {
         switch(this.callback.getUpdatePartyAsyncMode()) {
             case CREATE:
                 return partyManagerApplication.createParty(toBeUpdatedParty);

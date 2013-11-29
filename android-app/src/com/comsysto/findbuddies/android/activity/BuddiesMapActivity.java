@@ -50,7 +50,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
     public static final String SEPARATOR = " - ";
     private GoogleMap map;
     private LocationClient locationClient;
-    private List<Party> parties;
+
     private Set<String> partiesShownOnMap = new HashSet<String>();
     private HashMap<CategoryType, Bitmap> categoryDrawables;
     private Map<Marker, Party> partyMarkerMap = new HashMap<Marker, Party>();
@@ -291,13 +291,11 @@ public class BuddiesMapActivity extends AbstractActivity implements
     @Override
     public void errorOnGetPicture() {
         lastShownMarkerAndView = null;
-        //TODO: Show android and until this show a spinner GIF?
     }
 
     @Override
     public void successOnSearchParties(List<Party> parties) {
         if (parties != null) {
-            BuddiesMapActivity.this.parties = parties;
             displayParties(parties);
         }
 
