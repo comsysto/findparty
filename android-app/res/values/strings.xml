@@ -10,45 +10,37 @@
     <string name="FIND_ACTIVITIES_BUTTON">Find activities near you</string>
 
     <string name="EXPERIENCE_LABEL">Experience</string>
-    <string name="SUBJECT_LABEL">Description</string>
     <string name="SELECT_CATEGORY_TITLE">Select activity type</string>
     <string name="LOGIN_LABEL">Login</string>
-    <string name="DAY_AND_TIME_CONTEXT_LABEL">Day and Time</string>
 
     <string name="NUMBER_OF_PARTICIPANTS_DIALOG_TITLE">How many buddies?</string>
 
     <string name="OK_BUTTON">Ok</string>
     <string name="CANCEL_BUTTON">Cancel</string>
 
-    <string name="DESCRIBE_ACTIVITY">Describe Activity</string>
-    <string name="EDIT_ACTIVITY_MENU_ITEM">Edit Activity</string>
-    <string name="DELETE_ACTIVITY_MENU_ITEM">Delete Activity</string>
+    <string name="DESCRIBE_ACTIVITY">Describe activity</string>
+    <string name="EDIT_ACTIVITY_MENU_ITEM">Edit activity</string>
+    <string name="DELETE_ACTIVITY_MENU_ITEM">Delete activity</string>
     <string name="SAVE_ACTIVITY">Save Activity</string>
 
-    <string name="LOGIN_BUTTON">Sign In</string>
     <string name="REGISTER_BUTTON">Register</string>
-    <string name="LOGIN_FAILED_LABEL">Username and/or password incorrect. Check values or register new account</string>
 
 	<string name="SPACE_LABEL"> </string>
-	<string name="CREDITS_LABEL">Credits</string>
-	<string name="PREFERENCES_LABEL">Settings</string>
+	<string name="CREDITS_LABEL">Imprint</string>
 	<string name="TASK_STATUS_LABEL">Status</string>
     <string name="LOCATION_INPUT_TITLE">Activity Location</string>
     <string name="SUBJECT_INPUT_TITLE">Add a Description</string>
     <string name="LOCATION_GPS_BUTTON">GPS</string>
-    <string name="STREET_LABEL">Adresse</string>
-    <string name="LOCATION_BUTTON_WAITING_TEXT">Waiting For Location</string>
+    <string name="STREET_LABEL">Address</string>
+    <string name="LOCATION_BUTTON_WAITING_TEXT">Waiting for location</string>
     <string name="DATE_TIME_LABEL"><![CDATA[Date & Time]]></string>
     <string name="USER_LABEL">User</string>
-    <string name="SELECT_PICTURE">Select Picture</string>
-    <string name="DELETE_PICTURE">Delete Picture</string>
-    <string name="MANAGE_USER_PICTURE_BUTTON">Add Some Photo Spice?</string>
     <string name="LOGOUT_MENU_ITEM_TEXT">Logout</string>
     <string name="REGISTRATION_FAILED">Registration failed</string>
     <string name="SAVING_ACTIVITY_SPINNER">Saving...</string>
-    <string name="party_save_error">Could not save Party</string>
-    <string name="party_delete_error">Could not delete Party</string>
-    <string name="YOUR_PICTURE">Use your Google+ Picture</string>
+    <string name="party_save_error">Could not save activity</string>
+    <string name="party_delete_error">Could not delete activity</string>
+    <string name="YOUR_PICTURE">Use your Google+ picture</string>
     <string name="OTHER_PICTURE">Upload a picture by yourself</string>
     <string name="picture_get_error">Could not load picture</string>
     <string name="GROUP_SIZE">Group Size</string>
@@ -68,10 +60,9 @@
     <string name="CATEGORY_DANCING">Dancing</string>
     <string name="CATEGORY_SOCCER">Playing Soccer</string>
     <string name="CATEGORY_CLUBBING">Clubbing</string>
-
-    <string name="parties_load_error">Could not load Parties</string>
+    <string name="parties_load_error">Could not load activities</string>
     <string name="loading_toast">Loading. Please wait...</string>
-    <string name="parties_load_toast">Loading nearby Parties. Please wait...</string>
+    <string name="parties_load_toast">Loading nearby activities. Please wait...</string>
     <string name="GET_LOCATION">Trying to refresh position. Please wait...</string>
     <string name="GET__LAST_LOCATION">Aquiring last known position. Please wait...</string>
     <string name="USER_ALREADY_CONNECTED">User already connected with Google+ Signin: </string>
@@ -81,5 +72,7 @@
     <string name="USER_CONNECTED_WITH_GOOGLE">User connected with Google+ Signin: </string>
     <string name="YOUR_ACTIVITY_SUBJECT">Your activity: </string>
     <string name="SEND_MAIL_CHOOSER_TEXT">Send mail...</string>
+    <string name="PARTICIPANTS">Participants</string>
+    <string name="YOUR_ACTIVITIES">Your activities</string>
 
 </resources>

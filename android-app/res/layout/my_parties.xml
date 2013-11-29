@@ -13,7 +13,7 @@
 
     <TextView
             android:id="@+id/create_party"
-            android:text="Your activities"
+            android:text="@string/YOUR_ACTIVITIES"
             android:layout_height="wrap_content"
             android:layout_width="260dp"
             android:textColor="#aaa"
