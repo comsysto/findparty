@@ -254,7 +254,7 @@ public class BuddiesMapActivity extends AbstractActivity implements
 
         String uriText =
                 "mailto:" + party.getOwner() +
-                        "?subject=" + getString(R.string.YOUR_ACTIVITY_SUBJECT) + getSubject(party);
+                        "?subject=" + getString(R.string.YOUR_ACTIVITY_SUBJECT) + " " + getSubject(party);
 
         emailIntent.setData(Uri.parse(uriText));
 

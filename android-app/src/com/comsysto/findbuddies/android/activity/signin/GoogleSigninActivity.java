@@ -60,7 +60,7 @@ public class GoogleSigninActivity extends Activity implements View.OnClickListen
 
     private void handleGoogleSigninClick(SignInButton v) {
         if(plusClient.isConnected()) {
-            Toast.makeText(this, getString(R.string.USER_ALREADY_CONNECTED) + plusClient.getAccountName(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.USER_ALREADY_CONNECTED) + " " + plusClient.getAccountName(), Toast.LENGTH_LONG).show();
         } else {
             if(lastResult!=null) {
                 if(lastResult.hasResolution()) {
@@ -100,7 +100,7 @@ public class GoogleSigninActivity extends Activity implements View.OnClickListen
         }
 
         String accountName = plusClient.getAccountName();
-        Toast.makeText(this, getString(R.string.USER_CONNECTED_WITH_GOOGLE) + plusClient.getAccountName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.USER_CONNECTED_WITH_GOOGLE) + " " + plusClient.getAccountName(), Toast.LENGTH_SHORT).show();
 
         Person.Image image = plusClient.getCurrentPerson().getImage();
 

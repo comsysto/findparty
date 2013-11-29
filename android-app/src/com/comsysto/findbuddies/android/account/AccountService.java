@@ -100,7 +100,7 @@ public class AccountService {
             accountManager.removeAccount(account, new AccountManagerCallback<Boolean>() {
                 @Override
                 public void run(AccountManagerFuture<Boolean> future) {
-                    Toast toast = Toast.makeText(context, context.getString(R.string.REMOVED_ACCOUNT) + account.name, Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(context, context.getString(R.string.REMOVED_ACCOUNT) + " " + account.name, Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }, new Handler());
