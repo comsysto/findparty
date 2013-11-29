@@ -126,7 +126,7 @@ public class PartyControllerIT {
 
         party.setSize(2);
         party.setCategory("MUSIC");
-        party.setLevel(LevelType.EXPERIENCED.name());
+        party.setLevel(LevelType.AMATEUR.name());
         party.setLocation(location);
         party.setStartDate(cal.getTime());
         party.setName("Awesome party for test!");
@@ -157,7 +157,7 @@ public class PartyControllerIT {
         assertNotNull(storedParty.getId());
         assertEquals("Robert", storedParty.getOwner());
         assertEquals("MUSIC", storedParty.getCategory());
-        assertEquals(LevelType.EXPERIENCED.name(), storedParty.getLevel());
+        assertEquals(LevelType.AMATEUR.name(), storedParty.getLevel());
         assertEquals(new Double(11.53110d), storedParty.getLocation().getLon());
         assertEquals(new Double(48.1562d), storedParty.getLocation().getLat());
         assertEquals("Awesome party for test!", storedParty.getName());

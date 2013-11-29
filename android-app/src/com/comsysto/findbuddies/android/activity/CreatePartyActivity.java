@@ -1,6 +1,7 @@
 package com.comsysto.findbuddies.android.activity;
 
 import com.comsysto.findbuddies.android.application.PartyManagerApplication;
+import com.comsysto.findbuddies.android.model.LevelType;
 import com.comsysto.findbuddies.android.service.async.party.UpdatePartyMode;
 import com.comsysto.findparty.Party;
 
@@ -27,7 +28,7 @@ public class CreatePartyActivity extends PartyActivity {
         party.setSize(2);
         party.setStartDate(new Date());
 
-        party.setLevel(LEVELS[0]);
+        party.setLevel(LevelType.EVERYBODY.name());
         return party;
     }
 

@@ -9,6 +9,6 @@ package com.comsysto.findparty;
  */
 public enum LevelType {
 
-    BEGINNER, EXPERIENCED, PROFESSIONAL
+    BEGINNER, AMATEUR, PROFESSIONAL, EVERYBODY
 
 }
