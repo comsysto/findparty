@@ -163,11 +163,11 @@ public class BuddiesMapActivity extends AbstractActivity implements
     }
 
     private MarkerOptions getMarker(Party party, Bitmap partyBitmap) {
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(new LatLng(party.getLocation().getLat(), party.getLocation().getLon()));
-        markerOptions.title(party.getName());
-        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(partyBitmap));
-        return markerOptions;
+        return new MarkerOptions()
+                .position(new LatLng(party.getLocation().getLat(), party.getLocation().getLon()))
+                .title(party.getName())
+                .icon(BitmapDescriptorFactory.fromBitmap(partyBitmap))
+                .infoWindowAnchor(0.5f, 2f);
     }
 
 

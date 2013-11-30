@@ -12,7 +12,7 @@
 
         <TextView
                 android:id="@+id/create_party"
-                android:text="Create a new activity with the following settings"
+                android:text="@string/CREATE_NEW_ACTIVITY_INTRODUCTION"
                 android:layout_height="wrap_content"
                 android:layout_width="260dp"
                 android:textColor="#aaa"

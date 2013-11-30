@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:textColor="@android:color/darker_gray"
-            android:text="FindBuddies connects with your Google+ account. Just select an existing one or create a new Google+ account."
+            android:text="@string/GOOGLE_SIGNIN_DESCRIPTION"
             android:gravity="left"/>
 
 </LinearLayout>

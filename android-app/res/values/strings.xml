@@ -34,7 +34,6 @@
     <string name="STREET_LABEL">Address</string>
     <string name="LOCATION_BUTTON_WAITING_TEXT">Waiting for location</string>
     <string name="DATE_TIME_LABEL"><![CDATA[Date & Time]]></string>
-    <string name="USER_LABEL">User</string>
     <string name="LOGOUT_MENU_ITEM_TEXT">Logout</string>
     <string name="REGISTRATION_FAILED">Registration failed</string>
     <string name="SAVING_ACTIVITY_SPINNER">Saving...</string>
@@ -75,5 +74,9 @@
     <string name="PARTICIPANTS">Participants</string>
     <string name="YOUR_ACTIVITIES">Your activities</string>
     <string name="NO_ACTIVITIES_YET">You have no activities yet. Please add one from the menu.</string>
+    <string name="GOOGLE_SIGNIN_DESCRIPTION">FindBuddies connects with your Google+ account. Just select an existing one
+        or create a new Google+ account.
+    </string>
+    <string name="CREATE_NEW_ACTIVITY_INTRODUCTION">Create a new activity with the following settings</string>
 
 </resources>

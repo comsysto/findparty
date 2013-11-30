@@ -29,7 +29,6 @@
     <string name="STREET_LABEL">Adresse</string>
     <string name="LOCATION_BUTTON_WAITING_TEXT">Warten auf Positionsbestimmung</string>
     <string name="DATE_TIME_LABEL"><![CDATA[Tag & Zeit]]></string>
-    <string name="USER_LABEL">Initiator</string>
     <string name="LOGOUT_MENU_ITEM_TEXT">Abmelden</string>
     <string name="REGISTRATION_FAILED">Registrierung fehlgeschlagen</string>
     <string name="SAVING_ACTIVITY_SPINNER">Speichern...</string>
@@ -38,7 +37,7 @@
     <string name="YOUR_PICTURE">Mein Google+ Bild</string>
     <string name="OTHER_PICTURE">Bild hochladen</string>
     <string name="picture_get_error">Bild konnte nicht geladen werden</string>
-    <string name="GROUP_SIZE">Teilnehmeranzahl: </string>
+    <string name="GROUP_SIZE">Teilnehmeranzahl</string>
     <string name="BEGINNER">Anfänger</string>
     <string name="PROFESSIONAL">Profi</string>
     <string name="AMATEUR">Amateur</string>
@@ -67,8 +66,14 @@
     <string name="USER_CONNECTED_WITH_GOOGLE">Benutzer mit Google+ eingeloggt: </string>
     <string name="YOUR_ACTIVITY_SUBJECT">Ihre Aktivität: </string>
     <string name="SEND_MAIL_CHOOSER_TEXT">Sende Mail...</string>
+    <string name="PARTICIPANTS">Teilnehmer</string>
     <string name="YOUR_ACTIVITIES">Ihre Aktivitäten</string>
     <string name="NO_ACTIVITIES_YET">Sie haben noch keine Aktivitäten</string>
+    <string name="GOOGLE_SIGNIN_DESCRIPTION">SnuggleMe verbindet sich mit ihrem Google+ Konto. Wählen Sie ein existierendes
+        aus oder erstellen Sie sich ein neues Google+ Konto.
+    </string>
+    <string name="CREATE_NEW_ACTIVITY_INTRODUCTION">Erstellen Sie eine neue Aktivität mit den folgenden Einstellungen</string>
+
 
 
 
